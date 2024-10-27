@@ -1,4 +1,4 @@
-import { Field } from "./Field";
+import "./Field.js";
 
 export class SaleException extends Error {
     constructor(message) {
