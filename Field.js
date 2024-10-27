@@ -1,7 +1,8 @@
 export class Field {
-    constructor(name, type) {
+    constructor(name, type, position) {
         this.name = name;
         this.type = type;
+        this.position = position;
     }
 
     getName() {
@@ -10,5 +11,9 @@ export class Field {
 
     getType() {
         return this.type;
+    }
+
+    getPosition() {
+        return this.position;
     }
 }
