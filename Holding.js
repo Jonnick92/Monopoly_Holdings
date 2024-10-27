@@ -1,4 +1,4 @@
-import "./Player.js";
+import {Player, InsufficientFundsException} from "./Player.js";
 
 export class Holding extends Player {
     constructor(name, balance, min_balance) {

@@ -1,4 +1,4 @@
-import "./Field.js";
+import {Field} from "./Field.js";
 
 export class Extra extends Field {
     constructor(name, action_type, actions) {

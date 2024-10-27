@@ -17,12 +17,10 @@ export class GameLogic {
     }
 
     generateFields() {
-        console.log('Test');
         fetch('./Properties.txt').then(response => response.text()).then(text => console.log(text));
 
     }
 }
 
-console.log("Test");
 var test = new GameLogic;
 test.generateFields();
