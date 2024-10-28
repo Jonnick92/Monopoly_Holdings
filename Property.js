@@ -8,12 +8,13 @@ export class SaleException extends Error {
 }
 
 export class Property extends Field {
-    constructor(name, price, price_of_house, rents, mortgage){
-        super(name, "prop");
+    constructor(name, price, price_of_house, rents, mortgage, group, position){
+        super(name, "prop", position);
         this.price = price;
         this.price_of_house = price_of_house;
         this.rents = rents;
         this.mortgage = mortgage;
+        this.group = group
         this.owner = null;
         this.state = 0;
         this.value = price;
@@ -83,5 +84,9 @@ export class Property extends Field {
 
     getState() {
         return this.state;
+    }
+
+    getGroup() {
+        return this.group;
     }
 }

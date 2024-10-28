@@ -1,8 +1,8 @@
 import {Field} from "./Field.js";
 
 export class Extra extends Field {
-    constructor(name, action_type, actions) {
-        super(name, action_type)
+    constructor(name, action_type, actions, position) {
+        super(name, action_type, position)
         this.actions = actions;
     }
 

@@ -42,8 +42,8 @@ export class Player {
         }
     }
 
-    move(byFields) {
-        this.current_field += byFields;
+    move(toField) {
+        this.current_field = toField;
     }
 
     getName() {
@@ -81,5 +81,9 @@ export class Player {
     getNetWorth() {
         // needs function to calculate net worth based on owned properties and shares and current balance
         return this.balance;
+    }
+
+    setPrison(duration) {
+        this.prison = duration;
     }
 }
