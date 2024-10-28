@@ -3,6 +3,11 @@ import {Holding} from "./Holding.js";
 import {Field} from "./Field.js";
 import {Property} from "./Property.js";
 import {Extra} from "./Extra.js";
+import {Player, InsufficientFundsException} from "./Player.js";
+import {Holding} from "./Holding.js";
+import {Field} from "./Field.js";
+import {Property} from "./Property.js";
+import {Extra} from "./Extra.js";
 
 
 export class GameLogic {
