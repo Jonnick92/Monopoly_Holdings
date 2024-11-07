@@ -6,6 +6,16 @@ export class InsufficientFundsException extends Error {
 }
 
 export class Player {
+    name: string;
+    icon_color: any;
+    type: string;
+    balance: number;
+    current_field: number;
+    prison: number;
+    owned_properties: any[];
+    owned_shares: any[];
+    net_worth: number;
+
     constructor(name = 'player', icon_color = [null, 0xffffff]) {
         this.name = name;
         this.icon_color = icon_color;
@@ -19,7 +29,7 @@ export class Player {
     }
 
     moneyAction(amount) {
-        if (this.getBalance < (-amount)) throw InsufficientFundsException("Player " + this.getName() + "has insufficient funds!");
+        if (this.getBalance() < (-amount)) throw new InsufficientFundsException("Player " + this.getName() + "has insufficient funds!");
 
         this.balance += amount;
     }

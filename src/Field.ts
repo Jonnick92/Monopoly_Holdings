@@ -1,4 +1,7 @@
 export class Field {
+    name = '';
+    type = '';
+    position = 0;
     constructor(name, type, position) {
         this.name = name;
         this.type = type;
