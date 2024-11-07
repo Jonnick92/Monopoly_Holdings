@@ -1,16 +1,18 @@
-import {Player, InsufficientFundsException} from "./Player.js";
-import {Holding} from "./Holding.js";
-import {Field} from "./Field.js";
-import {Property} from "./Property.js";
-import {Extra} from "./Extra.js";
-import {Player, InsufficientFundsException} from "./Player.js";
-import {Holding} from "./Holding.js";
-import {Field} from "./Field.js";
-import {Property} from "./Property.js";
-import {Extra} from "./Extra.js";
+import {Player, InsufficientFundsException} from "./Player";
+import {Holding} from "./Holding";
+import {Field} from "./Field";
+import {Property} from "./Property";
+import {Extra} from "./Extra";
 
 
 export class GameLogic {
+    dice: number[];
+    players: Player[];
+    player_count: number;
+    current_player: Player;
+    holdings: Holding[];
+    fields: any;
+    properties: {};
     constructor() {
         this.dice = [1, 1];
         this.players = [];

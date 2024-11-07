@@ -1,4 +1,4 @@
-import {Field} from "./Field.js";
+import {Field} from "./Field";
 
 export class SaleException extends Error {
     constructor(message) {
@@ -8,6 +8,15 @@ export class SaleException extends Error {
 }
 
 export class Property extends Field {
+    price: number;
+    price_of_house: number;
+    rents: number[];
+    mortgage: any;
+    group: string;
+    owner: any;
+    state: number;
+    value: number;
+
     constructor(name, price, price_of_house, rents, mortgage, group, position){
         super(name, "prop", position);
         this.price = price;
@@ -27,7 +36,7 @@ export class Property extends Field {
 
     checkBuyable() {
         if (this.state > 0) {
-            throw SaleException("This Property is not eligeble for Sale! Cause: Built Houses");
+            throw new SaleException("This Property is not eligeble for Sale! Cause: Built Houses");
         }
         return 1;
     }
@@ -50,9 +59,14 @@ export class Property extends Field {
     }
 
     takeMortgage() {
-        while(sellHouse);
-        this.owner.moneyAction(this.getMortgage())
-        this.state = -1
+        while(this.sellHouse);
+            this.owner.moneyAction(this.getMortgage())
+            this.state = -1
+    }
+
+    // Idk die Methode war net definiert, weiß nicht was die machen soll
+    getMortgage() {
+        return this.mortgage;
     }
 
     payBackMortgage() {
