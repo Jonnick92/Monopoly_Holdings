@@ -1,3 +1,5 @@
+import { Property } from "./Property";
+
 export class InsufficientFundsException extends Error {
     constructor(message) {
         super(message);
@@ -7,12 +9,12 @@ export class InsufficientFundsException extends Error {
 
 export class Player {
     name: string;
-    icon_color: any;
+    icon_color: any[];
     type: string;
     balance: number;
     current_field: number;
     prison: number;
-    owned_properties: any[];
+    owned_properties: Property[];
     owned_shares: any[];
     net_worth: number;
 

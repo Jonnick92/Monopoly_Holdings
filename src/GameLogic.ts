@@ -13,6 +13,7 @@ export class GameLogic {
     holdings: Holding[];
     fields: any;
     properties: {};
+
     constructor() {
         this.dice = [1, 1];
         this.players = [];
@@ -67,14 +68,6 @@ export class GameLogic {
         }
     }
 
-    turn() {
-        this.rollDice();
-        this.current_player.move((this.current_player.getCurrentField() + this.dice[0] + this.dice[1]) % (this.fields.length - 1));
-
-
-        
-    }
-
     fieldAction() {
         if (this.fields[this.current_player.getCurrentField()].getType() != 'property') this.quickAction(this.fields[this.current_player.getCurrentField()]);
         else {
@@ -89,30 +82,35 @@ export class GameLogic {
     }
 
     quickAction(field) {
-        if (field.getType() == "sma") {
-            try {
-                this.current_player.moneyAction(field.getAction());
+        switch (field.getType()) {
+            case "sma":
+                try {
+                    this.current_player.moneyAction(field.getAction());
+                    return;
+                }
+                catch {InsufficientFundsException} {
+                    //deal with it, I don't know how yet
+                    return;
+                }
+            
+            case "com":;
+            case "eve":
+                this.cardAction(field.getType());
                 return;
-            }
-            catch {InsufficientFundsException} {
-                //deal with it, I don't know how yet
+            case "prison":
+                this.current_player.move(40);
+                this.current_player.setPrison(3);
                 return;
-            }
+            case "inprison":
+                this.prisonManagement();
+                return;
+            case "none": return;
+            default: return;
         }
+    }
 
-        if (field.getType() == "com" || field.getType() == "eve") {
-            this.cardAction(field.getType());
-            return;
-        }
-
-        if (field.getType() == "prison") {
-            this.current_player.move(40);
-            this.current_player.setPrison(3);
-            return;
-        }
-
-        if (field.getType() == "none") return;
-
+    prisonManagement() {
+        //UI Management: Bail out? -> Roll dice 3x -> Pasch? -> reduce Prison by 1
     }
 
     cardAction(cardType) {
@@ -120,7 +118,7 @@ export class GameLogic {
     }
 
     rollDice() {
-
+        this.dice = [Math.max(1, Math.floor(Math.random() * 7)), Math.max(1, Math.floor(Math.random() * 7))];
     }
 
     getFields() {

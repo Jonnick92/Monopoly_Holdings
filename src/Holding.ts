@@ -3,13 +3,15 @@ import {Player, InsufficientFundsException} from "./Player";
 export class Holding extends Player {
     balance: number;
     min_balance: number;
-    owners: any;
+    owners: any[];
+    paymode: string;
 
-    constructor(name, balance, min_balance) {
+    constructor(name, balance, min_balance, paymode) {
         super(name);
         this.balance = balance;
         this.min_balance = min_balance
         this.owners = []
+        this.paymode = paymode;
     }
 
     payout() {

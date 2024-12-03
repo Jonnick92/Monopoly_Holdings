@@ -1,0 +1,1977 @@
+<!DOCTYPE html>
+
+<html lang='en'>
+    <head>
+        <meta charset='utf-8'>
+        <title>Monopoly Holdings</title>
+        <script src="https://cdn.jsdelivr.net/npm/phaser@3.51.0/dist/phaser-arcade-physics.min.js">
+        </script>
+    </head>
+    <body>
+        <script>
+
+            class property {
+                constructor(name, price, price_of_house, rents, mortgage, color) {
+                    this.name = name
+                    this.price = price
+                    this.price_of_house = price_of_house
+                    this.rents = rents
+                    this.mortgage = mortgage
+                    this.state = 0
+                    this.owner = null
+                    this.color = color
+                    this.type = 'prop'
+                }
+                
+            }
+
+            class extras {
+                constructor(name, action, type) {
+                    this.name = name
+                    this.action = action
+                    this.type = type
+                }
+            }
+            var comm_cards = [['sma', 100, 2], ['sma', 200, 3], ['sma', 20, 4], ['sma', 100, 5], ['sma', 10, 6], ['sma', -50, 8], ['sma', 25, 9], ['sma', -100, 14], ['sma', 50, 15], ['prison', 1], ['mve', 1, 7], ['mve', 0, 13]]
+            var eve_cards = [['sma', -150, 18], ['sma', 150, 20], ['sma', 100, 23], ['sma', -15, 27], ['sma', 50, 28], ['mve', 0, 17], ['mve', 24, 22], ['mve', 39, 24], ['prison', 26], ['mve', 11, 29]]
+            //var eve_cards = [['sma', -1500, 18]]
+            const fields = [
+                new extras('Los', 200, 'sma'),
+                new property('Badstraße', 60, 50, [2, 10, 30, 90, 160, 250], 30, 'brown'),
+                new extras('Community Field', 0, 'com'),
+                new property("Turmstraße", 60, 50, [4, 20, 60, 180, 320, 450], 30, 'brown'),
+                new extras('Income Tax', -200, 'sma'),
+                new property('Südbahnhof', 200, 0, [25, 50, 100, 200], 100, 'stations'),
+                new property("Chauseestraße", 100, 50, [6, 30, 90, 270, 400, 550], 50, 'baby blue'),
+                new extras('Event Field', 0, 'eve'),
+                new property("Elisenstraße", 100, 50, [6, 30, 90, 270, 400, 550], 50, 'baby blue'),
+                new property("Poststraße", 120, 50, [8, 40, 100, 300, 450, 600], 60, 'baby blue'),
+                new extras('default', 0),
+                new property("Seestraße", 140, 100, [10, 50, 150, 450, 625, 750], 70, 'pink'),
+                new property('Elektrizitätswerk', 150, 0, [4, 10], 75, 'providers'),
+                new property('Hafenstraße', 140, 100, [10, 50, 150, 450, 625, 750], 70, 'pink'),
+                new property('Neue Straße', 160, 100, [12, 60, 180, 500, 700, 900], 80, 'pink'),
+                new property('Westbahnhof', 200, 0, [25, 50, 100, 200], 100, 'stations'),
+                new property('Münchener Straße', 180, 100, [14, 70, 200, 550, 750, 950], 90, 'orange'),
+                new extras('Community Field', 0, 'com'),
+                new property('Wiener Straße', 180, 100, [14, 70, 200, 550, 750, 950], 90, 'orange'),
+                new property('Berliner Straße', 200, 100, [16, 80, 220, 600, 800, 1000], 100, 'orange'),
+                new extras('default', 0),
+                new property('Theaterstraße', 220, 150, [18, 90, 250, 700, 875, 1050], 110, 'red'),
+                new extras('Event Field', 0, 'eve'),
+                new property('Museumstraße', 220, 150, [18, 90, 250, 700, 875, 1050], 110, 'red'),
+                new property('Opernplatz', 240, 150, [20, 100, 300, 750, 925, 1100], 120, 'red'),
+                new property('Nordbahnhof', 200, 0, [25, 50, 100, 200], 100, 'stations'),
+                new property('Lessingstraße', 260, 150, [22, 110, 330, 800, 975, 1150], 130, 'yellow'),
+                new property('Schillerstraße', 260, 150, [22, 110, 330, 800, 975, 1150], 130, 'yellow'),
+                new property('Wasserwerk', 150, 0, [4, 10], 75, 'providers'),
+                new property('Goethestraße', 280, 150, [24, 120, 360, 850, 1025, 1200], 140, 'yellow'),
+                new extras('prison', 0, 'prison'),
+                new property('Rathausplatz', 300, 200, [26, 130, 390, 900, 1100, 1275], 150, 'green'),
+                new property('Hauptstraße', 300, 200, [26, 130, 390, 900, 1100, 1275], 150, 'green'),
+                new extras('Community Field', 0, 'com'),
+                new property('Bahnhofstraße', 320, 200, [28, 150, 450, 1000, 1200, 1400], 160, 'green'),
+                new property('Hauptbahnhof', 200, 0, [25, 50, 100, 200], 100, 'stations'),
+                new extras('Event Field', 0, 'eve'),
+                new property('Parkstraße', 350, 200, [35, 175, 500, 1100, 1300, 1500], 175, 'blue'),
+                new extras('Some other tax', -100, 'sma'),
+                new property('Schlossallee', 400, 200, [50, 200, 600, 1400, 1700, 2000], 200, 'blue'),
+                new extras('prison', 0)
+            ]
+
+            var properties = {
+                'brown': [fields[1], fields[3]],
+                'baby blue': [fields[6], fields[8], fields[9]],
+                'pink': [fields[11], fields[13], fields[14]],
+                'orange': [fields[16], fields[18], fields[19]],
+                'red': [fields[21], fields[23], fields[24]],
+                'yellow': [fields[26], fields[27], fields[29]],
+                'green': [fields[31], fields[32], fields[34]],
+                'blue': [fields[37], fields[39]],
+                'stations': [fields[5], fields[15], fields[25], fields[35]],
+                'providers': [fields[12], fields[28]]
+            }
+            //[x,y,occupied by x players, playeroffset x, playeroffset y]
+            const field_grid = [
+                [2780,1970,4,-1,-1],
+                [2580,1970,0,0,-1],
+                [2423,1970,0,0,-1],
+                [2260,1970,0,0,-1],
+                [2092,1970,0,0,-1],
+                [1925,1970,0,0,-1],
+                [1760,1970,0,0,-1],
+                [1595,1970,0,0,-1],
+                [1420,1970,0,0,-1],
+                [1250,1970,0,0,-1],
+                [995,1990,0,1,-1],
+                [1015,1740,0,1,0],
+                [1015,1580,0,1,0],
+                [1015,1420,0,1,0],
+                [1015,1260,0,1,0],
+                [1015,1100,0,1,0],
+                [1015,940,0,1,0],
+                [1015,775,0,1,0],
+                [1015,610,0,1,0],
+                [1015,440,0,1,0],
+                [1050,235,0,1,1],
+                [1250,200,0,0,1],
+                [1420,200,0,0,1],
+                [1595,200,0,0,1],
+                [1760,200,0,0,1],
+                [1925,200,0,0,1],
+                [2092,200,0,0,1],
+                [2260,200,0,0,1],
+                [2423,200,0,0,1],
+                [2580,200,0,0,1],
+                [2780,235,0,-1,1],
+                [2800,440,0,-1,0],
+                [2800,610,0,-1,0],
+                [2800,775,0,-1,0],
+                [2800,940,0,-1,0],
+                [2800,1100,0,-1,0],
+                [2800,1260,0,-1,0],
+                [2800,1420,0,-1,0],
+                [2800,1580,0,-1,0],
+                [2800,1740,0,-1,0],
+                [995,1990,1,-1,0]
+            ]
+
+            class player {
+                constructor(name='player', color=0xffffff, owned_properties=[], type='player') {
+                    this.name = name
+                    this.balance = 1500
+                    this.owned_properties = owned_properties
+                    this.owned_shares = []
+                    this.position = 0
+                    this.image = ''
+                    this.color = color
+                    this.in_prison = 0
+                    this.pasch_counter = 0
+                    this.type = type
+                };
+
+                set_image(image) {
+                    this.image = image
+                }
+
+                spend_money(amount) {
+                    this.balance -= amount
+                };
+
+                receive_money(amount) {
+                    this.balance += amount
+                };
+
+                buy_property(property) {
+                    property.owner = this
+                    this.owned_properties.unshift(property)
+                    this.balance -= property.price
+                };
+            };
+
+            class holding extends player {
+                constructor(name, members, owned_properties, balance, min_liquid) {
+                    super(name, 0xffffff, owned_properties, 'holding')
+                    this.balance = balance
+                    this.members = members
+                    this.min_liquid = min_liquid
+                }
+            };
+            //Logic setup
+            var players = [
+                new player('Player 1', 0xc21807),
+                new player('Player 2', 0x2e8b57),
+                new player('Player 3', 0x0f4d92),
+                new player('Player 4', 0xd24787)
+            ]
+
+            var holdings = []
+            var current_player = players[0]
+            var player_at_train = 0
+            var dice = [1, 1]
+            var updated = false
+            var pasch = 1
+            var player_number = 4
+            var current_group = 'baby blue'
+            var trade_partner = null
+            var trade_host = null
+            var dice_interactive = true
+            var switch_to_trade = false
+            var switch_to_auction = false
+            var prison_seq_init = false
+            var dice_rolled = 0
+            var player_at_train_old = 0
+            var center_offset = 200
+            var shadow_color = '#00dd00'
+            var shadow_blur = 30
+            var edge_thickness = 0
+
+            //Graphics Setup
+            var GameView = new Phaser.Scene('game');
+            var MainMenu = new Phaser.Scene('menu');
+            var UsrDetail = new Phaser.Scene('usr_det');
+            var PlayerMenu = new Phaser.Scene('plr_menu');
+            var PropertyMenu = new Phaser.Scene('prop_menu');
+            var TradeManager = new Phaser.Scene('trade_mngr');
+            var PropertyManager = new Phaser.Scene('prop_mngr');
+            var HoldingCreator = new Phaser.Scene('hold_creat')
+            var Auctioneer = new Phaser.Scene('auct')
+
+
+            //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+            GameView.init = function() {
+
+            };
+
+            GameView.preload = function() {
+            };
+
+            GameView.create = function() {
+                this.input.keyboard.on('keydown-SPACE', this.rollDice, this)
+                this.board = this.add.image(1920 + center_offset,1080,'bg');
+
+                this.open = this.add.text(3800, 2120, 'Open Trade Manager').setOrigin(1,1).setFontSize(60).setPadding(20,20,10,10).setShadow(0,0, shadow_color, shadow_blur, 1, 1).setStroke(shadow_color, edge_thickness).setInteractive({useHandCursor: true}).on('pointerdown', () => {switch_to_trade = true}).on('pointerover', () => {this.open.setScale(1.1)}).on('pointerout', () => {this.open.setScale(1)})
+                
+                this.dice = this.add.image(3790,50,'d3').setOrigin(1,0).setScale(0.8)
+                this.dice.setInteractive({useHandCursor: true}).on('pointerdown', () => this.rollDice()).on('pointerover', () => {this.dice.setScale(0.9)}).on('pointerout', () => {this.dice.setScale(0.8)})
+                this.add.text(100,100,'Players:').setFontSize(80)
+                this.names = []
+                this.images = []
+                this.indicators = []
+
+                for (let i = 1; i < field_grid.length - 1; i++){
+                    this.indicators.push([this.add.rectangle(field_grid[i][0] - 150 * field_grid[i][3] + center_offset, field_grid[i][1] - 150 * field_grid[i][4], 50, 50, 0x555555), this.add.text(field_grid[i][0] - 150 * field_grid[i][3] + center_offset, field_grid[i][1] - 150 * field_grid[i][4], '').setColor('#555555').setFontSize(50).setOrigin(0.5)])
+                }
+                
+                for (let n = 0; n < player_number; ++n) {
+                    if (player_at_train == 0){
+                        this.imageposx = 2700 + 170 * ((n - (n%2))/2) + center_offset
+                        this.imageposy = 1935 + ((-1)**n * 85)
+                    } else {
+                        this.imageposx = field_grid[players[n].position][0] + 150 * (field_grid[players[n].position][2] - 1) * field_grid[players[n].position][3] + center_offset
+                        this.imageposy = field_grid[players[n].position][1] + 150 * (field_grid[players[n].position][2] - 1) * field_grid[players[n].position][4]
+                    }
+
+                    this.images.push(this.add.image(this.imageposx, this.imageposy, 'usr').setTint(players[n].color).setScale(0.2).setInteractive({useHandCursor: true}).on('pointerdown', () => this.clickonUser(players[n])))
+                    this.names.push([this.add.text(100, 200 + 150*n, players[n].name).setFontSize(80).setColor('#' + players[n].color.toString(16).padStart(6, '0')).setStroke('#ffffff', 5).setPadding(20,20,10,10).setInteractive({useHandCursor: true}).on('pointerdown', () => this.clickonUser(players[n])), this.add.text(1020, 200 + 150*n, players[n].balance + '€$').setFontSize(80).setOrigin(1, 0).setColor('#' + players[n].color.toString(16).padStart(6, '0')).setStroke('#ffffff', 5)])
+                }
+
+                this.add.text(100, (150 * players.length + 300), 'Holdings:').setFontSize(80)
+                
+                this.holdings_visual = []
+
+                for (let n = 0; n < holdings.length; ++n) {
+                    //console.log(n)
+                    this.holdings_visual.push(this.add.text(100, (150 * players.length + 400 + 150 * n), holdings[n].name).setFontSize(70).setInteractive({useHandCursor : true}).on('pointerdown', () => this.clickonUser(holdings[n])))
+                }
+                
+                this.holdings_visual.push(this.add.text(500, (150 * players.length + 400 + 150 * holdings.length), 'Found a new Holding').setFontSize(70).setOrigin(0.5, 0).setPadding(20,20,10,10).setShadow(0,0, shadow_color, shadow_blur, 1, 1).setStroke(shadow_color, edge_thickness).setInteractive({useHandCursor: true}).on('pointerdown', () => {HoldingCreator.scene.restart(); this.scene.switch('hold_creat')}).on('pointerover', () => {this.holdings_visual[this.holdings_visual.length - 1].setScale(1.1)}).on('pointerout', () => {this.holdings_visual[this.holdings_visual.length - 1].setScale(1)}))
+
+                this.dice1 = this.add.image(3530,300,'d'+dice[0]).setOrigin(1,1).setScale(0.6)
+                this.dice2 = this.add.image(3530,300,'d'+dice[1]).setOrigin(0,0).setScale(0.6)
+
+
+                
+            };
+
+            GameView.clickonUser = function(player) {
+                current_player = player
+                console.log(current_player)
+                UsrDetail.scene.restart()
+                this.scene.switch('usr_det')
+            }
+
+            GameView.movePlayer = function(usrimage, byfields, byorto = 0) {
+                
+                if (byorto == 0){
+                    let destination = (current_player.position + byfields) % (field_grid.length-1)
+                    console.log('Moving player ' + current_player.name + 'by ' + byfields.toString() + ' fields from ' + current_player.position.toString() + ' to ' + destination.toString())
+                    //let delta = [field_grid[(player.position + byfields) % field_grid.length][0] - usrimage.x, field_grid[(player.position + byfields) % field_grid.length][1] - usrimage.y]
+                    
+                    //Überlos Event
+                    if (destination < current_player.position){
+                        current_player.balance += 200
+                    }
+                    
+                    //decrease occupancy of the "old" field
+                    field_grid[current_player.position][2] -= 1
+                    current_player.position = destination
+                    
+                    //manage multiple players on one field
+                    usrimage.setX(field_grid[current_player.position][0] + 150 * field_grid[current_player.position][2] * field_grid[current_player.position][3] + center_offset)
+                    usrimage.setY(field_grid[current_player.position][1] + 150 * field_grid[current_player.position][2] * field_grid[current_player.position][4])
+                    
+                    //increase occupancy of field
+                    field_grid[current_player.position][2] += 1
+
+                    this.fieldAction()
+                } else {
+                    let destination = byfields
+                    console.log('Moving player ' + current_player.name + ' to ' + destination.toString())
+                    //let delta = [field_grid[(player.position + byfields) % field_grid.length][0] - usrimage.x, field_grid[(player.position + byfields) % field_grid.length][1] - usrimage.y]
+                    
+                    //Überlos Event
+                    if (destination < current_player.position){
+                        current_player.balance += 200
+                    }
+                    
+                    //decrease occupancy of the "old" field
+                    field_grid[current_player.position][2] -= 1
+                    current_player.position = destination
+                    
+                    //manage multiple players on one field
+                    usrimage.setX(field_grid[current_player.position][0] + 150 * field_grid[current_player.position][2] * field_grid[current_player.position][3] + center_offset)
+                    usrimage.setY(field_grid[current_player.position][1] + 150 * field_grid[current_player.position][2] * field_grid[current_player.position][4])
+                    
+                    //increase occupancy of field
+                    field_grid[current_player.position][2] += 1
+
+                    this.fieldAction()
+                }
+                
+            }
+
+            GameView.fieldAction = function(){
+                console.log('FieldAction{')
+                dice_interactive = false
+                if (fields[current_player.position].type == 'sma'){
+                    console.log(current_player)
+                    console.log('sma: ' + fields[current_player.position].action.toString())
+                    this.info = this.add.text(1920 + center_offset, 700, fields[current_player.position].name + ': ' + fields[current_player.position].action + '€$').setFontSize(100).setOrigin(0.5)
+                    this.acknowledge = this.add.text(1920 + center_offset, 1000, 'Acknowledge').setFontSize(100).setOrigin(0.5).setInteractive({useHandCursor: true}).on('pointerdown', () => {
+                        this.info.destroy()
+                        this.acknowledge.destroy()
+                        current_player.balance += fields[current_player.position].action
+                        player_at_train += pasch
+                        pasch = 1
+                        dice_interactive = true
+                    }).setPadding(20,20,10,10).setShadow(0,0, shadow_color, shadow_blur, 1, 1).setStroke(shadow_color, edge_thickness).on('pointerover', () => {this.acknowledge.setScale(1.2)}).on('pointerout', () => {this.acknowledge.setScale(1)})
+                    
+
+                } else { 
+                    if (fields[current_player.position].type == 'prop') {
+                        console.log('prop:')
+                        console.log(fields[current_player.position])
+                        dice_interactive = false
+                        this.scene.launch('prop_menu')
+
+                    } else { 
+                        if (fields[current_player.position].type == 'eve' || fields[current_player.position].type == 'com') {
+                            this.action = eve_cards[Math.floor(Math.random() * eve_cards.length)]
+                            if (this.action[0] == 'sma'){
+                                this.card = this.add.image(1920 + center_offset,1080, this.action[2].toString()).setScale(0.7)
+                                if (current_player.balance + this.action[1] > 0){
+                                    this.acknowledge = this.add.text(1920 + center_offset, 1600, 'Acknowledge this card').setOrigin(0.5).setFontSize(70).setInteractive({useHandCursor : true}).on('pointerdown', () => {this.moneyAction(this.action[1]); this.card.destroy(); this.acknowledge.destroy(); dice_interactive = true; player_at_train += pasch; pasch = 1}).setPadding(20,20,10,10).setShadow(0,0, shadow_color, shadow_blur, 1, 1).setStroke(shadow_color, edge_thickness).on('pointerover', () => {this.acknowledge.setScale(1.2)}).on('pointerout', () => {this.acknowledge.setScale(1)})
+                                } else {
+                                    this.deny = this.add.text(1920 + center_offset, 1600, 'Open Trade Manager').setOrigin(0.5).setFontSize(70).setInteractive({useHandCursor : true}).on('pointerdown', () => {switch_to_trade = true; this.card.destroy(); this.deny.destroy(); this.fieldAction()}).setPadding(20,20,10,10).setShadow(0,0, shadow_color, shadow_blur, 1, 1).setStroke(shadow_color, edge_thickness).on('pointerover', () => {this.deny.setScale(1.2)}).on('pointerout', () => {this.deny.setScale(1)})
+                                }
+                            } else {
+                                if (this.action[0] == 'mve'){
+                                    this.card = this.add.image(1920 + center_offset,1080, this.action[2].toString()).setScale(0.7)
+                                    this.acknowledge = this.add.text(1920 + center_offset, 1600, 'Acknowledge this card').setOrigin(0.5).setFontSize(70).setInteractive({useHandCursor : true}).on('pointerdown', () => {this.card.destroy(); this.acknowledge.destroy(); dice_interactive = true; this.movePlayer(this.images[player_at_train % player_number], this.action[1], 1)}).setPadding(20,20,10,10).setShadow(0,0, shadow_color, shadow_blur, 1, 1).setStroke(shadow_color, edge_thickness).on('pointerover', () => {this.acknowledge.setScale(1.2)}).on('pointerout', () => {this.acknowledge.setScale(1)})
+                                } else {
+                                    if (this.action[0] == 'prison'){
+                                        this.card = this.add.image(1920 + center_offset,1080, this.action[1].toString()).setScale(0.7)
+                                        this.acknowledge = this.add.text(1920 + center_offset, 1600, 'Acknowledge this card').setOrigin(0.5).setFontSize(70).setInteractive({useHandCursor : true}).on('pointerdown', () => {pasch = 1; this.movePlayer(this.images[player_at_train % player_number], 40, 1); current_player.in_prison = 3; this.card.destroy(); this.acknowledge.destroy(); dice_interactive = true}).setPadding(20,20,10,10).setShadow(0,0, shadow_color, shadow_blur, 1, 1).setStroke(shadow_color, edge_thickness).on('pointerover', () => {this.acknowledge.setScale(1.2)}).on('pointerout', () => {this.acknowledge.setScale(1)})
+                                    }
+                                }
+                            } 
+                        } else {
+                            if (fields[current_player.position].type == 'prison') {
+                                current_player.in_prison = 3
+                                this.prisonMessage(1)
+                            } else {
+                                player_at_train += pasch
+                                pasch = 1
+                                dice_interactive = true
+                            }
+                        }
+                    }
+                }
+            }
+                
+
+            GameView.moneyAction = function(amount) {
+                current_player.balance += amount
+            }
+
+            GameView.rollDice = function() {
+                if (dice_interactive == true){
+                    dice[0] = Math.floor(Math.random() * 6) + 1
+                    dice[1] = Math.floor(Math.random() * 6) + 1
+                    console.log(dice)
+                    if (dice[0] == dice[1]){
+                        pasch = 0
+                        current_player.pasch_counter += 1
+                    }
+                    updated = true
+                    dice_rolled += 1
+                }
+                
+            }
+
+            GameView.prisonManagement = function(){
+                if (prison_seq_init == false){
+                    current_player.pasch_counter = 0
+                    dice_rolled = 0
+                    this.banner = this.add.text(1920 + center_offset, 800, current_player.name + ', you are in Prison!').setFontSize(100).setOrigin(0.5)
+                    this.bail = this.add.text(1400 + center_offset, 1600, 'Bail out for 50€$').setFontSize(50).setInteractive({useHandCursor : true}).on('pointerdown', () => {current_player.balance -= 50; current_player.in_prison = 0; dice_rolled = 0; prison_seq_init = false; this.banner.destroy(); this.dice_count.destroy(); this.bail.destroy();pasch = 1; this.movePlayer(this.images[player_at_train % player_number], 10, 1); player_at_train -= 1}).setPadding(20,20,10,10).setShadow(0,0, shadow_color, shadow_blur, 1, 1).setStroke(shadow_color, edge_thickness).on('pointerover', () => {this.bail.setScale(1.2)}).on('pointerout', () => {this.bail.setScale(1)})
+                    this.dice_count = this.add.text(1920 + center_offset, 950, 'Roll dice 0/3').setFontSize(70).setOrigin(0.5)
+                    prison_seq_init = true
+                } else {
+                    this.dice_count.text = 'Roll dice ' + dice_rolled.toString() + '/3'
+                    if (current_player.pasch_counter > 0){
+                        current_player.in_prison = 0
+                        this.banner.destroy()
+                        this.bail.destroy()
+                        this.dice_count.destroy()
+                        prison_seq_init = false
+                        this.movePlayer(this.images[player_at_train % player_number], 10, 1)
+                    } else {
+                        if (dice_rolled == 3 && current_player.in_prison == 1){
+                            this.dice_count.text = 'You now have to bail out.'
+                        } else {
+                            if (dice_rolled == 3){
+                                dice_rolled = 0
+                                current_player.in_prison -= 1
+                                prison_seq_init = false
+                                this.banner.destroy()
+                                this.bail.destroy()
+                                this.dice_count.destroy()
+                                player_at_train += 1
+                            }
+                        }
+                    }
+                }
+            }
+
+            GameView.prisonMessage = function(whichone) {
+                dice_interactive = false
+                if (whichone == 0){
+                    this.banner = this.add.text(1920 + center_offset, 800, 'You are imprisoned for speeding!').setFontSize(100).setOrigin(0.5)
+                } else {
+                    this.banner = this.add.text(1920 + center_offset, 800, 'A policeman caught you!').setFontSize(100).setOrigin(0.5)
+                }
+                
+                this.acknowledge = this.add.text(1920 + center_offset, 1000, 'Acknowledge').setFontSize(80).setOrigin(0.5).setInteractive({useHandCursor : true}).on('pointerdown', () => {this.banner.destroy(); this.acknowledge.destroy(); dice_interactive = true; this.movePlayer(this.images[player_at_train % player_number], 40, 1)}).setPadding(20,20,10,10).setShadow(0,0, shadow_color, shadow_blur, 1, 1).setStroke(shadow_color, edge_thickness).on('pointerover', () => {this.acknowledge.setScale(1.2)}).on('pointerout', () => {this.acknowledge.setScale(1)})
+            }
+
+            GameView.update = function() {
+                this.names[player_at_train % player_number][0].setShadow(0,0, '#ffffff', 30, 1, 1)
+                
+                for (let i = 0; i < players.length; ++i){
+                    this.names[i][1].setText(players[i].balance + '€$')
+                }
+
+                if (player_at_train > 0){
+                    this.names[(player_at_train-1) % player_number][0].setShadow()
+                }
+
+                current_player = players[player_at_train % player_number]
+                this.dice1.setTexture('d' + dice[0])
+                this.dice2.setTexture('d' + dice[1])
+                
+                if (updated == true) {
+                    if (current_player.in_prison > 0){
+                        this.prisonManagement()
+                    } else {
+                        if (current_player.pasch_counter == 3){
+                            current_player.in_prison = 3
+                            this.prisonMessage(0)
+                            player_at_train += 1
+                            pasch = 1
+                        } else {
+                            this.movePlayer(this.images[player_at_train % player_number], dice[0] + dice[1])
+                        }
+                    }
+                    updated = false 
+                }
+
+                if (switch_to_trade == true){
+                    TradeManager.scene.restart()
+                    this.scene.switch('trade_mngr')
+                    switch_to_trade = false
+                } 
+
+                if (switch_to_auction == true){
+                    Auctioneer.scene.restart()
+                    this.scene.switch('auct')
+                    switch_to_auction = false
+                }
+                
+                if (player_at_train != player_at_train_old){
+                    for (let i = 0; i < players.length; ++i){
+                        players[i].pasch_counter = 0
+                    }
+                    if ((player_at_train_old % player_number) > (player_at_train % player_number)){
+                        this.payday()
+                    }
+                    player_at_train_old = player_at_train
+                    pasch = 1
+                }
+
+                for (let i = 0; i < this.indicators.length; i++){
+                    if (fields[i+1].type == 'prop' && fields[i+1].owner != null){
+                        if (fields[i+1].owner.type == 'holding'){
+                            this.indicators[i][0].destroy()
+                            this.indicators[i][0] = this.add.circle(field_grid[i+1][0] - 150 * field_grid[i+1][3] + center_offset, field_grid[i+1][1] - 150 * field_grid[i+1][4], 25, fields[i+1].owner.color, 1)
+                            this.indicators[i][1].destroy()
+                            this.indicators[i][1] = this.add.text(field_grid[i+1][0] - 150 * field_grid[i+1][3] + center_offset, field_grid[i+1][1] - 150 * field_grid[i+1][4], fields[i+1].state).setColor('#ffffff').setOrigin(0.5).setFontSize(50)
+                            if (fields[i+1].owner.color != 0xffffff){
+                                this.indicators[i][1].setText(fields[i+1].state).setColor('#ffffff')
+                            } else {
+                                this.indicators[i][1].setText(fields[i+1].state).setColor('#000000')
+                            }
+                        } else {
+                            this.indicators[i][0].setFillStyle(fields[i+1].owner.color, 1)
+                            if (fields[i+1].owner.color != 0xffffff){
+                                this.indicators[i][1].setText(fields[i+1].state).setColor('#ffffff')
+                            } else {
+                                this.indicators[i][1].setText(fields[i+1].state).setColor('#000000')
+                            }
+                        }
+                        
+                        
+                    }
+                }
+
+            }
+
+            GameView.payday = function(){
+                console.log('payday')
+                var delta = 0
+                for (let i = 0; i < holdings.length; ++i){
+                    console.log(holdings[i])
+                    delta = holdings[i].balance - holdings[i].min_liquid
+                    if (delta > 0){
+                        for (let n = 0; n < holdings[i].members.length; ++n){
+                            console.log(Math.round(delta * holdings[i].members[n][1] / 100))
+                            holdings[i].members[n][0].balance += Math.round(delta * holdings[i].members[n][1] / 100)
+                        }
+                        holdings[i].balance = holdings[i].min_liquid
+                    }
+                }
+            }
+
+
+            GameView.end = function() {
+
+            };
+            //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+            //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+            HoldingCreator.preload = function(){
+                this.load.plugin('rexinputtextplugin', 'https://raw.githubusercontent.com/rexrainbow/phaser3-rex-notes/master/dist/rexinputtextplugin.min.js', true)
+            }
+
+            HoldingCreator.create = function(){
+                this.add.text(1920, 200, 'Holding Creator').setFontSize(100).setOrigin(0.5)
+                this.add.image(50, 200, 'ab').setOrigin(0, 0.5).setScale(0.2).setInteractive({useHandCursor: true}).on('pointerdown', () => {this.scene.switch('game')})
+                this.add.text(2500, 200, 'Name:').setFontSize(70).setOrigin(0, 0.5)
+                this.name = this.add.rexInputText({x: 2750, y: 200, width: 1000, height: 100, fontSize: '70px'}).setPlaceholder('Cool Holding').setOrigin(0,0.5)
+                this.add.text(250, 200, 'Min balance for payday:').setFontSize(70).setOrigin(0, 0.5)
+                this.min_liquid = this.add.rexInputText({x: 1200, y: 200, width: 400, height: 100, fontSize: '70px'}).setPlaceholder('amount').setOrigin(0,0.5)
+                this.playerimages = []
+                
+                for (let i = 0; i < players.length; i++){
+                    this.playerimages.push([this.add.image(100, 400 + 400 * i, 'usr').setAlpha(0.25).setScale(0.5).setTint(players[i].color).setOrigin(0,0).setInteractive({useHandCursor: true}).on('pointerdown', () => {this.selectPlayer(i)}), false, [], null, null])
+                }
+
+                this.finish = this.add.text(3790, 2110, 'Create').setFontSize(80).setOrigin(1, 1).setInteractive({useHandCursor: true}).on('pointerdown', () => {this.validate()}).setPadding(20,20,10,10).setShadow(0,0, shadow_color, shadow_blur, 1, 1).setStroke(shadow_color, edge_thickness).on('pointerover', () => {this.finish.setScale(1.2)}).on('pointerout', () => {this.finish.setScale(1)})
+            }
+
+            HoldingCreator.selectPlayer = function(number){
+                if (this.playerimages[number][1] == false){
+                    this.playerimages[number][0].setAlpha(1)
+                    this.playerimages[number][1] = true
+                    var properties = []
+                    for (let i = 0; i < players[number].owned_properties.length; ++i){
+                        properties.push([this.add.image(450 + 400 * i, 380 + 400 * number, players[number].owned_properties[i].name).setScale(0.4).setAlpha(0.25).setOrigin(0,0).setInteractive({useHandCursor: true}).on('pointerdown', () => {this.selectProperty(number, i)}), false, players[number].owned_properties[i]])
+                    }
+                    this.playerimages[number][2] = properties
+                    this.playerimages[number][3] = this.add.rexInputText({x: 2800, y: 450 + 400 * number, width: 500, height: 100, fontSize: '70px'}).setPlaceholder('Entrance fee').setOrigin(0,0.5)
+                    this.playerimages[number][4] = this.add.rexInputText({x: 3400, y: 450 + 400 * number, width: 500, height: 100, fontSize: '70px'}).setPlaceholder('% of shares').setOrigin(0,0.5)
+                } else {
+                    this.playerimages[number][0].setAlpha(0.25)
+                    this.playerimages[number][1] = false
+                    for (let i = 0; i < this.playerimages[number][2].length; i++){
+                        this.playerimages[number][2][i][0].destroy()
+                    }
+                    this.playerimages[number][2] = []
+                    this.playerimages[number][3].destroy()
+                    this.playerimages[number][4].destroy()
+                    this.playerimages[number][3] = null
+                    this.playerimages[number][4] = null
+                    
+                    
+                }
+            }
+
+            HoldingCreator.selectProperty = function(player, number){
+                if (this.playerimages[player][2][number][1] == false){
+                    this.playerimages[player][2][number][1] = true
+                    this.playerimages[player][2][number][0].setAlpha(1)
+                } else {
+                    this.playerimages[player][2][number][1] = false
+                    this.playerimages[player][2][number][0].setAlpha(0.25)
+                }
+            }
+
+            HoldingCreator.validate = function() {
+                var exception = false
+                var properties = []
+                var members = []
+                var balance = 0
+                var abs_ownership = 0
+                var new_holding = null
+                for (let i = 0; i < this.playerimages.length; ++i){
+                    if (this.playerimages[i][1] == true){
+                        if (this.playerimages[i][3].text != ''){
+                            if (this.playerimages[i][4].text != ''){
+                                if (this.name.text != ''){
+                                    if (this.min_liquid.text != ''){
+                                        for (let n = 0; n < this.playerimages[i][2].length; ++n){
+                                            if (this.playerimages[i][2][n][1] == true){
+                                                properties.push(this.playerimages[i][2][n][2])
+                                            }
+                                        }
+                                        members.push([players[i], parseInt(this.playerimages[i][4].text)])
+                                        balance += parseInt(this.playerimages[i][3].text)
+                                    } else {
+                                        this.mask = this.add.rectangle(1920,1080,3000,600,0x444444)
+                                        this.info = this.add.text(1920, 880, 'Make sure all input fields').setFontSize(100).setOrigin(0.5)
+                                        this.info2 = this.add.text(1920, 980, 'are filled in!').setFontSize(100).setOrigin(0.5)
+                                        this.acknowledge = this.add.text(1920,1280, 'Acknowledge').setFontSize(100).setOrigin(0.5).setInteractive({useHandCursor: true}).on('pointerdown', () => {this.mask.destroy(); this.info.destroy(); this.info2.destroy(); this.acknowledge.destroy()}).setPadding(20,20,10,10).setShadow(0,0, shadow_color, shadow_blur, 1, 1).setStroke(shadow_color, edge_thickness).on('pointerover', () => {this.acknowledge.setScale(1.2)}).on('pointerout', () => {this.acknowledge.setScale(1)})
+                                        exception = true
+                                        break
+                                    }
+                                } else {
+                                    this.mask = this.add.rectangle(1920,1080,3000,600,0x444444)
+                                    this.info = this.add.text(1920, 880, 'Make sure all input fields').setFontSize(100).setOrigin(0.5)
+                                    this.info2 = this.add.text(1920, 980, 'are filled in!').setFontSize(100).setOrigin(0.5)
+                                    this.acknowledge = this.add.text(1920,1280, 'Acknowledge').setFontSize(100).setOrigin(0.5).setInteractive({useHandCursor: true}).on('pointerdown', () => {this.mask.destroy(); this.info.destroy(); this.info2.destroy(); this.acknowledge.destroy()}).setPadding(20,20,10,10).setShadow(0,0, shadow_color, shadow_blur, 1, 1).setStroke(shadow_color, edge_thickness).on('pointerover', () => {this.acknowledge.setScale(1.2)}).on('pointerout', () => {this.acknowledge.setScale(1)})
+                                    exception = true
+                                    break
+                                }
+                            } else {
+                                this.mask = this.add.rectangle(1920,1080,3000,600,0x444444)
+                                this.info = this.add.text(1920, 880, 'Make sure all input fields').setFontSize(100).setOrigin(0.5)
+                                this.info2 = this.add.text(1920, 980, 'are filled in!').setFontSize(100).setOrigin(0.5)
+                                this.acknowledge = this.add.text(1920,1280, 'Acknowledge').setFontSize(100).setOrigin(0.5).setInteractive({useHandCursor: true}).on('pointerdown', () => {this.mask.destroy(); this.info.destroy(); this.info2.destroy(); this.acknowledge.destroy()}).setPadding(20,20,10,10).setShadow(0,0, shadow_color, shadow_blur, 1, 1).setStroke(shadow_color, edge_thickness).on('pointerover', () => {this.acknowledge.setScale(1.2)}).on('pointerout', () => {this.acknowledge.setScale(1)})
+                                exception = true
+                                break
+                            }
+                        } else {
+                            this.mask = this.add.rectangle(1920,1080,3000,600,0x444444)
+                            this.info = this.add.text(1920, 880, 'Make sure all input fields').setFontSize(100).setOrigin(0.5)
+                            this.info2 = this.add.text(1920, 980, 'are filled in!').setFontSize(100).setOrigin(0.5)
+                            this.acknowledge = this.add.text(1920,1280, 'Acknowledge').setFontSize(100).setOrigin(0.5).setInteractive({useHandCursor: true}).on('pointerdown', () => {this.mask.destroy(); this.info.destroy(); this.info2.destroy(); this.acknowledge.destroy()}).setPadding(20,20,10,10).setShadow(0,0, shadow_color, shadow_blur, 1, 1).setStroke(shadow_color, edge_thickness).on('pointerover', () => {this.acknowledge.setScale(1.2)}).on('pointerout', () => {this.acknowledge.setScale(1)})
+                            exception = true
+                            break
+                        }
+                    }
+                }
+                for (let i = 0; i < members.length; ++i){
+                    abs_ownership += members[i][1]
+                }
+                console.log(abs_ownership)
+
+                if (abs_ownership == 100 && exception == false) {
+                    for (let i = 0; i < this.playerimages.length; ++i){
+                        if (this.playerimages[i][1] == true){
+                            if (players[i].balance < parseInt(this.playerimages[i][3].text)){
+                                exception = true
+                            }
+                        }
+                    }
+                    if (exception == true) {
+                        this.mask = this.add.rectangle(1920,1080,3000,600,0x444444)
+                        this.info = this.add.text(1920, 880, 'At least one player').setFontSize(100).setOrigin(0.5)
+                        this.info2 = this.add.text(1920, 980, 'does not have sufficient funds.').setFontSize(100).setOrigin(0.5)
+                        this.acknowledge = this.add.text(1920,1280, 'Acknowledge').setFontSize(100).setOrigin(0.5).setInteractive({useHandCursor: true}).on('pointerdown', () => {this.mask.destroy(); this.info.destroy(); this.info2.destroy(); this.acknowledge.destroy()}).setPadding(20,20,10,10).setShadow(0,0, shadow_color, shadow_blur, 1, 1).setStroke(shadow_color, edge_thickness).on('pointerover', () => {this.acknowledge.setScale(1.2)}).on('pointerout', () => {this.acknowledge.setScale(1)})
+                    } else {
+                        new_holding = new holding(this.name.text, members, properties, balance, parseInt(this.min_liquid.text))
+                        for (let i = 0; i < this.playerimages.length; ++i){
+                            if (this.playerimages[i][1] == true){
+                                players[i].balance -= parseInt(this.playerimages[i][3].text)
+                                for (let n = 0; n < this.playerimages[i][2].length; ++n){
+                                    if (this.playerimages[i][2][n][1] == true){
+                                        players[i].owned_properties.splice(players[i].owned_properties.indexOf(this.playerimages[i][2][n][2]), 1)
+                                        this.playerimages[i][2][n][2].owner = new_holding
+                                    }
+                                }
+                            }
+                        }
+                        for (let i = 0; i < members.length; i++){
+                            members[i][0].owned_shares.push([new_holding, members[i][1]])
+                        }
+
+                        count = -1
+                        for (let i = 0; i < new_holding.owned_properties.length; ++i){
+                            if (new_holding.owned_properties[i].color == 'stations'){
+                                count++
+                            }
+                        }
+                        for (let i = 0; i < new_holding.owned_properties.length; ++i){
+                            if (new_holding.owned_properties[i].color == 'stations'){
+                                new_holding.owned_properties[i].state = count
+                            }
+                        }
+
+                        count = -1
+                        for (let i = 0; i < new_holding.owned_properties.length; ++i){
+                            if (new_holding.owned_properties[i].color == 'providers'){
+                                count++
+                            }
+                        }
+                        for (let i = 0; i < new_holding.owned_properties.length; ++i){
+                            if (new_holding.owned_properties[i].color == 'providers'){
+                                new_holding.owned_properties[i].state = count
+                            }
+                        }
+                        holdings.push(new_holding)
+                        GameView.scene.restart()
+                        this.scene.switch('game')
+                    }
+                       
+                } else {
+                    if (exception == false){
+                        this.mask = this.add.rectangle(1920,1080,3000,600,0x444444)
+                        this.info = this.add.text(1920, 880, 'Make shure that all partial ownerships').setFontSize(100).setOrigin(0.5)
+                        this.info2 = this.add.text(1920, 980, 'add up to 100!').setFontSize(100).setOrigin(0.5)
+                        this.acknowledge = this.add.text(1920,1280, 'Acknowledge').setFontSize(100).setOrigin(0.5).setInteractive({useHandCursor: true}).on('pointerdown', () => {this.mask.destroy(); this.info.destroy(); this.info2.destroy(); this.acknowledge.destroy()}).setPadding(20,20,10,10).setShadow(0,0, shadow_color, shadow_blur, 1, 1).setStroke(shadow_color, edge_thickness).on('pointerover', () => {this.acknowledge.setScale(1.2)}).on('pointerout', () => {this.acknowledge.setScale(1)})
+                    }
+                }
+                console.log(holdings)
+            }
+
+            HoldingCreator.update = function(){
+
+            }
+
+            //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+            //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+            Auctioneer.preload = function() {
+
+            }
+
+            Auctioneer.create = function() {
+                this.banner = this.add.text(1920, 300, "Today's Offer: " + fields[current_player.position].name).setFontSize(100).setOrigin(0.5)
+                this.prop = this.add.image(3300, 1080, fields[current_player.position].name)
+                this.add.text(100,600,'Players:').setFontSize(80)
+                this.amount = this.add.rexInputText({x: 1920, y: 1080, width: 600, height: 100, fontSize: '100px'}).setPlaceholder('amount in €$').setOrigin(0.5,0.5)
+                this.continue = this.add.text(3800, 2120, 'Continue').setFontSize(100).setOrigin(1, 1).setInteractive({useHandCursor: true}).on('pointerdown', () => {
+                    this.validate()
+                }).setPadding(20,20,10,10).setShadow(0,0, shadow_color, shadow_blur, 1, 1).setStroke(shadow_color, edge_thickness).on('pointerover', () => {this.continue.setScale(1.2)}).on('pointerout', () => {this.continue.setScale(1)})
+
+                this.playerimages = []
+                for (let i = 0; i < players.length; ++i){
+                    this.playerimages.push([this.add.text(100, 700 + 150*i, players[i].name).setFontSize(80).setColor('#' + players[i].color.toString(16).padStart(6, '0')).setStroke('#ffffff', 5).setPadding(20,20,10,10).setInteractive({useHandCursor: true}).on('pointerdown', () => this.selectPlayer(i)), this.add.text(1020, 700 + 150*i, players[i].balance + '€$').setFontSize(80).setOrigin(1, 0).setColor('#' + players[i].color.toString(16).padStart(6, '0')).setStroke('#ffffff', 5), false])
+                }
+
+            }
+
+            Auctioneer.selectPlayer = function(i) {
+                if (this.playerimages[i][2] == false){
+                    this.playerimages[i][0].setPadding(20,20,10,10).setShadow(0,0,'#ffffff', 30, 1, 1)
+                    this.playerimages[i][2] = true
+                } else {
+                    this.playerimages[i][0].setShadow()
+                    this.playerimages[i][2] = false
+                }
+            }
+
+            Auctioneer.validate = function() {
+                trues = 0
+                this.selected = null
+                for (let i = 0; i < this.playerimages.length; ++i){
+                    if (this.playerimages[i][2] == true){
+                        trues += 1
+                        this.selected = players[i]
+                    }
+                }
+                if (trues > 1){
+                    this.mask = this.add.rectangle(1920,1080,2500,400,0x444444).setOrigin(0.5)
+                    this.info = this.add.text(1920, 980, 'Only select one player').setFontSize(100).setOrigin(0.5)
+                    this.acknowledge = this.add.text(1920, 1180, 'Acknowledge').setFontSize(80).setOrigin(0.5).setInteractive({useHandCursor: true}).on('pointerdown', () => {this.mask.destroy(); this.info.destroy(); this.acknowledge.destroy()}).setPadding(20,20,10,10).setShadow(0,0, shadow_color, shadow_blur, 1, 1).setStroke(shadow_color, edge_thickness).on('pointerover', () => {this.acknowledge.setScale(1.2)}).on('pointerout', () => {this.acknowledge.setScale(1)})
+                } else {
+                    if (parseInt(this.amount.text) > this.selected.balance){
+                        this.mask = this.add.rectangle(1920,1080,2500,400,0x444444).setOrigin(0.5)
+                        this.info = this.add.text(1920, 980, 'Insufficient funds').setFontSize(100).setOrigin(0.5)
+                        this.acknowledge = this.add.text(1920, 1180, 'Acknowledge').setFontSize(80).setOrigin(0.5).setInteractive({useHandCursor: true}).on('pointerdown', () => {this.mask.destroy(); this.info.destroy(); this.acknowledge.destroy()}).setPadding(20,20,10,10).setShadow(0,0, shadow_color, shadow_blur, 1, 1).setStroke(shadow_color, edge_thickness).on('pointerover', () => {this.acknowledge.setScale(1.2)}).on('pointerout', () => {this.acknowledge.setScale(1)})
+                    } else {
+                        this.selected.balance -= parseInt(this.amount.text)
+                        this.selected.owned_properties.push(fields[current_player.position])
+                        fields[current_player.position].owner = this.selected
+                        GameView.scene.restart()
+                        this.scene.switch('game')
+                    }
+                }
+            }
+
+            Auctioneer.update = function() {
+
+            }
+
+
+            //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+            //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+            MainMenu.preload = function() {
+                this.load.image('Badstraße', 'assets/Monpol design/reel_estate_cards/Folie1.PNG')
+                this.load.image('Turmstraße', 'assets/Monpol design/reel_estate_cards/Folie2.PNG')
+                this.load.image('Chauseestraße', 'assets/Monpol design/reel_estate_cards/Folie3.PNG')
+                this.load.image('Elisenstraße', 'assets/Monpol design/reel_estate_cards/Folie4.PNG')
+                this.load.image('Poststraße', 'assets/Monpol design/reel_estate_cards/Folie5.PNG')
+                this.load.image('Seestraße', 'assets/Monpol design/reel_estate_cards/Folie6.PNG')
+                this.load.image('Hafenstraße', 'assets/Monpol design/reel_estate_cards/Folie7.PNG')
+                this.load.image('Neue Straße', 'assets/Monpol design/reel_estate_cards/Folie8.PNG')
+                this.load.image('Münchener Straße', 'assets/Monpol design/reel_estate_cards/Folie9.PNG')
+                this.load.image('Wiener Straße', 'assets/Monpol design/reel_estate_cards/Folie10.PNG')
+                this.load.image('Berliner Straße', 'assets/Monpol design/reel_estate_cards/Folie11.PNG')
+                this.load.image('Theaterstraße', 'assets/Monpol design/reel_estate_cards/Folie12.PNG')
+                this.load.image('Museumstraße', 'assets/Monpol design/reel_estate_cards/Folie13.PNG')
+                this.load.image('Opernplatz', 'assets/Monpol design/reel_estate_cards/Folie14.PNG')
+                this.load.image('Lessingstraße', 'assets/Monpol design/reel_estate_cards/Folie15.PNG')
+                this.load.image('Schillerstraße', 'assets/Monpol design/reel_estate_cards/Folie16.PNG')
+                this.load.image('Goethestraße', 'assets/Monpol design/reel_estate_cards/Folie17.PNG')
+                this.load.image('Rathausplatz', 'assets/Monpol design/reel_estate_cards/Folie18.PNG')
+                this.load.image('Bahnhofstraße', 'assets/Monpol design/reel_estate_cards/Folie19.PNG')
+                this.load.image('Hauptstraße', 'assets/Monpol design/reel_estate_cards/Folie20.PNG')
+                this.load.image('Parkstraße', 'assets/Monpol design/reel_estate_cards/Folie21.PNG')
+                this.load.image('Schlossallee', 'assets/Monpol design/reel_estate_cards/Folie22.PNG')
+                this.load.image('Südbahnhof', 'assets/Monpol design/reel_estate_cards/Folie23.PNG')
+                this.load.image('Westbahnhof', 'assets/Monpol design/reel_estate_cards/Folie24.PNG')
+                this.load.image('Nordbahnhof', 'assets/Monpol design/reel_estate_cards/Folie25.PNG')
+                this.load.image('Hauptbahnhof', 'assets/Monpol design/reel_estate_cards/Folie26.PNG')
+                this.load.image('Elektrizitätswerk', 'assets/Monpol design/reel_estate_cards/Folie27.PNG')
+                this.load.image('Wasserwerk', 'assets/Monpol design/reel_estate_cards/Folie28.PNG')
+                for (let i = 1; i <= 32; ++i){
+                    this.load.image(i.toString(), 'assets/Monpol design/community_event_cards/Folie' + i.toString() + '.PNG')
+                }
+                this.load.image('ab', 'assets/Monpol design/arrow_back.png')
+                this.load.image('bg', 'assets/Monpol design/simple_board_dark.png');
+                this.load.image('usr', 'assets/Monpol design/user_icon.png');
+                this.load.image('hol', 'assets/Monpol design/holding_icon.png');
+                this.load.image('d1', 'assets/Monpol design/dice1.png')
+                this.load.image('d2', 'assets/Monpol design/dice2.png')
+                this.load.image('d3', 'assets/Monpol design/dice3.png')
+                this.load.image('d4', 'assets/Monpol design/dice4.png')
+                this.load.image('d5', 'assets/Monpol design/dice5.png')
+                this.load.image('d6', 'assets/Monpol design/dice6.png')
+                this.load.plugin('rexinputtextplugin', 'https://raw.githubusercontent.com/rexrainbow/phaser3-rex-notes/master/dist/rexinputtextplugin.min.js', true)
+            };
+
+            MainMenu.create = function() {
+                var banner = this.add.text(1920,300, 'Welcome to Monopoly Holdings!').setFontSize(200).setOrigin(0.5);
+
+                var start = this.add.text(1920, 800, 'New Game').setFontSize(100).setOrigin(0.5).setPadding(20,20,10,10).setShadow(0,0, shadow_color, shadow_blur, 1, 1).setStroke(shadow_color, edge_thickness)
+                start.setInteractive({useHandCursor: true}).on('pointerdown', () => this.toGame()).on('pointerover', () => {start.setScale(1.2)}).on('pointerout', () => {start.setScale(1)})
+
+                var player_menu = this.add.text(1920, 1000, 'Player Menu').setFontSize(100).setOrigin(0.5).setPadding(20,20,10,10).setShadow(0,0, shadow_color, shadow_blur, 1, 1).setStroke(shadow_color, edge_thickness)
+                player_menu.setInteractive({useHandCursor: true}).on('pointerdown', () => this.toPlayerMenu()).on('pointerover', () => {player_menu.setScale(1.2)}).on('pointerout', () => {player_menu.setScale(1)})
+            };
+
+            MainMenu.toGame = function() {
+                this.scene.switch('plr_menu');
+            }
+
+            MainMenu.toPlayerMenu = function() {
+                this.scene.switch('plr_menu')
+            }
+            //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+            
+            //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+            UsrDetail.init = function() {
+            };
+
+            UsrDetail.preload = function() {
+                
+            }
+            //750 * scale * owned_properties.length
+            UsrDetail.create = function() {
+                this.add.image(50, 50, 'ab').setOrigin(0,0).setScale(0.2).setInteractive({useHandCursor: true}).on('pointerdown', () => this.clickBackButton())
+                this.shares = []
+                this.members = []
+                var props = {
+                    'Badstraße': this.add.image(430, 500, 'Badstraße').setOrigin(0.5).setScale(0.7).setAlpha(0.25).setInteractive({useHandCursor: true}).on('pointerdown', () => this.propManager('brown')),
+                    'Turmstraße': this.add.image(430, 650, 'Turmstraße').setOrigin(0.5).setScale(0.7).setAlpha(0.25).setInteractive({useHandCursor: true}).on('pointerdown', () => this.propManager('brown')),
+                    'Chauseestraße': this.add.image(430, 1400, 'Chauseestraße').setOrigin(0.5).setScale(0.7).setAlpha(0.25).setInteractive({useHandCursor: true}).on('pointerdown', () => this.propManager('baby blue')),
+                    'Elisenstraße': this.add.image(430, 1550, 'Elisenstraße').setOrigin(0.5).setScale(0.7).setAlpha(0.25).setInteractive({useHandCursor: true}).on('pointerdown', () => this.propManager('baby blue')),
+                    'Poststraße': this.add.image(430, 1700, 'Poststraße').setOrigin(0.5).setScale(0.7).setAlpha(0.25).setInteractive({useHandCursor: true}).on('pointerdown', () => this.propManager('baby blue')),
+                    'Seestraße': this.add.image(1030, 1400, 'Seestraße').setOrigin(0.5).setScale(0.7).setAlpha(0.25).setInteractive({useHandCursor: true}).on('pointerdown', () => this.propManager('pink')),
+                    'Hafenstraße': this.add.image(1030, 1550, 'Hafenstraße').setOrigin(0.5).setScale(0.7).setAlpha(0.25).setInteractive({useHandCursor: true}).on('pointerdown', () => this.propManager('pink')),
+                    'Neue Straße': this.add.image(1030, 1700, 'Neue Straße').setOrigin(0.5).setScale(0.7).setAlpha(0.25).setInteractive({useHandCursor: true}).on('pointerdown', () => this.propManager('pink')),
+                    'Münchener Straße': this.add.image(1630, 1400, 'Münchener Straße').setOrigin(0.5).setScale(0.7).setAlpha(0.25).setInteractive({useHandCursor: true}).on('pointerdown', () => this.propManager('orange')),
+                    'Wiener Straße': this.add.image(1630, 1550, 'Wiener Straße').setOrigin(0.5).setScale(0.7).setAlpha(0.25).setInteractive({useHandCursor: true}).on('pointerdown', () => this.propManager('orange')),
+                    'Berliner Straße': this.add.image(1630, 1700, 'Berliner Straße').setOrigin(0.5).setScale(0.7).setAlpha(0.25).setInteractive({useHandCursor: true}).on('pointerdown', () => this.propManager('orange')),
+                    'Theaterstraße': this.add.image(2230, 1400, 'Theaterstraße').setOrigin(0.5).setScale(0.7).setAlpha(0.25).setInteractive({useHandCursor: true}).on('pointerdown', () => this.propManager('red')),
+                    'Museumstraße': this.add.image(2230, 1550, 'Museumstraße').setOrigin(0.5).setScale(0.7).setAlpha(0.25).setInteractive({useHandCursor: true}).on('pointerdown', () => this.propManager('red')),
+                    'Opernplatz': this.add.image(2230, 1700, 'Opernplatz').setOrigin(0.5).setScale(0.7).setAlpha(0.25).setInteractive({useHandCursor: true}).on('pointerdown', () => this.propManager('red')),
+                    'Lessingstraße': this.add.image(2830, 1400, 'Lessingstraße').setOrigin(0.5).setScale(0.7).setAlpha(0.25).setInteractive({useHandCursor: true}).on('pointerdown', () => this.propManager('yellow')),
+                    'Schillerstraße': this.add.image(2830, 1550, 'Schillerstraße').setOrigin(0.5).setScale(0.7).setAlpha(0.25).setInteractive({useHandCursor: true}).on('pointerdown', () => this.propManager('yellow')),
+                    'Goethestraße': this.add.image(2830, 1700, 'Goethestraße').setOrigin(0.5).setScale(0.7).setAlpha(0.25).setInteractive({useHandCursor: true}).on('pointerdown', () => this.propManager('yellow')),
+                    'Rathausplatz': this.add.image(3430, 1400, 'Rathausplatz').setOrigin(0.5).setScale(0.7).setAlpha(0.25).setInteractive({useHandCursor: true}).on('pointerdown', () => this.propManager('green')),
+                    'Bahnhofstraße': this.add.image(3430, 1550, 'Bahnhofstraße').setOrigin(0.5).setScale(0.7).setAlpha(0.25).setInteractive({useHandCursor: true}).on('pointerdown', () => this.propManager('green')),
+                    'Hauptstraße': this.add.image(3430, 1700, 'Hauptstraße').setOrigin(0.5).setScale(0.7).setAlpha(0.25).setInteractive({useHandCursor: true}).on('pointerdown', () => this.propManager('green')),
+                    'Parkstraße': this.add.image(3430, 500, 'Parkstraße').setOrigin(0.5).setScale(0.7).setAlpha(0.25).setInteractive({useHandCursor: true}).on('pointerdown', () => this.propManager('blue')),
+                    'Schlossallee': this.add.image(3430, 650, 'Schlossallee').setOrigin(0.5).setScale(0.7).setAlpha(0.25).setInteractive({useHandCursor: true}).on('pointerdown', () => this.propManager('blue')),
+                    'Elektrizitätswerk': this.add.image(1030, 500, 'Elektrizitätswerk').setOrigin(0.5).setScale(0.7).setAlpha(0.25).setInteractive({useHandCursor: true}).on('pointerdown', () => this.propManager('providers')),
+                    'Wasserwerk': this.add.image(1030, 650, 'Wasserwerk').setOrigin(0.5).setScale(0.7).setAlpha(0.25).setInteractive({useHandCursor: true}).on('pointerdown', () => this.propManager('providers')),
+                    'Südbahnhof': this.add.image(2830, 500, 'Südbahnhof').setOrigin(0.5).setScale(0.7).setAlpha(0.25).setInteractive({useHandCursor: true}).on('pointerdown', () => this.propManager('stations')),
+                    'Westbahnhof': this.add.image(2830, 550, 'Westbahnhof').setOrigin(0.5).setScale(0.7).setAlpha(0.25).setInteractive({useHandCursor: true}).on('pointerdown', () => this.propManager('stations')),
+                    'Nordbahnhof': this.add.image(2830, 600, 'Nordbahnhof').setOrigin(0.5).setScale(0.7).setAlpha(0.25).setInteractive({useHandCursor: true}).on('pointerdown', () => this.propManager('stations')),
+                    'Hauptbahnhof': this.add.image(2830, 650, 'Hauptbahnhof').setOrigin(0.5).setScale(0.7).setAlpha(0.25).setInteractive({useHandCursor: true}).on('pointerdown', () => this.propManager('stations')),
+                }
+                
+                this.add.text(1920, 250, current_player.name).setFontSize(100).setOrigin(0.5)
+                this.add.text(1920, 450, 'Balance: ' + current_player.balance + '€$').setFontSize(100).setOrigin(0.5)
+                if (current_player.owned_shares != []){
+                    this.view = this.add.text(1920, 650, 'View Shares').setFontSize(100).setOrigin(0.5).setInteractive({useHandCursor: true}).on('pointerdown', () => this.viewShares()).setPadding(20,20,10,10).setShadow(0,0, shadow_color, shadow_blur, 1, 1).setStroke(shadow_color, edge_thickness).on('pointerover', () => {this.view.setScale(1.2)}).on('pointerout', () => {this.view.setScale(1)})
+                } else {
+                    this.add.text(1920, 650, 'View Shares').setFontSize(100).setOrigin(0.5).setAlpha(0.25)
+                }
+                
+                if (current_player.type == 'player'){
+                    this.give = this.add.text(1920, 850, 'Give Up').setFontSize(100).setOrigin(0.5).setInteractive({useHandCursor: true}).on('pointerdown', () => this.deletePlayer()).setPadding(20,20,10,10).setShadow(0,0, '#ff0000', shadow_blur, 1, 1).setStroke('#ff0000', edge_thickness).on('pointerover', () => {this.give.setScale(1.2)}).on('pointerout', () => {this.give.setScale(1)})
+                } else {
+                    this.viewm = this.add.text(1920, 850, 'View Members').setFontSize(100).setOrigin(0.5).setInteractive({useHandCursor: true}).on('pointerdown', () => this.viewMembers()).setPadding(20,20,10,10).setShadow(0,0, shadow_color, shadow_blur, 1, 1).setStroke(shadow_color, edge_thickness).on('pointerover', () => {this.viewm.setScale(1.2)}).on('pointerout', () => {this.viewm.setScale(1)})
+                }
+                
+                
+                for (n = 0; n < current_player.owned_properties.length; ++n) {
+                    //this.add.text(1920, 1200 + 100*n, current_player.owned_properties[n].name).setFontSize(60).setOrigin(0.5)
+                    //props.push(this.add.image(800 + (3200/(current_player.owned_properties.length)*(n)), 1500, current_player.owned_properties[n].name).setOrigin(0.5,0.5).setScale(1-current_player.owned_properties.length/10).setInteractive({useHandCursor: true}).on('pointerdown', () => {this.propManager(n)}))
+                    props[current_player.owned_properties[n].name].setAlpha(1)
+                }
+
+            }
+
+            UsrDetail.viewShares = function(){
+                this.mask = this.add.rectangle(1920, 1080, 3000, 1600, 0x444444).setOrigin(0.5)
+                for (let i = 0; i < current_player.owned_shares.length; ++i){
+                    this.shares.push(this.add.text(1920, 400 + i * 100, current_player.owned_shares[i][0].name + ': ' + current_player.owned_shares[i][1].toString() + '%').setFontSize(80).setOrigin(0.5).setInteractive({useHandCursor: true}).on('pointerdown', () => {current_player = current_player.owned_shares[i][0]; this.scene.restart()}))
+                }
+                this.back = this.add.text(1920, 1800, 'Back').setFontSize(80).setOrigin(0.5).setInteractive({useHandCursor: true}).on('pointerdown', () => {
+                    this.mask.destroy()
+                    for (let n = 0; n < this.shares.length; ++n){
+                        this.shares[n].destroy()
+                    }
+                    this.back.destroy()
+                    this.shares = []
+                }).setPadding(20,20,10,10).setShadow(0,0, shadow_color, shadow_blur, 1, 1).setStroke(shadow_color, edge_thickness).on('pointerover', () => {this.back.setScale(1.2)}).on('pointerout', () => {this.back.setScale(1)})
+            }
+
+            UsrDetail.viewMembers = function(){
+                this.mask = this.add.rectangle(1920, 1080, 3000, 1600, 0x444444).setOrigin(0.5)
+                for (let i = 0; i < current_player.members.length; ++i){
+                    this.members.push(this.add.text(1920, 400 + i * 100, current_player.members[i][0].name + ': ' + current_player.members[i][1].toString() + '%').setFontSize(80).setOrigin(0.5).setInteractive({useHandCursor: true}).on('pointerdown', () => {current_player = current_player.members[i][0]; this.scene.restart()}))
+                }
+                this.back = this.add.text(1920, 1800, 'Back').setFontSize(80).setOrigin(0.5).setInteractive({useHandCursor: true}).on('pointerdown', () => {
+                    this.mask.destroy()
+                    for (let n = 0; n < this.members.length; ++n){
+                        this.members[n].destroy()
+                    }
+                    this.back.destroy()
+                    this.members = []
+                }).setPadding(20,20,10,10).setShadow(0,0, shadow_color, shadow_blur, 1, 1).setStroke(shadow_color, edge_thickness).on('pointerover', () => {this.back.setScale(1.2)}).on('pointerout', () => {this.back.setScale(1)})
+            }
+
+            UsrDetail.propManager = function(color){
+                current_group = color
+                PropertyManager.scene.restart()
+                this.scene.switch('prop_mngr')
+            }
+
+            UsrDetail.clickBackButton = function() {
+                this.scene.switch('game')
+            }
+
+            UsrDetail.deletePlayer = function(){
+                if (current_player.owned_properties.length == 0){
+                    players.splice(player_at_train % player_number, 1)
+                    player_number -= 1
+                    player_at_train = player_at_train % player_number
+                    GameView.scene.restart()
+                    this.scene.switch('game')
+                } else {
+                    this.overlay = this.add.rectangle(1920,1080,2800,900,0x444444).setOrigin(0.5)
+                    this.banner = this.add.text(1920, 880, 'Sell all your properties and shares first!').setOrigin(0.5).setFontSize(100)
+                    this.acknowledge = this.add.text(1920, 1280, 'Acknowledge').setOrigin(0.5).setFontSize(100).setInteractive({useHandCursor: true}).on('pointerdown', () => {this.overlay.destroy();this.banner.destroy();this.acknowledge.destroy()}).setPadding(20,20,10,10).setShadow(0,0, shadow_color, shadow_blur, 1, 1).setStroke(shadow_color, edge_thickness).on('pointerover', () => {this.acknowledge.setScale(1.2)}).on('pointerout', () => {this.acknowledge.setScale(1)})
+                }
+                
+            }
+            //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+            
+            //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+            PropertyManager.preload = function(){
+                
+            }
+
+            PropertyManager.create = function() {
+                this.add.text(1920, 250, 'Property Manager').setFontSize(150).setOrigin(0.5)
+                this.add.text(3810, 250, 'Your Balance: ' + current_player.balance.toString() + '€$').setFontSize(70).setOrigin(1, 0)
+                this.add.image(50, 50, 'ab').setOrigin(0,0).setScale(0.2).setInteractive({useHandCursor: true}).on('pointerdown', () => this.clickBackButton())
+                this.open = this.add.text(3810, 2130, 'Open trade manager').setOrigin(1,1).setFontSize(80).setInteractive({useHandCursor: true}).on('pointerdown', () => {TradeManager.scene.restart(); this.scene.switch('trade_mngr')}).setPadding(20,20,10,10).setShadow(0,0, shadow_color, shadow_blur, 1, 1).setStroke(shadow_color, edge_thickness).on('pointerover', () => {this.open.setScale(1.2)}).on('pointerout', () => {this.open.setScale(1)})
+
+                this.textAlpha = 1
+                for (let n = 0; n < properties[current_group].length; ++n){
+                    if (properties[current_group][n].owner != current_player){
+                        this.textAlpha = 0.25
+                    }
+                }
+                if (this.textAlpha == 1){
+                    if (properties[current_group].length == 2){
+                        if (current_group != 'providers'){
+                        for (let i = 0; i < properties[current_group].length; ++i){
+                            this.add.image(1920 - (-1)**i * 400, 1080, properties[current_group][i].name).setAlpha(1)
+                            this.add.text(1920 - (-1)**i * 400, 1800, properties[current_group][i].state).setFontSize(70).setOrigin(0.5).setAlpha(this.textAlpha)
+                            this.add.text(1920 - (-1)**i * 400 - 50, 1800, '-').setFontSize(70).setOrigin(0.5).setAlpha(this.textAlpha).setInteractive({useHandCursor: true}).on('pointerdown', () => this.sellHouse(i)).setPadding(20,20,10,10).setShadow(0,0, '#ff0000', shadow_blur, 1, 1).setStroke('#ff0000', edge_thickness)
+                            this.add.text(1920 - (-1)**i * 400 + 50, 1800, '+').setFontSize(70).setOrigin(0.5).setAlpha(this.textAlpha).setInteractive({useHandCursor: true}).on('pointerdown', () => this.buyHouse(i)).setPadding(20,20,10,10).setShadow(0,0, shadow_color, shadow_blur, 1, 1).setStroke(shadow_color, edge_thickness)
+                    }} else {
+                        for (let i = 0; i < properties[current_group].length; ++i){
+                            this.add.image(1920 - (-1)**i * 400, 1080, properties[current_group][i].name).setAlpha(1)
+                        }
+                    }
+                    } else {if (properties[current_group].length == 3) {
+                        for (let i = -1; i < properties[current_group].length-1; ++i){
+                            this.add.image(1920 + 800 * i, 1080, properties[current_group][i+1].name).setAlpha(1)
+                            this.add.text(1920 + 800 * i, 1800, properties[current_group][i+1].state).setFontSize(70).setOrigin(0.5).setAlpha(this.textAlpha)
+                            this.add.text(1920 + 800 * i - 50, 1800, '-').setFontSize(70).setOrigin(0.5).setAlpha(this.textAlpha).setInteractive({useHandCursor: true}).on('pointerdown', () => this.sellHouse(i+1)).setPadding(20,20,10,10).setShadow(0,0, '#ff0000', shadow_blur, 1, 1).setStroke('#ff0000', edge_thickness)
+                            this.add.text(1920 + 800 * i + 50, 1800, '+').setFontSize(70).setOrigin(0.5).setAlpha(this.textAlpha).setInteractive({useHandCursor: true}).on('pointerdown', () => this.buyHouse(i+1)).setPadding(20,20,10,10).setShadow(0,0, shadow_color, shadow_blur, 1, 1).setStroke(shadow_color, edge_thickness)
+                        }
+                    } else {
+                        for (let i = -1; i < properties[current_group].length-1; ++i){
+                            this.add.image(1520 + 800 * i, 1080, properties[current_group][i+1].name).setAlpha(1)
+                        }
+                    }}
+                } else {
+                    if (properties[current_group].length == 2){
+                        if (current_group != 'providers'){
+                            for (let i = 0; i < properties[current_group].length; ++i){
+                                if (properties[current_group][i].owner != null){
+                                    if (properties[current_group][i].owner == current_player) {
+                                        this.add.image(1920 - (-1)**i * 400, 1080, properties[current_group][i].name).setAlpha(1)
+                                        this.add.text(1920 - (-1)**i * 400, 1800, properties[current_group][i].state).setFontSize(70).setOrigin(0.5).setAlpha(this.textAlpha)
+                                        this.add.text(1920 - (-1)**i * 400 - 50, 1800, '-').setFontSize(70).setOrigin(0.5).setAlpha(this.textAlpha)
+                                        this.add.text(1920 - (-1)**i * 400 + 50, 1800, '+').setFontSize(70).setOrigin(0.5).setAlpha(this.textAlpha)
+                                    } else {
+                                        this.add.image(1920 - (-1)**i * 400, 1080, properties[current_group][i].name).setAlpha(0.25)
+                                        this.add.text(1920 - (-1)**i * 400, 1800, properties[current_group][i].state).setFontSize(70).setOrigin(0.5).setAlpha(this.textAlpha)
+                                        this.add.text(1920 - (-1)**i * 400 - 50, 1800, '-').setFontSize(70).setOrigin(0.5).setAlpha(this.textAlpha)
+                                        this.add.text(1920 - (-1)**i * 400 + 50, 1800, '+').setFontSize(70).setOrigin(0.5).setAlpha(this.textAlpha)
+                                        this.add.text(1920 - (-1)**i * 400, 1080, 'Owned by: ' + properties[current_group][i].owner.name).setOrigin(0.5).setRotation(45).setFontSize(100).setTint(0xff0000)
+                                    }
+                                } else {
+                                    this.add.image(1920 - (-1)**i * 400, 1080, properties[current_group][i].name).setAlpha(0.25)
+                                    this.add.text(1920 - (-1)**i * 400, 1800, properties[current_group][i].state).setFontSize(70).setOrigin(0.5).setAlpha(this.textAlpha)
+                                    this.add.text(1920 - (-1)**i * 400 - 50, 1800, '-').setFontSize(70).setOrigin(0.5).setAlpha(this.textAlpha)
+                                    this.add.text(1920 - (-1)**i * 400 + 50, 1800, '+').setFontSize(70).setOrigin(0.5).setAlpha(this.textAlpha)
+                                }
+                            }
+                        } else {
+                            for (let i = 0; i < properties[current_group].length; ++i){
+                                if (properties[current_group][i].owner != null){
+                                    if (properties[current_group][i].owner == current_player) {
+                                        this.add.image(1920 - (-1)**i * 400, 1080, properties[current_group][i].name).setAlpha(1)
+                                    } else {
+                                        this.add.image(1920 - (-1)**i * 400, 1080, properties[current_group][i].name).setAlpha(0.25)
+                                        this.add.text(1920 - (-1)**i * 400, 1080, 'Owned by: ' + properties[current_group][i].owner.name).setOrigin(0.5).setRotation(45).setFontSize(100).setTint(0xff0000)
+                                    }
+                                } else {
+                                    this.add.image(1920 - (-1)**i * 400, 1080, properties[current_group][i].name).setAlpha(0.25)
+                                }
+                            }
+                        }
+                    } else {if (properties[current_group].length == 3){
+                        for (let i = -1; i < properties[current_group].length-1; ++i){
+                            if (properties[current_group][i+1].owner != null){
+                                if (properties[current_group][i+1].owner == current_player) {
+                                    this.add.image(1920 + 800 * i, 1080, properties[current_group][i+1].name).setAlpha(1)
+                                    this.add.text(1920 + 800 * i, 1800, properties[current_group][i+1].state).setFontSize(70).setOrigin(0.5).setAlpha(this.textAlpha)
+                                    this.add.text(1920 + 800 * i - 50, 1800, '-').setFontSize(70).setOrigin(0.5).setAlpha(this.textAlpha)
+                                    this.add.text(1920 + 800 * i + 50, 1800, '+').setFontSize(70).setOrigin(0.5).setAlpha(this.textAlpha)
+                                } else {
+                                    this.add.image(1920 + 800 * i, 1080, properties[current_group][i+1].name).setAlpha(0.25)
+                                    this.add.text(1920 + 800 * i, 1800, properties[current_group][i+1].state).setFontSize(70).setOrigin(0.5).setAlpha(this.textAlpha)
+                                    this.add.text(1920 + 800 * i - 50, 1800, '-').setFontSize(70).setOrigin(0.5).setAlpha(this.textAlpha)
+                                    this.add.text(1920 + 800 * i + 50, 1800, '+').setFontSize(70).setOrigin(0.5).setAlpha(this.textAlpha)
+                                    this.add.text(1920 + 800 * i, 1080, 'Owned by: ' + properties[current_group][i+1].owner.name).setOrigin(0.5).setRotation(45).setFontSize(100).setTint(0xff0000)
+                                }
+                            } else {
+                                this.add.image(1920 + 800 * i, 1080, properties[current_group][i+1].name).setAlpha(0.25)
+                                this.add.text(1920 + 800 * i, 1800, properties[current_group][i+1].state).setFontSize(70).setOrigin(0.5).setAlpha(this.textAlpha)
+                                this.add.text(1920 + 800 * i - 50, 1800, '-').setFontSize(70).setOrigin(0.5).setAlpha(this.textAlpha)
+                                this.add.text(1920 + 800 * i + 50, 1800, '+').setFontSize(70).setOrigin(0.5).setAlpha(this.textAlpha)
+                            }
+                            
+                        }
+                    } else {
+                        for (let i = -1; i < properties[current_group].length-1; ++i){
+                            if (properties[current_group][i+1].owner != null){
+                                if (properties[current_group][i+1].owner == current_player) {
+                                    this.add.image(1520 + 800 * i, 1080, properties[current_group][i+1].name).setAlpha(1)
+                                } else {
+                                    this.add.image(1520 + 800 * i, 1080, properties[current_group][i+1].name).setAlpha(0.25)
+                                    this.add.text(1520 + 800 * i, 1080, 'Owned by: ' + properties[current_group][i+1].owner.name).setOrigin(0.5).setRotation(45).setFontSize(100).setTint(0xff0000)
+                                }
+                            } else {
+                                this.add.image(1520 + 800 * i, 1080, properties[current_group][i+1].name).setAlpha(0.25)
+                            }
+                    }}}
+                }
+                
+                
+            }
+
+            PropertyManager.update = function() {
+
+            }
+
+            PropertyManager.buyHouse = function(i) {
+                if (current_player.balance >= properties[current_group][i].price_of_house){
+                    current_player.balance -= properties[current_group][i].price_of_house
+                    properties[current_group][i].state += 1
+                    this.scene.restart()
+                } else {
+                    this.mask = this.add.rectangle(1920,1080,2500,400,0x444444).setOrigin(0.5)
+                    this.info = this.add.text(1920, 980, 'Insufficient funds').setFontSize(100).setOrigin(0.5)
+                    this.acknowledge = this.add.text(1920, 1180, 'Acknowledge').setFontSize(80).setOrigin(0.5).setInteractive({useHandCursor: true}).on('pointerdown', () => {this.mask.destroy(); this.info.destroy(); this.acknowledge.destroy()}).setPadding(20,20,10,10).setShadow(0,0, shadow_color, shadow_blur, 1, 1).setStroke(shadow_color, edge_thickness).on('pointerover', () => {this.acknowledge.setScale(1.2)}).on('pointerout', () => {this.acknowledge.setScale(1)})
+                }
+                
+            }
+
+            PropertyManager.sellHouse = function(i) {
+                current_player.balance += properties[current_group][i].price_of_house * 0.5
+                properties[current_group][i].state -= 1
+                this.scene.restart()
+            }
+
+            PropertyManager.clickBackButton = function(){
+                this.scene.switch('game')
+            }
+
+            //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+            //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+            PropertyMenu.preload = function() {
+                
+            }
+
+            PropertyMenu.create = function() {
+                console.log('Property Menu')
+                propimg = this.add.image(1920 + center_offset,1080,fields[current_player.position].name).setOrigin(0.5).setScale(0.8)
+                if (fields[current_player.position].owner != current_player){
+                    if (fields[current_player.position].owner != null) {
+                        this.add.text(1920 + center_offset,500,'This property is owned by: \n' + fields[current_player.position].owner.name).setOrigin(0.5).setFontSize(80)
+                        if (fields[current_player.position].color != 'providers'){
+                            pay = this.add.text(1600 + center_offset, 1600,'Pay rent of ' + fields[current_player.position].rents[fields[current_player.position].state] + ' €$').setOrigin(0.5).setFontSize(50).setPadding(20,20,10,10).setShadow(0,0, shadow_color, shadow_blur, 1, 1).setStroke(shadow_color, edge_thickness)
+                            pay.setInteractive({useHandCursor: true}).on('pointerdown', () => {this.payRent()}).on('pointerover', () => {pay.setScale(1.2)}).on('pointerout', () => {pay.setScale(1)})
+                            trade = this.add.text(2200 + center_offset, 1600,'Propose a trade').setOrigin(0.5).setFontSize(50).setPadding(20,20,10,10).setShadow(0,0, shadow_color, shadow_blur, 1, 1).setStroke(shadow_color, edge_thickness)
+                            trade.setInteractive({useHandCursor: true}).on('pointerdown', () => {dice_interactive = true; trade_partner = fields[current_player.position].owner; switch_to_trade = true; this.scene.stop()}).on('pointerover', () => {trade.setScale(1.2)}).on('pointerout', () => {trade.setScale(1)})
+                        } else {
+                            pay = this.add.text(1600 + center_offset, 1600,'Pay rent of ' + fields[current_player.position].rents[fields[current_player.position].state] * (dice[0] + dice[1]) + ' €$').setOrigin(0.5).setFontSize(50).setPadding(20,20,10,10).setShadow(0,0, shadow_color, shadow_blur, 1, 1).setStroke(shadow_color, edge_thickness)
+                            pay.setInteractive({useHandCursor: true}).on('pointerdown', () => {this.payRent()}).on('pointerover', () => {pay.setScale(1.2)}).on('pointerout', () => {pay.setScale(1)})
+                            trade = this.add.text(2200 + center_offset, 1600,'Propose a trade').setOrigin(0.5).setFontSize(50).setPadding(20,20,10,10).setShadow(0,0, shadow_color, shadow_blur, 1, 1).setStroke(shadow_color, edge_thickness)
+                            trade.setInteractive({useHandCursor: true}).on('pointerdown', () => {dice_interactive = true; trade_partner = fields[current_player.position].owner; switch_to_trade = true; this.scene.stop()}).on('pointerover', () => {trade.setScale(1.2)}).on('pointerout', () => {trade.setScale(1)})
+                        }
+                    } else {
+                        this.add.text(1920 + center_offset,500, current_player.name + ' reached this property:').setOrigin(0.5).setFontSize(80)
+                        pay = this.add.text(1600 + center_offset, 1600,'Buy this property for ' + fields[current_player.position].price + '€$').setOrigin(0.5).setFontSize(50).setPadding(20,20,10,10).setShadow(0,0, shadow_color, shadow_blur, 1, 1).setStroke(shadow_color, edge_thickness)
+                        pay.setInteractive({useHandCursor: true}).on('pointerdown', () => {this.buy()}).on('pointerover', () => {pay.setScale(1.2)}).on('pointerout', () => {pay.setScale(1)})
+                        trade = this.add.text(2350 + center_offset, 1600,'Auction this off').setOrigin(0.5).setFontSize(50).setPadding(20,20,10,10).setShadow(0,0, shadow_color, shadow_blur, 1, 1).setStroke(shadow_color, edge_thickness)
+                        trade.setInteractive({useHandCursor: true}).on('pointerdown', () => {dice_interactive = true; switch_to_auction = true; this.scene.stop()}).on('pointerover', () => {trade.setScale(1.2)}).on('pointerout', () => {trade.setScale(1)})
+                        
+                    }
+                } else {
+                    dice_interactive = true
+                    player_at_train += pasch
+                    pasch = 1
+                    this.scene.stop()
+                }
+                
+            }
+
+            PropertyMenu.payRent = function(){
+                if (current_player.balance > fields[current_player.position].rents[fields[current_player.position].state]){
+                    current_player.balance -= fields[current_player.position].rents[fields[current_player.position].state]
+                    fields[current_player.position].owner.balance += fields[current_player.position].rents[fields[current_player.position].state]
+                    player_at_train += pasch
+                    pasch = 1
+                    dice_interactive = true
+                    this.scene.stop()
+                } else {
+                    this.mask = this.add.rectangle(1920,1080,2500,400,0x444444).setOrigin(0.5)
+                    this.info = this.add.text(1920, 980, 'Insufficient funds').setFontSize(100).setOrigin(0.5)
+                    this.acknowledge = this.add.text(1920, 1180, 'Acknowledge').setFontSize(80).setOrigin(0.5).setInteractive({useHandCursor: true}).on('pointerdown', () => {this.mask.destroy(); this.info.destroy(); this.acknowledge.destroy()}).setPadding(20,20,10,10).setShadow(0,0, shadow_color, shadow_blur, 1, 1).setStroke(shadow_color, edge_thickness).on('pointerover', () => {this.acknowledge.setScale(1.2)}).on('pointerout', () => {this.acknowledge.setScale(1)})
+                }
+                
+            }
+
+            PropertyMenu.buy = function(){
+                if (current_player.balance > fields[current_player.position].price){
+                    let count = -1
+                    console.log('Current Player in buy function:{')
+                    console.log(current_player)
+                    console.log('}')
+                    current_player.balance -= fields[current_player.position].price
+                    fields[current_player.position].owner = current_player
+                    current_player.owned_properties.push(fields[current_player.position])
+                    console.log('Buying Process completed:{')
+                    console.log(current_player)
+                    console.log(fields[current_player.position])
+                    console.log('}')
+                    if (fields[current_player.position].color == 'stations'){
+                        for (let i = 0; i < current_player.owned_properties.length; ++i){
+                            if (current_player.owned_properties[i].color == 'stations'){
+                                count++
+                            }
+                        }
+                        for (let i = 0; i < current_player.owned_properties.length; ++i){
+                            if (current_player.owned_properties[i].color == 'stations'){
+                                current_player.owned_properties[i].state == count
+                            }
+                        }
+                    }
+                    count = -1
+                    if (fields[current_player.position].color == 'providers'){
+                        for (let i = 0; i < current_player.owned_properties.length; ++i){
+                            if (current_player.owned_properties[i].color == 'providers'){
+                                count++
+                            }
+                        }
+                        for (let i = 0; i < current_player.owned_properties.length; ++i){
+                            if (current_player.owned_properties[i].color == 'providers'){
+                                current_player.owned_properties[i].state = count
+                            }
+                        }
+                    }
+                    player_at_train += pasch
+                    pasch = 1
+                    dice_interactive = true
+                    this.scene.stop()
+                } else {
+                    this.mask = this.add.rectangle(1920,1080,2500,400,0x444444).setOrigin(0.5)
+                    this.info = this.add.text(1920, 980, 'Insufficient funds').setFontSize(100).setOrigin(0.5)
+                    this.acknowledge = this.add.text(1920, 1180, 'Acknowledge').setFontSize(80).setOrigin(0.5).setInteractive({useHandCursor: true}).on('pointerdown', () => {this.mask.destroy(); this.info.destroy(); this.acknowledge.destroy()}).setPadding(20,20,10,10).setShadow(0,0, shadow_color, shadow_blur, 1, 1).setStroke(shadow_color, edge_thickness).on('pointerover', () => {this.acknowledge.setScale(1.2)}).on('pointerout', () => {this.acknowledge.setScale(1)})
+                }
+            }
+
+            //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+            //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+            TradeManager.preload = function() {
+            }
+
+            TradeManager.create = function() {
+                trade_host = current_player
+                this.add.image(30,30, 'ab').setScale(0.3).setOrigin(0).setInteractive({useHandCursor: true}).on('pointerdown', () => {this.scene.switch('game')})
+                this.add.text(1920, 900, '€$').setFontSize(150).setOrigin(0.5)
+                this.host = [this.add.image(400, 350, 'usr').setScale(0.7).setTint(trade_host.color).setInteractive({useHandCursor: true}).on('pointerdown', () => this.selectHost()), this.add.text(400, 650, trade_host.name).setFontSize(70).setOrigin(0.5), this.add.text(700, 150, 'Balance: ' + trade_host.balance.toString() + '€$').setFontSize(70).setOrigin(0,0), this.add.text(700, 250, 'Shares:').setFontSize(70)]
+                this.partner = ''
+                this.mon_host = this.add.rexInputText({x: 300, y: 900, width: 500, height: 100, fontSize: '80px'}).setPlaceholder('amount').setOrigin(0,0.5)
+                this.mon_partner = this.add.rexInputText({x: 3540, y: 900, width: 500, height: 100, fontSize: '80px'}).setPlaceholder('amount').setOrigin(1,0.5)
+                this.appl_host = this.add.text(50, 2110, 'Confirm').setFontSize(100).setOrigin(0, 1).setInteractive({useHandCursor: true}).on('pointerdown', () => this.applyHost()).setPadding(20,20,10,10).setShadow(0,0, shadow_color, shadow_blur, 1, 1).setStroke(shadow_color, edge_thickness).on('pointerover', () => {this.appl_host.setScale(1.2)}).on('pointerout', () => {this.appl_host.setScale(1)})
+                this.appl_partner = this.add.text(3790, 2110, 'Confirm').setFontSize(100).setOrigin(1, 1).setInteractive({useHandCursor: true}).on('pointerdown', () => this.applyPartner()).setPadding(20,20,10,10).setShadow(0,0, shadow_color, shadow_blur, 1, 1).setStroke(shadow_color, edge_thickness).on('pointerover', () => {this.appl_partner.setScale(1.2)}).on('pointerout', () => {this.appl_partner.setScale(1)})
+                this.applied = [false, false]
+                this.mon_host_old = ''
+                this.mon_partner_old = ''
+                this.props_host = []
+                this.props_partner = []
+                this.shares_host = []
+                this.shares_partner = []
+                this.selected_props_host = []
+                this.selected_props_partner = []
+                this.updated_partner = false
+                this.updated_host = false
+                this.shares_init = false
+                this.justdont = false
+
+                
+
+                for (let i = 0; i < trade_host.owned_properties.length; ++i){
+                    if (i < 3){
+                        this.props_host.push(this.add.image(130 + 400 * i, 1200, trade_host.owned_properties[i].name).setScale(0.5).setOrigin(0, 0).setInteractive({useHandCursor: true}).on('pointerdown', () => this.selectPropHost(i)))
+                    } else {
+                        this.props_host.push(this.add.image(130 + 400 * 3, 1200, trade_host.owned_properties[i].name).setScale(0.5).setOrigin(0, 0).setInteractive({useHandCursor: true}).on('pointerdown', () => this.selectPropHost(i)))
+
+                    }
+                    
+                }
+
+                this.general_mask = this.add.rectangle(1920, 1100, 1200, 700, 0x555555).setOrigin(0.5, 0)
+                this.general_mask_right = this.add.rectangle(3840, 1100, 100, 700, 0x555555).setOrigin(1, 0)
+                this.general_mask_left = this.add.rectangle(0, 1100, 100, 700, 0x555555).setOrigin(0)
+
+                if (trade_host.owned_properties.length > 3){
+                    this.arrow_left_h = this.add.text(20, 1450, '<').setFontSize(150).setOrigin(0, 0.5).setInteractive({useHandCursor: true}).on('pointerdown', () => this.moveLeft(this.props_host, 0)).setPadding(20,20,10,10).setShadow(0,0, shadow_color, shadow_blur, 1, 1).setStroke(shadow_color, edge_thickness).on('pointerover', () => {this.arrow_left_h.setScale(1.2)}).on('pointerout', () => {this.arrow_left_h.setScale(1)})
+                    this.arrow_right_h = this.add.text(1300, 1450, '>').setFontSize(150).setOrigin(0, 0.5).setInteractive({useHandCursor: true}).on('pointerdown', () => this.moveRight(this.props_host, 0)).setPadding(20,20,10,10).setShadow(0,0, shadow_color, shadow_blur, 1, 1).setStroke(shadow_color, edge_thickness).on('pointerover', () => {this.arrow_right_h.setScale(1.2)}).on('pointerout', () => {this.arrow_right_h.setScale(1)})
+                }
+
+                for (let i = 0; i < trade_host.owned_shares.length; ++i){
+                    this.shares_host.push([trade_host.owned_shares[i][0], this.add.rexInputText({x: 1900, y: 320 + 70*i, width: 100, height: 100, fontSize: '70px'}).setPlaceholder('%').setOrigin(1,0), this.add.text(700, 320 + 70*i, trade_host.owned_shares[i][0].name + ': ' + trade_host.owned_shares[i][1].toString() + '%').setFontSize(70)])
+                }
+
+                this.some_text_i_dont_bother_naming = this.add.text(1920, 1200, 'Properties').setFontSize(150).setOrigin(0.5)
+                if (trade_partner == null || trade_partner == trade_host){
+                    this.selectPartner()
+                    
+                } else {
+                    this.partner = [this.add.image(3440, 350, 'usr').setScale(0.7).setTint(trade_partner.color).setInteractive({useHandCursor: true}).on('pointerdown', () => this.selectPartner()), this.add.text(3440, 650, trade_partner.name).setFontSize(70).setOrigin(0.5), this.add.text(3140, 150, 'Balance: ' + trade_partner.balance.toString() + '€$').setFontSize(70).setOrigin(1,0), this.add.text(3140, 250, 'Shares:').setFontSize(70).setOrigin(1,0)]
+                    for (let i = 0; i < trade_partner.owned_properties.length; ++i){
+                        if (i < 3){
+                            this.props_partner.push(this.add.image(2910 + 400 * i, 1200, trade_partner.owned_properties[i].name).setScale(0.5).setOrigin(1, 0).setInteractive({useHandCursor: true}).on('pointerdown', () => this.selectPropPartner(i)))
+                        } else {
+                            this.props_partner.push(this.add.image(2910 + 400 * 3, 1200, trade_partner.owned_properties[i].name).setScale(0.5).setOrigin(1, 0).setInteractive({useHandCursor: true}).on('pointerdown', () => this.selectPropPartner(i)))
+                        }
+                    }
+                    this.general_mask_right = [this.add.rectangle(3840, 1100, 100, 700, 0x555555).setOrigin(1, 0), this.add.rectangle(1920, 1100, 600, 700, 0x555555).setOrigin(0)]
+                    this.some_text_i_dont_bother_naming = this.add.text(1920, 1200, 'Properties').setFontSize(150).setOrigin(0.5)
+                    if (trade_partner.owned_properties.length > 3){
+                        this.arrow_left_p = this.add.text(2530, 1450, '<').setFontSize(150).setOrigin(1, 0.5).setInteractive({useHandCursor: true}).on('pointerdown', () => this.moveLeft(this.props_partner, 1)).setPadding(20,20,10,10).setShadow(0,0, shadow_color, shadow_blur, 1, 1).setStroke(shadow_color, edge_thickness).on('pointerover', () => {this.arrow_left_p.setScale(1.2)}).on('pointerout', () => {this.arrow_left_p.setScale(1)})
+                        this.arrow_right_p = this.add.text(3820, 1450, '>').setFontSize(150).setOrigin(1, 0.5).setInteractive({useHandCursor: true}).on('pointerdown', () => this.moveRight(this.props_partner, 1)).setPadding(20,20,10,10).setShadow(0,0, shadow_color, shadow_blur, 1, 1).setStroke(shadow_color, edge_thickness).on('pointerover', () => {this.arrow_right_p.setScale(1.2)}).on('pointerout', () => {this.arrow_right_p.setScale(1)})
+                    }
+
+                    for (let i = 0; i < trade_partner.owned_shares.length; ++i){
+                        this.shares_partner.push([trade_partner.owned_shares[i][0], this.add.rexInputText({x: 1940, y: 320 + 70*i, width: 100, height: 100, fontSize: '70px'}).setPlaceholder('%').setOrigin(0,0), this.add.text(3140, 320 + 70*i, trade_partner.owned_shares[i][0].name + ': ' + trade_partner.owned_shares[i][1].toString() + '%').setFontSize(70).setOrigin(1,0)])
+                    }
+                }
+            }
+
+            TradeManager.update = function() {
+                if (this.applied[0] == true){
+                    this.appl_host.setColor('#00ff00')
+                } else {
+                    this.appl_host.setColor('#ffffff')
+                }
+
+                if (this.applied[1] == true){
+                    this.appl_partner.setColor('#00ff00')
+                } else {
+                    this.appl_partner.setColor('#ffffff')
+                }
+
+                if (this.mon_host.text != this.mon_host_old){
+                    this.applied = [false, false]
+                    this.mon_host_old = this.mon_host.text
+                }
+
+                if (this.mon_partner.text != this.mon_partner_old){
+                    this.applied = [false, false]
+                    this.mon_partner_old = this.mon_partner.text
+                }
+
+                if (this.updated_partner == true){
+                    if (this.props_partner.length > 3){
+                        this.arrow_left_p.destroy()
+                        this.arrow_right_p.destroy()
+                    }
+
+                    for(let n = 0; n < this.props_partner.length; ++n){
+                        this.props_partner[n].destroy()
+                    }
+
+                    for(let n = 0; n < this.shares_partner.length; ++n){
+                        this.shares_partner[n][1].destroy()
+                        this.shares_partner[n][2].destroy()
+                    }
+                    
+                    this.props_partner = []
+                    this.selected_props_partner = []
+                    this.shares_partner = []
+
+                    for (let i = 0; i < trade_partner.owned_properties.length; ++i){
+                        if (i < 3){
+                            this.props_partner.push(this.add.image(2910 + 400 * i, 1200, trade_partner.owned_properties[i].name).setScale(0.5).setOrigin(1, 0).setInteractive({useHandCursor: true}).on('pointerdown', () => this.selectPropPartner(i)))
+                        } else {
+                            this.props_partner.push(this.add.image(2910 + 400 * 3, 1200, trade_partner.owned_properties[i].name).setScale(0.5).setOrigin(1, 0).setInteractive({useHandCursor: true}).on('pointerdown', () => this.selectPropPartner(i)))
+                        }
+                    }
+
+                    this.general_mask_right = [this.add.rectangle(3840, 1100, 100, 700, 0x555555).setOrigin(1, 0), this.add.rectangle(1920, 1100, 600, 700, 0x555555).setOrigin(0)]
+                    this.some_text_i_dont_bother_naming = this.add.text(1920, 1200, 'Properties').setFontSize(150).setOrigin(0.5)
+
+                    if (trade_partner.owned_properties.length > 3){
+                        this.arrow_left_p = this.add.text(2530, 1450, '<').setFontSize(150).setOrigin(1, 0.5).setInteractive({useHandCursor: true}).on('pointerdown', () => this.moveLeft(this.props_partner, 1)).setPadding(20,20,10,10).setShadow(0,0, shadow_color, shadow_blur, 1, 1).setStroke(shadow_color, edge_thickness).on('pointerover', () => {this.arrow_left_p.setScale(1.2)}).on('pointerout', () => {this.arrow_left_p.setScale(1)})
+                        this.arrow_right_p = this.add.text(3820, 1450, '>').setFontSize(150).setOrigin(1, 0.5).setInteractive({useHandCursor: true}).on('pointerdown', () => this.moveRight(this.props_partner, 1)).setPadding(20,20,10,10).setShadow(0,0, shadow_color, shadow_blur, 1, 1).setStroke(shadow_color, edge_thickness).on('pointerover', () => {this.arrow_right_p.setScale(1.2)}).on('pointerout', () => {this.arrow_right_p.setScale(1)})
+                    }
+
+                    for(let i = 0; i < trade_partner.owned_shares.length; ++i){
+                        this.shares_partner.push([trade_partner.owned_shares[i][0], this.add.rexInputText({x: 1940, y: 320 + 70*i, width: 100, height: 100, fontSize: '70px'}).setPlaceholder('%').setOrigin(0,0), this.add.text(3140, 320 + 70*i, trade_partner.owned_shares[i][0].name + ': ' + trade_partner.owned_shares[i][1].toString() + '%').setFontSize(70).setOrigin(1,0)])
+                    }
+                    
+                    this.updated_partner = false
+                }
+
+                if (this.updated_host == true){
+                    if (this.props_host.length > 3){
+                        this.arrow_left_h.destroy()
+                        this.arrow_right_h.destroy()
+                    }
+
+                    for(let n = 0; n < this.props_host.length; ++n){
+                        this.props_host[n].destroy()
+                    }
+
+                    for(let n = 0; n < this.shares_host.length; ++n){
+                        this.shares_host[n][1].destroy()
+                        this.shares_host[n][2].destroy()
+                    }
+                    
+                    this.props_host = []
+                    this.selected_props_host = []
+                    this.shares_host = []
+
+                    for (let i = 0; i < trade_host.owned_properties.length; ++i){
+                        if (i < 3){
+                            this.props_host.push(this.add.image(130 + 400 * i, 1200, trade_host.owned_properties[i].name).setScale(0.5).setOrigin(0, 0).setInteractive({useHandCursor: true}).on('pointerdown', () => this.selectPropHost(i)))
+                        } else {
+                            this.props_host.push(this.add.image(130 + 400 * 3, 1200, trade_host.owned_properties[i].name).setScale(0.5).setOrigin(0, 0).setInteractive({useHandCursor: true}).on('pointerdown', () => this.selectPropHost(i)))
+                        }
+                    }
+
+                    this.general_mask_left = [this.add.rectangle(1920, 1100, 600, 700, 0x555555).setOrigin(1, 0), this.add.rectangle(0, 1100, 120, 700, 0x555555).setOrigin(0)]
+                    this.some_text_i_dont_bother_naming = this.add.text(1920, 1200, 'Properties').setFontSize(150).setOrigin(0.5)
+
+                    if (trade_host.owned_properties.length > 3){
+                        this.arrow_left_h = this.add.text(20, 1450, '<').setFontSize(150).setOrigin(0, 0.5).setInteractive({useHandCursor: true}).on('pointerdown', () => this.moveLeft(this.props_host, 0)).setPadding(20,20,10,10).setShadow(0,0, shadow_color, shadow_blur, 1, 1).setStroke(shadow_color, edge_thickness).on('pointerover', () => {this.arrow_left_h.setScale(1.2)}).on('pointerout', () => {this.arrow_left_h.setScale(1)})
+                        this.arrow_right_h = this.add.text(1320, 1450, '>').setFontSize(150).setOrigin(0, 0.5).setInteractive({useHandCursor: true}).on('pointerdown', () => this.moveRight(this.props_host, 0)).setPadding(20,20,10,10).setShadow(0,0, shadow_color, shadow_blur, 1, 1).setStroke(shadow_color, edge_thickness).on('pointerover', () => {this.arrow_right_h.setScale(1.2)}).on('pointerout', () => {this.arrow_right_h.setScale(1)})
+                    }
+
+                    for (let i = 0; i < trade_host.owned_shares.length; ++i){
+                        this.shares_host.push([trade_host.owned_shares[i][0], this.add.rexInputText({x: 1900, y: 320 + 70*i, width: 100, height: 100, fontSize: '70px'}).setPlaceholder('%').setOrigin(1,0), this.add.text(700, 320 + 70*i, trade_host.owned_shares[i][0].name + ': ' + trade_host.owned_shares[i][1].toString() + '%').setFontSize(70)])
+                    }
+                    
+                    this.updated_host = false
+                }
+
+                if (this.applied[0] == true && this.applied[1] == true && this.justdont == false){
+                    let count = -1
+                    if (this.mon_partner_old != ''){
+                        trade_partner.balance -= parseInt(this.mon_partner_old)
+                        trade_host.balance += parseInt(this.mon_partner_old)
+                    }
+                    if (this.mon_host_old != ''){
+                        trade_host.balance -= parseInt(this.mon_host_old)
+                        trade_partner.balance += parseInt(this.mon_host_old)
+                    }
+
+                    for (let i = 0; i < this.selected_props_host.length; ++i){
+                        trade_partner.owned_properties.push(trade_host.owned_properties[this.selected_props_host[i]])
+                    }
+                    for (let i = 0; i < this.selected_props_partner.length; ++i){
+                        trade_host.owned_properties.push(trade_partner.owned_properties[this.selected_props_partner[i]])
+                    }
+                    for (let i = 0; i < this.selected_props_partner.length; ++i){
+                        var index = trade_partner.owned_properties.indexOf(trade_partner.owned_properties[this.selected_props_partner[i]])
+                        trade_partner.owned_properties.splice(index, 1)
+                    }
+                    for (let i = 0; i < this.selected_props_host.length; ++i){
+                        var index = trade_host.owned_properties.indexOf(trade_host.owned_properties[this.selected_props_host[i]])
+                        trade_host.owned_properties.splice(index, 1)
+                    }
+
+                    for (let i = 0; i < trade_host.owned_properties.length; ++i){
+                        trade_host.owned_properties[i].owner = trade_host
+                    }
+                    for (let i = 0; i < trade_partner.owned_properties.length; ++i){
+                        trade_partner.owned_properties[i].owner = trade_partner
+                    }
+                    for (let i = 0; i < trade_host.owned_properties.length; ++i){
+                        if (trade_host.owned_properties[i].color == 'stations'){
+                            count++
+                        }
+                    }
+                    for (let i = 0; i < trade_host.owned_properties.length; ++i){
+                        if (trade_host.owned_properties[i].color == 'stations'){
+                            trade_host.owned_properties[i].state = count
+                        }
+                    }
+                    count = -1
+                    for (let i = 0; i < trade_host.owned_properties.length; ++i){
+                        if (trade_host.owned_properties[i].color == 'providers'){
+                            count++
+                        }
+                    }
+                    for (let i = 0; i < trade_host.owned_properties.length; ++i){
+                        if (trade_host.owned_properties[i].color == 'providers'){
+                            trade_host.owned_properties[i].state = count
+                        }
+                    }
+                    count = -1
+                    for (let i = 0; i < trade_partner.owned_properties.length; ++i){
+                        if (trade_partner.owned_properties[i].color == 'stations'){
+                            count++
+                        }
+                    }
+                    for (let i = 0; i < trade_partner.owned_properties.length; ++i){
+                        if (trade_partner.owned_properties[i].color == 'stations'){
+                            trade_partner.owned_properties[i].state = count
+                        }
+                    }
+                    count = -1
+                    for (let i = 0; i < trade_partner.owned_properties.length; ++i){
+                        if (trade_partner.owned_properties[i].color == 'providers'){
+                            count++
+                        }
+                    }
+                    for (let i = 0; i < trade_partner.owned_properties.length; ++i){
+                        if (trade_partner.owned_properties[i].color == 'providers'){
+                            trade_partner.owned_properties[i].state = count
+                        }
+                    }
+                    console.log(trade_host)
+                    console.log(trade_partner)
+                    console.log(this.shares_host)
+                    console.log(this.shares_partner)
+                    for (let i = 0; i < this.shares_host.length; ++i){
+                        console.log(i)
+                        for (let n = 0; n < this.shares_partner.length; ++n){
+                            console.log(n)
+                            if (this.shares_host[i][0] == this.shares_partner[n][0]){
+                                console.log('both have share')
+                                if (this.shares_host[i][1] != ''){
+                                    console.log('number host')
+                                    if (parseInt(this.shares_host[i][1].text) != 0){
+                                        console.log('not 0')
+                                        if (trade_host.owned_shares[i][1] > parseInt(this.shares_host[i][1].text)){
+                                            console.log('number smaller')
+                                            trade_host.owned_shares[i][0].members[getIndex(trade_host.owned_shares[i][0].members, [trade_host, trade_host.owned_shares[n][1]])][1] -= parseInt(this.shares_host[i][1].text)
+                                            trade_host.owned_shares[i][1] -= parseInt(this.shares_host[i][1].text)
+                                            trade_host.owned_shares[i][0].members[getIndex(trade_host.owned_shares[i][0].members, [trade_partner, trade_partner.owned_shares[n][1]])][1] += parseInt(this.shares_host[i][1].text)
+                                            trade_partner.owned_shares[n][1] += parseInt(this.shares_host[i][1].text)
+                                        } else {
+                                            if (parseInt(this.shares_host[i][1].text) == trade_host.owned_shares[i][1]){
+                                                console.log('number same')
+                                                console.log('removing:')
+                                                console.log(getIndex(trade_host.owned_shares[i][0].members, [trade_host, trade_host.owned_shares[i][1]]))
+                                                console.log(trade_host.owned_shares[i][0].members)
+                                                console.log([trade_host, trade_host.owned_shares[i][1]])
+                                                trade_host.owned_shares[i][0].members.splice(getIndex(trade_host.owned_shares[i][0].members, [trade_host, trade_host.owned_shares[i][1]]), 1)
+                                                this.shares_host[i][0].members[getIndex(this.shares_host[i][0].members, [trade_partner, trade_partner.owned_shares[n][1]])][1] += parseInt(this.shares_host[i][1].text)
+                                                trade_partner.owned_shares[n][1] += parseInt(this.shares_host[i][1].text)
+                                
+                                                trade_host.owned_shares.splice(i, 1)
+                                            } 
+                                        }
+                                    }
+                                }
+                                this.shares_init = true
+                                break
+                            }
+                        }
+                        if (this.shares_init != true){
+                            console.log('not both have share')
+                            if (this.shares_host[i][1] != ''){
+                                console.log('number host')
+                                if (parseInt(this.shares_host[i][1]) != 0){
+                                    console.log('bigger than 0')
+                                    if (trade_host.owned_shares[i][1] > parseInt(this.shares_host[i][1].text)){
+                                        console.log('smaller')
+                                        trade_host.owned_shares[i][1] -= parseInt(this.shares_host[i][1].text)
+                                        trade_partner.owned_shares.push([trade_host.owned_shares[i][0], parseInt(this.shares_host[i][1].text)])
+                                        trade_host.owned_shares[i][0].members.push([trade_partner, parseInt(this.shares_host[i][1].text)])
+                                    } else {
+                                        if (parseInt(this.shares_host[i][1].text) == trade_host.owned_shares[i][1]){
+                                            console.log('equal')
+                                            trade_host.owned_shares[i][0].members.splice(getIndex(trade_host.owned_shares[i][0].members, [trade_host, trade_host.owned_shares[i][1]]), 1)
+                                            trade_partner.owned_shares.push([this.shares_host[i][0], parseInt(this.shares_host[i][1].text)])
+                                            this.shares_host[i][0].members.push([trade_partner, parseInt(this.shares_host[i][1].text)])
+                                            trade_host.owned_shares.splice(i, 1)
+                                        } 
+                                    }
+                                }
+                            }
+                        }
+                        this.shares_init = false  
+                    }
+
+                    for (let i = 0; i < this.shares_partner.length; ++i){
+                        for (let n = 0; n < this.shares_host.length; ++n){
+                            if (this.shares_partner[i][0] == this.shares_host[n][0]){
+                                if (this.shares_partner[i][1] != ''){
+                                    if (parseInt(this.shares_partner[i][1].text) != 0){
+                                        if (trade_partner.owned_shares[i][1] > parseInt(this.shares_partner[i][1].text)){
+                                            trade_partner.owned_shares[i][0].members[getIndex(trade_partner.owned_shares[i][0].members, [trade_partner, trade_partner.owned_shares[n][1]])][1] -= parseInt(this.shares_partner[i][1].text)
+                                            trade_partner.owned_shares[i][1] -= parseInt(this.shares_partner[i][1].text)
+                                            trade_partner.owned_shares[i][0].members[getIndex(trade_partner.owned_shares[i][0].members, [trade_host, trade_host.owned_shares[n][1]])][1] += parseInt(this.shares_partner[i][1].text)
+                                            trade_host.owned_shares[n][1] += parseInt(this.shares_partner[i][1].text)
+                                        } else {
+                                            if (parseInt(this.shares_partner[i][1].text) == trade_partner.owned_shares[i][1]){
+                                                trade_partner.owned_shares[i][0].members.splice(trade_partner.owned_shares[i][0].members.indexOf([trade_partner, trade_partner.owned_shares[i][1]]), 1)
+                                                trade_host.owned_shares[n][1] += parseInt(this.shares_partner[i][0].text)
+                                                this.shares_partner[i][0].members[getIndex(this.shares_partner[i][0].members, [trade_host, trade_host.owned_shares[n][1]])][1] += parseInt(this.shares_partner[i][1].text)
+                                                trade_partner.owned_shares.splice(i, 1)
+                                            } 
+                                        }
+                                    }
+                                }
+                                this.shares_init = true
+                                break
+                            }
+                        }
+                        if (this.shares_init != true){
+                            if (this.shares_partner[i][1] != ''){
+                                if (parseInt(this.shares_partner[i][1].text) != 0){
+                                    if (trade_partner.owned_shares[i][1] > parseInt(this.shares_partner[i][1].text)){
+                                        trade_partner.owned_shares[i][1] -= parseInt(this.shares_partner[i][1].text)
+                                        trade_host.owned_shares.push([trade_partner.owned_shares[i][0], parseInt(this.shares_partner[i][1].text)])
+                                        trade_partner.owned_shares[i][0].members.push([trade_host, parseInt(this.shares_partner[i][1].text)])
+                                    } else {
+                                        if (parseInt(this.shares_partner[i][1].text) == trade_partner.owned_shares[i][1]){
+                                            trade_partner.owned_shares[i][0].members.splice(getIndex(trade_partner.owned_shares[i][0].members, [trade_partner, trade_partner.owned_shares[i][1]]), 1)
+                                            trade_host.owned_shares.push([this.shares_partner[i][0], parseInt(this.shares_partner[i][1].text)])
+                                            this.shares_partner[i][0].members.push([trade_host, parseInt(this.shares_partner[i][1].text)])
+                                            trade_partner.owned_shares.splice(i, 1)
+                                        } 
+                                    }
+                                }
+                            }
+                        }
+                        this.shares_init = false  
+                    }
+
+                    this.scene.switch('game')
+                }
+            }
+
+            TradeManager.selectPartner = function() {
+                this.justdont = true
+                this.choose = this.add.text(3190, 650, 'Choose your trade partner').setFontSize(70).setOrigin(0.5)
+                if (this.partner != ''){
+                    this.partner[0].destroy()
+                    this.partner[1].destroy()
+                    this.partner[2].destroy()
+                    this.partner[3].destroy()
+                }
+                this.choice = []
+                for (let i = 0; i < player_number; ++i){
+                    if (players[i] == trade_host){
+                        this.choice.push([this.add.image(3750 - 350 * i, 100, 'usr').setScale(0.5).setOrigin(1,0).setAlpha(0.25).setTint(players[i].color), this.add.text(3650 - 350 * i, 430, players[i].name).setFontSize(70).setOrigin(1,0).setAlpha(0.25)])
+                    } else {
+                        this.choice.push([this.add.image(3750 - 350 * i, 100, 'usr').setScale(0.5).setOrigin(1,0).setTint(players[i].color).setInteractive({useHandCursor: true}).on('pointerdown', () => this.setPartner(players[i])), this.add.text(3650 - 350 * i, 430, players[i].name).setFontSize(70).setOrigin(1,0).setInteractive({useHandCursor: true}).on('pointerdown', () => this.setPartner(players[i]))])
+                    }
+                    
+                }
+
+                for (let i = 0; i < holdings.length; ++i){
+                    if (holdings[i] == trade_host){
+                        this.choice.push([this.add.image(3750 - 350 * (i + player_number), 100, 'hol').setScale(0.5).setOrigin(1,0).setAlpha(0.25), this.add.text(3650 - 350 * (i + player_number), 430, holdings[i].name).setFontSize(70).setOrigin(1,0).setAlpha(0.25)])
+                    } else {
+                        this.choice.push([this.add.image(3750 - 350 * (i + player_number), 100, 'hol').setScale(0.5).setOrigin(1,0).setInteractive({useHandCursor: true}).on('pointerdown', () => this.setPartner(holdings[i])), this.add.text(3650 - 350 * (i + player_number), 430, holdings[i].name).setFontSize(70).setOrigin(1,0).setInteractive({useHandCursor: true}).on('pointerdown', () => this.setPartner(holdings[i]))])
+                    }
+                    
+                }
+            }
+
+            TradeManager.selectHost = function() {
+                this.justdont = true
+                this.choose = this.add.text(650, 650, 'Choose your trade partner').setFontSize(70).setOrigin(0.5)
+                if (this.host != ''){
+                    this.host[0].destroy()
+                    this.host[1].destroy()
+                    this.host[2].destroy()
+                    this.host[3].destroy()
+                }
+                this.choice = []
+                for (let i = 0; i < player_number; ++i){
+                    if (players[i] == trade_partner){
+                        this.choice.push([this.add.image(90 + 350 * i, 100, 'usr').setScale(0.5).setOrigin(0,0).setAlpha(0.25).setTint(players[i].color), this.add.text(190 + 350 * i, 430, players[i].name).setFontSize(70).setOrigin(0,0).setAlpha(0.25)])
+                    } else {
+                        this.choice.push([this.add.image(90 + 350 * i, 100, 'usr').setScale(0.5).setOrigin(0,0).setTint(players[i].color).setInteractive({useHandCursor: true}).on('pointerdown', () => this.setHost(players[i])), this.add.text(190 + 350 * i, 430, players[i].name).setFontSize(70).setOrigin(0,0).setInteractive({useHandCursor: true}).on('pointerdown', () => this.setHost(players[i]))])
+                    }
+                    
+                }
+
+                for (let i = 0; i < holdings.length; ++i){
+                    if (holdings[i] == trade_partner){
+                        this.choice.push([this.add.image(90 + 350 * (i + player_number), 100, 'hol').setScale(0.5).setOrigin(0,0).setAlpha(0.25), this.add.text(190 + 350 * (i + player_number), 430, holdings[i].name).setFontSize(70).setOrigin(0,0).setAlpha(0.25)])
+                    } else {
+                        this.choice.push([this.add.image(90 + 350 * (i + player_number), 100, 'hol').setScale(0.5).setOrigin(0,0).setInteractive({useHandCursor: true}).on('pointerdown', () => this.setHost(holdings[i])), this.add.text(190 + 350 * (i + player_number), 430, holdings[i].name).setFontSize(70).setOrigin(0,0).setInteractive({useHandCursor: true}).on('pointerdown', () => this.setHost(holdings[i]))])
+                    }
+                    
+                }
+            }
+
+            TradeManager.setPartner = function(player) {
+                trade_partner = player
+                this.partner = [this.add.image(3440, 350, 'usr').setScale(0.7).setTint(trade_partner.color).setInteractive({useHandCursor: true}).on('pointerdown', () => this.selectPartner()), this.add.text(3440, 650, trade_partner.name).setFontSize(70).setOrigin(0.5), this.add.text(3140, 150, 'Balance: ' + trade_partner.balance.toString() + '€$').setFontSize(70).setOrigin(1,0), this.add.text(3140, 250, 'Shares:').setFontSize(70).setOrigin(1,0)]
+                for (let i = 0; i < this.choice.length; ++i){
+                    this.choice[i][0].destroy()
+                    this.choice[i][1].destroy()
+                    //console.log('destroyed')
+                }
+                this.choose.destroy()
+                this.updated_partner = true
+                this.justdont = false
+            }
+
+            TradeManager.setHost = function(player) {
+                trade_host = player
+                this.host = [this.add.image(400, 350, 'usr').setScale(0.7).setTint(trade_host.color).setInteractive({useHandCursor: true}).on('pointerdown', () => this.selectHost()), this.add.text(400, 650, trade_host.name).setFontSize(70).setOrigin(0.5), this.add.text(700, 150, 'Balance: ' + trade_host.balance.toString() + '€$').setFontSize(70).setOrigin(0,0), this.add.text(700, 250, 'Shares:').setFontSize(70)]
+                for (let i = 0; i < this.choice.length; ++i){
+                    this.choice[i][0].destroy()
+                    this.choice[i][1].destroy()
+                    //console.log('destroyed')
+                }
+                this.choose.destroy()
+                this.updated_host = true
+                this.justdont = false
+            }
+
+            TradeManager.applyHost = function() {
+                if (this.applied[0] == false){
+                    this.applied[0] = true
+                } else {
+                    this.applied[0] = false
+                }
+               
+            }
+
+            TradeManager.applyPartner = function() {
+                if (this.applied[1] == false){
+                    this.applied[1] = true
+                } else {
+                    this.applied[1] = false
+                }
+            }
+
+            TradeManager.moveRight = function(items, lor) {
+                var stop = false
+                for (let i = 0; i < items.length; ++i){
+                    if (items[i].x > 2900 * lor){
+                        if (stop != true){
+                            if (items[i].x > 1000 + 2900*lor){
+                                stop = true
+                            }
+                            items[i].setX(items[i].x - 400) 
+                        }
+                    }
+                }
+            }
+
+            TradeManager.moveLeft = function(items, lor) {
+                var stop = false
+                for (let i = 1; i < items.length + 1; ++i){
+                    if (items[items.length-i].x < 1000 + 2900 * lor){
+                        if (stop != true){
+                            if (items[items.length-i].x < 2900*lor){
+                                stop = true
+                            }
+                            items[items.length-i].setX(items[items.length-i].x + 400)
+                        }
+                    }
+                }
+            }
+
+            TradeManager.selectPropHost = function(i) {
+                var in_it = false
+                for (let n = 0; n < this.selected_props_host.length; ++n){
+                    if(i == this.selected_props_host[n]){
+                        in_it = true
+                    }
+                }
+
+                if (in_it == true){
+                    this.props_host[i].setTint(0xffffff)
+                    var index = this.selected_props_host.indexOf(i)
+                    this.selected_props_host.splice(index, 1)
+                } else {
+                    this.props_host[i].setTint(0x00ff00)
+                    this.selected_props_host.push(i)
+                }
+            }
+
+            TradeManager.selectPropPartner = function(i) {
+                var in_it = false
+                for (let n = 0; n < this.selected_props_partner.length; ++n){
+                    if(i == this.selected_props_partner[n]){
+                        in_it = true
+                    }
+                }
+
+                if (in_it == true){
+                    this.props_partner[i].setTint(0xffffff)
+                    var index = this.selected_props_partner.indexOf(i)
+                    this.selected_props_partner.splice(index, 1)
+                } else {
+                    this.props_partner[i].setTint(0x00ff00)
+                    this.selected_props_partner.push(i)
+                }
+            }
+
+
+            //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+            //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+            PlayerMenu.preload = function() {
+                this.load.image('usr', 'assets/Monpol design/user_icon.png')
+            };
+
+            PlayerMenu.create = function() {
+                this.menu_open = false
+                var banner = this.add.text(1920,300, 'Welcome to Monopoly Holdings!').setFontSize(200).setOrigin(0.5);
+
+                var start = this.add.text(1920, 600, 'Current Players:').setFontSize(100).setOrigin(0.5)
+
+                this.players = []
+                this.offsets = [-300,300,-870,870,-1440,1440]
+                for (let j = 0; j < player_number; j++){
+                    console.log(players[j])
+                    this.players.push([this.add.image(1920 + this.offsets[j], 1100, 'usr').setTint(players[j].color).setScale(0.8).setInteractive({useHandCursor: true}).on('pointerdown', () => this.choose_color(players[j])), this.add.rexInputText({x: 1920 + this.offsets[j], y: 1500, width: 500, height: 100, fontSize: '80px'}).setPlaceholder(players[j].name)])
+                }
+                var back = this.add.image(50, 600, 'ab').setOrigin(0, 0.5).setScale(0.3)
+                back.setInteractive({useHandCursor: true}).on('pointerdown', () => this.toMainMenu());
+
+                var inc_plr_nmbr = this.add.text(3600, 600, '+').setFontSize(100).setOrigin(0.5).setPadding(20,20,10,10).setShadow(0,0, shadow_color, shadow_blur, 1, 1).setStroke(shadow_color, edge_thickness)
+                inc_plr_nmbr.setInteractive({useHandCursor: true}).on('pointerdown', () => this.inc_plr_nmbr()).on('pointerover', () => {inc_plr_nmbr.setScale(1.2)}).on('pointerout', () => {inc_plr_nmbr.setScale(1)})
+
+                this.plr_nmbr = this.add.text(3500, 600, player_number.toString()).setFontSize(100).setOrigin(0.5)
+                
+                var dec_plr_nmbr = this.add.text(3400, 600, '-').setFontSize(100).setOrigin(0.5).setPadding(20,20,10,10).setShadow(0,0, shadow_color, shadow_blur, 1, 1).setStroke(shadow_color, edge_thickness)
+                dec_plr_nmbr.setInteractive({useHandCursor: true}).on('pointerdown', () => this.dec_plr_nmbr()).on('pointerover', () => {dec_plr_nmbr.setScale(1.2)}).on('pointerout', () => {dec_plr_nmbr.setScale(1)})
+
+                this.continue = this.add.text(3800, 2120, 'Continue').setFontSize(100).setOrigin(1, 1).setInteractive({useHandCursor: true}).on('pointerdown', () => {
+                    for (let k = 0; k < this.players.length; ++k){
+                        if (this.players[k][1].text != ''){
+                            players[k].name = this.players[k][1].text
+                        }
+                    }
+                    this.scene.switch('game')
+                }).setPadding(20,20,10,10).setShadow(0,0, shadow_color, shadow_blur, 1, 1).setStroke(shadow_color, edge_thickness).on('pointerover', () => {this.continue.setScale(1.2)}).on('pointerout', () => {this.continue.setScale(1)})
+
+            };
+
+            PlayerMenu.toMainMenu = function() {
+                this.scene.switch('menu');
+            }
+
+            PlayerMenu.toPlayerMenu = function() {
+                
+                this.scene.switch('plr_menu')
+            }
+
+            PlayerMenu.inc_plr_nmbr = function() {
+                if (player_number < 6){
+                    player_number += 1
+                    players.push(new player('player name', 0xffffff))
+                    for (let k = 0; k < this.players.length; ++k){
+                        if (this.players[k][1].text != ''){
+                            players[k].name = this.players[k][1].text
+                        }
+                    }
+                    updated = true
+                }
+                
+            }
+
+            PlayerMenu.dec_plr_nmbr = function() {
+                if (player_number > 2){
+                    player_number -= 1
+                    players.pop()
+                    for (let k = 0; k < player_number; ++k){
+                        if (this.players[k][1].text != ''){
+                            players[k].name = this.players[k][1].text
+                        }
+
+                    }
+                    updated = true
+                }
+                
+            }
+
+            PlayerMenu.choose_color = function(bla) {
+                if (this.menu_open != true) {
+                    current_player = bla
+                    //console.log(bla)
+                    this.colors = [
+                        this.add.text(1920, 1700, 'Choose color of ' + current_player.name).setFontSize(100).setOrigin(0.5),
+                        this.add.image(1920 - 200, 2000, 'usr').setTint(0xffff00).setScale(0.5).setInteractive({useHandCursor: true}).on('pointerdown', () => this.color_chosen(0xffff00)),
+                        this.add.image(1920 + 200, 2000, 'usr').setTint(0xc21807).setScale(0.5).setInteractive({useHandCursor: true}).on('pointerdown', () => this.color_chosen(0xc21807)),
+                        this.add.image(1920 - 600, 2000, 'usr').setTint(0x2e8b57).setScale(0.5).setInteractive({useHandCursor: true}).on('pointerdown', () => this.color_chosen(0x2e8b57)),
+                        this.add.image(1920 + 600, 2000, 'usr').setTint(0x0f4d92).setScale(0.5).setInteractive({useHandCursor: true}).on('pointerdown', () => this.color_chosen(0x0f4d92)),
+                        this.add.image(1920 - 1000, 2000, 'usr').setTint(0xd24787).setScale(0.5).setInteractive({useHandCursor: true}).on('pointerdown', () => this.color_chosen(0xd24787)),
+                        this.add.image(1920 + 1000, 2000, 'usr').setTint(0xeeeeee).setScale(0.5).setInteractive({useHandCursor: true}).on('pointerdown', () => this.color_chosen(0xeeeeee)),
+                    ]
+                    this.menu_open = true
+                } else {
+                    this.color_chosen(current_player.color)
+                }
+                
+            }
+
+            PlayerMenu.color_chosen = function(color) {
+                //console.log(current_player)
+                current_player.color = color
+                for (n = 0; n < this.colors.length; n++)
+                    this.colors[n].destroy()
+                for (let k = 0; k < this.players.length; ++k){
+                    if (this.players[k][1].text != ''){
+                        players[k].name = this.players[k][1].text
+                    }
+                }
+                this.menu_open = false
+                updated = true
+            }
+
+            PlayerMenu.update = function() {
+                if (updated == true){
+                    this.plr_nmbr.setText(player_number.toString())
+                    for (i = 0; i < this.players.length; ++i){
+                        this.players[i][0].destroy()
+                        this.players[i][1].destroy()
+                    }
+                    this.players = []
+                    for (let n = 0; n < player_number; ++n){
+                        this.players.push([this.add.image(1920 + this.offsets[n], 1100, 'usr').setTint(players[n].color).setScale(0.8).setInteractive({useHandCursor: true}).on('pointerdown', () => this.choose_color(players[n])), this.add.rexInputText({x: 1920 + this.offsets[n], y: 1500, width: 500, height: 100, fontSize: '80px'}).setPlaceholder(players[n].name)])
+                    }
+                    updated = false
+                }
+                
+            }
+
+
+            var getIndex = function(arr1, arr2){
+                for (let i = 0; i < arr1.length; i++){
+                    if (arr1[i][0] == arr2[0] && arr1[i][1] == arr2[1]){
+                        return i
+                    }
+                }
+                return -1
+            }
+            //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+            var config = {
+                type: Phaser.AUTO,
+                backgroundColor: '#555555',
+                scale: {
+                mode: Phaser.Scale.FIT,
+                parent: 'divId',
+                width: 3840,
+                height: 2160
+                },
+                dom: {
+                    createContainer: true
+                }
+                };
+
+            var game = new Phaser.Game(config);
+
+            game.scene.add('menu', MainMenu);
+            game.scene.add('game', GameView);
+            game.scene.add('usr_det', UsrDetail);
+            game.scene.add('plr_menu', PlayerMenu)
+            game.scene.add('prop_menu', PropertyMenu)
+            game.scene.add('trade_mngr', TradeManager)
+            game.scene.add('prop_mngr', PropertyManager)
+            game.scene.add('hold_creat', HoldingCreator)
+            game.scene.add('auct', Auctioneer)
+
+            game.scene.start('menu');
+        </script>
+    </body>
+</html>

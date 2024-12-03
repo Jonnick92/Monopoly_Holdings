@@ -1,7 +1,8 @@
 export class Field {
-    name = '';
-    type = '';
-    position = 0;
+    name: string;
+    type: string;
+    position: number;
+    
     constructor(name, type, position) {
         this.name = name;
         this.type = type;

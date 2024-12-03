@@ -1,4 +1,5 @@
 import {Field} from "./Field";
+import { Player } from "./Player";
 
 export class SaleException extends Error {
     constructor(message) {
@@ -11,9 +12,9 @@ export class Property extends Field {
     price: number;
     price_of_house: number;
     rents: number[];
-    mortgage: any;
+    mortgage: number;
     group: string;
-    owner: any;
+    owner: Player;
     state: number;
     value: number;
 
