@@ -20,7 +20,9 @@
   },
   "homepage": "https://github.com/Jonnick92/Monopoly_Holdings#readme",
   "dependencies": {
-    "express": "5.0.1"
+    "express": "5.0.1",
+    "sqlite": "^5.1.1",
+    "sqlite3": "^5.1.7"
   },
   "devDependencies": {
     "@types/express": "^5.0.1",
