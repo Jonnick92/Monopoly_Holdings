@@ -18,8 +18,8 @@ async function initDatabase() {
     `);
 
     // Insert sample data
-    await db.run(`INSERT INTO users (name, email) VALUES (?)`, ['John Doe']);
-    await db.run(`INSERT INTO users (name, email) VALUES (?)`, ['Jane Smith']);
+    await db.run(`INSERT INTO users (name) VALUES (?)`, ['John Doe']);
+    await db.run(`INSERT INTO users (name) VALUES (?)`, ['Jane Smith']);
 
     // Query the data
     const users = await db.all(`SELECT * FROM users`);
@@ -29,7 +29,9 @@ async function initDatabase() {
     await db.close();
 }
 
-// Initialize the database
-initDatabase().catch((err) => {
-    console.error('Error initializing the database:', err);
-});
+export async function setupDatabase() {
+    // Initialize the database
+    initDatabase().catch((err) => {
+        console.error('Error initializing the database:', err);
+    });
+}
