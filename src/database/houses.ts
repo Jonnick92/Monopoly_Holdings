@@ -9,6 +9,8 @@ class property {
         this.owner = null
         this.color = color
         this.type = 'prop'
+        this.is_train_station = false
+        this.is_provider = false
     }
     
 }
