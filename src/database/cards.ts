@@ -1,44 +1,94 @@
 // Weitere aus dem offiziellen Monopoly Spiel hinzufügen?
+// Häufigkeit der Karten muss noch berücksichtigt werden
 
-/*
-    id: Image id in assets
-    type: Card type
-    value? : Card value (if applicable)
-    house? : House value (if applicable)
-    hotel? : Hotel value (if applicable)
-*/
-let cards = [
-    { id: 1, type: "prison" },
-    { id: 2, type: "money_bank", value: 100 },
-    { id: 3, type: "money_bank", value: 200 },
-    { id: 4, type: "money_bank", value: 20 },
-    { id: 5, type: "money_bank", value: 100 },
-    { id: 6, type: "money_bank", value: 10 },
-    { id: 7, type: "move_to", value: "Badstraße"},
-    { id: 8, type: "money_bank", value: -50 },
-    { id: 9, type: "money_bank", value: 25 },
-    { id: 10, type: "no_prison" },
-    { id: 11, type: "redraw_choice", value: 10},
-    { id: 12, type: "move_to_next", value: "Train Station"},
-    { id: 13, type: "move_to", value: "Los"},
-    { id: 14, type: "money_bank", value: -100 },
-    { id: 15, type: "money_bank", value: 50 },
-    { id: 16, type: "money_players", value: 10 },
-    { id: 17, type: "move_to", value: "Los"},
-    { id: 18, type: "money_bank", value: -150 },
-    { id: 19, type: "renovation", house: 40, hotel: 115 },
-    { id: 20, type: "money_bank", value: 150 },
-    { id: 21, type: "money_players", value: -50 },
-    { id: 22, type: "move_to", value: "Opernplatz"},
-    { id: 23, type: "money_bank", value: 100 },
-    { id: 24, type: "move_to", value: "Schloßallee"},
-    { id: 25, type: "move", value: -3 },
-    { id: 26, type: "prison" },
-    { id: 27, type: "money_bank", value: -15 },
-    { id: 28, type: "money_bank", value: 50 },
-    { id: 29, type: "move_to", value: "Seestraße"},
-    { id: 30, type: "move_to", value: "Südbahnhof"},
-    { id: 31, type: "no_prison" },
-    { id: 32, type: "renovation", house: 25, hotel: 100 },
+enum CardType {
+    money_bank,
+    money_players,
+    move_to,
+    move_to_next_train_station,
+    move,
+    prison,
+    no_prison,
+    renovation,
+    redraw_choice,
+}
+
+class Card {
+    asset_id: number;
+    type: CardType;
+    value?: number | string;
+    house?: number;
+    hotel?: number;
+
+    constructor(id: number, type: CardType, value?: number | string, house?: number, hotel?: number) {
+        this.asset_id = id;
+        this.type = type;
+        this.value = value;
+        this.house = house;
+        this.hotel = hotel;
+    }
+
+    do_action(player: any, game: any) {
+        switch (this.type) {
+            case CardType.money_bank:
+                break;
+            case CardType.money_players:
+                break;
+            case CardType.move_to:
+                break;
+            case CardType.move_to_next_train_station:
+                break;
+            case CardType.move:
+                break;
+            case CardType.prison:
+                break;
+            case CardType.no_prison:
+                break;
+            case CardType.renovation:
+                break;
+            case CardType.redraw_choice:
+                break;
+            default:
+                throw new Error(`Unknown card type: ${this.type}`);
+        }
+    }
+}
+
+
+const COMMUNITY_CARDS: Card[] = [
+    new Card(1, CardType.prison),
+    new Card(2, CardType.money_bank, 100),
+    new Card(3, CardType.money_bank, 200),
+    new Card(4, CardType.money_bank, 20),
+    new Card(5, CardType.money_bank, 100),
+    new Card(6, CardType.money_bank, 10),
+    new Card(7, CardType.move_to, "Badstraße"),
+    new Card(8, CardType.money_bank, -50),
+    new Card(9, CardType.money_bank, 25),
+    new Card(10, CardType.no_prison),
+    new Card(11, CardType.redraw_choice, -10),
+    new Card(12, CardType.move_to_next_train_station),
+    new Card(13, CardType.move_to, "Los"),
+    new Card(14, CardType.money_bank, -100),
+    new Card(15, CardType.money_bank, 50),
+    new Card(16, CardType.money_players, 10),
+];
+
+const EVENT_CARDS: Card[] = [
+    new Card(17, CardType.move_to, "Los"),
+    new Card(18, CardType.money_bank, -150),
+    new Card(19, CardType.renovation, 0, 40, 115),
+    new Card(20, CardType.money_bank, 150),
+    new Card(21, CardType.money_players, -50),
+    new Card(22, CardType.move_to, "Opernplatz"),
+    new Card(23, CardType.money_bank, 100),
+    new Card(24, CardType.move_to, "Schloßallee"),
+    new Card(25, CardType.move, -3),
+    new Card(26, CardType.prison),
+    new Card(27, CardType.money_bank, -15),
+    new Card(28, CardType.money_bank, 50),
+    new Card(29, CardType.move_to, "Seestraße"),
+    new Card(30, CardType.move_to, "Südbahnhof"),
+    new Card(31, CardType.no_prison),
+    new Card(32, CardType.renovation, 0, 25, 100),
 ]
-
