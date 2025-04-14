@@ -85,7 +85,7 @@ class Property extends MortgageableField {
         
     }
 
-    calculate_rent(): number {
+    calculate_rent(player: any): number {
         return 0;
     }
 }
