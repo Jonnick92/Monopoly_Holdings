@@ -65,7 +65,7 @@ abstract class MortgageableField extends Field {
     abstract calculate_rent(player: any): number;
 }
 
-class Property extends MortgageableField {
+export class Property extends MortgageableField {
     price_of_house: number;
     rents: number[];
     color: string;
@@ -90,7 +90,7 @@ class Property extends MortgageableField {
     }
 }
 
-class TrainStation extends MortgageableField {
+export class TrainStation extends MortgageableField {
 
     constructor(pos: number, name: string) {
         super(pos, name, 200);
@@ -117,7 +117,7 @@ class TrainStation extends MortgageableField {
     }
 }
 
-class Provider extends MortgageableField {
+export class Provider extends MortgageableField {
     constructor(pos: number, name: string) {
         super(pos, name, 150);
     }
@@ -148,7 +148,7 @@ class ActionField extends Field {
     }
 }
 
-class EventField extends ActionField {
+export class EventField extends ActionField {
     is_event_field(): boolean {
         return true;
     }
@@ -158,7 +158,7 @@ class EventField extends ActionField {
     }
 }
 
-class CommunityField extends ActionField {
+export class CommunityField extends ActionField {
     is_community_field(): boolean {
         return true;
     }

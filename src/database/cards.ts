@@ -13,7 +13,7 @@ enum CardType {
     redraw_choice,
 }
 
-class Card {
+export class Card {
     asset_id: number;
     type: CardType;
     value?: number | string;

@@ -1,5 +1,7 @@
 import sqlite3 from 'sqlite3';
 import { open } from 'sqlite';
+export { GAME_FIELD, Provider, TrainStation, Property, CommunityField, EventField } from './houses';
+export { EVENT_CARDS, COMMUNITY_CARDS, Card } from './cards';
 
 async function initDatabase() {
     const db = await open({
@@ -19,6 +21,8 @@ async function initDatabase() {
             game_id INTEGER NOT NULL,
             player_id INTEGER NOT NULL,
             name TEXT NOT NULL,
+            color TEXT NOT NULL,
+            figure TEXT NOT NULL,
             is_holding BOOLEAN DEFAULT 0,
             money INTEGER NOT NULL,
             position INTEGER NOT NULL,
