@@ -32,7 +32,16 @@ app.get('/api/v1/:name', (req, res) => {
   res.send('API is working!, ' + req.params.name);
 });
 
-app.listen(port, () => {
-  setupDatabase();
-  console.log(`Server is running on http://localhost:${port}`);
-});
+const startServer = async () => {
+  try {
+    await setupDatabase();
+    app.listen(port, () => {
+      console.log(`Server is running on http://localhost:${port}`);
+    });
+  } catch (error) {
+    console.error('Failed to initialize the database:', error);
+    process.exit(1); // Exit the process with an error code
+  }
+};
+
+startServer();
