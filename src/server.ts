@@ -33,6 +33,6 @@ app.get('/api/v1/:name', (req, res) => {
 });
 
 app.listen(port, () => {
-  console.log(`Server is running on http://localhost:${port}`);
   setupDatabase();
+  console.log(`Server is running on http://localhost:${port}`);
 });

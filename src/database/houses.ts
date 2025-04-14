@@ -168,7 +168,7 @@ class CommunityField extends ActionField {
     }
 }
 
-const GAME_FIELD: Field[] = [
+export const GAME_FIELD: Field[] = [
     new ActionField(0, 'Los', 'Los'),
     new Property(1, 'Badstraße', 60, 50, [2, 10, 30, 90, 160, 250], 'brown'),
     new CommunityField(2, 'Community Field', 'Community'),

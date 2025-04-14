@@ -55,7 +55,7 @@ class Card {
 }
 
 
-const COMMUNITY_CARDS: Card[] = [
+export const COMMUNITY_CARDS: Card[] = [
     new Card(1, CardType.prison),
     new Card(2, CardType.money_bank, 100),
     new Card(3, CardType.money_bank, 200),
@@ -74,7 +74,7 @@ const COMMUNITY_CARDS: Card[] = [
     new Card(16, CardType.money_players, 10),
 ];
 
-const EVENT_CARDS: Card[] = [
+export const EVENT_CARDS: Card[] = [
     new Card(17, CardType.move_to, "Los"),
     new Card(18, CardType.money_bank, -150),
     new Card(19, CardType.renovation, 0, 40, 115),
