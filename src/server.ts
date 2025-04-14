@@ -36,10 +36,7 @@ app.get('/api/v1/:name', (req, res) => {
 const startServer = async () => {
   try {
     await setupDatabase();
-    let game_id = await create_game();
-    let player_id = await create_player(game_id, 'Max', 'red', 'car');
-    console.log('Game ID:', game_id);
-    console.log('Player ID:', player_id);
+
     app.listen(port, () => {
       console.log(`Server is running on http://localhost:${port}`);
     });
