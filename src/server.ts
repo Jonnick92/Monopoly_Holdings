@@ -1,6 +1,10 @@
 import express from 'express';
 import { setupDatabase } from './database/init';
+import { apiHandler } from './routes/apiv1/index';
+import bodyParser from 'body-parser';
 
+const router = express.Router();
+router.use(bodyParser.json());
 
 const app = express();
 const port = 3000;
@@ -29,8 +33,12 @@ app.get('/play/:id', (req, res) => {
   res.send('Spiele ' + req.params.id);
 });
 
-app.get('/api/v1/:name', (req, res) => {
-  res.send('API is working!, ' + req.params.name);
+app.get('/api/v1/', (req, res) => {
+  apiHandler(req, res);
+});
+
+app.post('/api/v1/:name', (req, res, func) => {
+  apiHandler(req, res);
 });
 
 const startServer = async () => {
