@@ -4,10 +4,7 @@ export { GAME_FIELD, Provider, TrainStation, Property, CommunityField, EventFiel
 export { EVENT_CARDS, COMMUNITY_CARDS, Card } from './cards';
 
 async function initDatabase() {
-    const db = await open({
-        filename: './database.sqlite',
-        driver: sqlite3.Database
-    });
+    const db = await get_database();
 
     await db.exec(`
         PRAGMA foreign_keys = ON;
@@ -77,4 +74,12 @@ export async function setupDatabase() {
         console.error('Error initializing the database:', err);
         }
     );
+}
+
+export async function get_database() {
+    const db = await open({
+        filename: './database.sqlite',
+        driver: sqlite3.Database
+    });
+    return db;
 }

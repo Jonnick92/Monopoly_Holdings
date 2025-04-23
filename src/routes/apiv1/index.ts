@@ -1,5 +1,7 @@
 import express from 'express';
 import { IncomingHttpHeaders } from 'http';
+import { player_create, player_delete, player_get } from './player';
+import { games_create, games_delete, games_get } from './game';
 
 export async function apiHandler(req: express.Request, res: express.Response) {
     if (!req.params.name) {
@@ -13,28 +15,23 @@ export async function apiHandler(req: express.Request, res: express.Response) {
         case 'player_create':
             player_create(res, data);
             return;
-        case 'games':
-            res.sendStatus(501);
+        case 'player_delete':
+            player_delete(res, data);
             return;
-        case 'play':
-            res.sendStatus(501);
+        case 'player_get':
+            player_get(res, data);
+            return;
+        case 'games_create':
+            games_create(res, data);
+            return;
+        case 'games_delete':
+            games_delete(res, data);
+            return;
+        case 'games_get':
+            games_get(res, data);
             return;
         default:
             res.sendStatus(404).send('Unknown API endpoint!');
             return;
     }
-}
-
-async function player_create(res: express.Response, params: IncomingHttpHeaders) {
-    const name = params['name'];
-    const color = params['color'];
-
-    if (!name || !color) {
-        res.sendStatus(400).send('Missing name or color!');
-        return;
-    }
-
-
-
-    res.sendStatus(501);
 }
