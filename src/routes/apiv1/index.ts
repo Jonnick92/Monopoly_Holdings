@@ -2,6 +2,7 @@ import express from 'express';
 import { IncomingHttpHeaders } from 'http';
 import { player_create, player_delete, player_get } from './player';
 import { games_create, games_delete, games_get } from './game';
+import { game_updates } from './games_sse';
 
 export async function apiHandler(req: express.Request, res: express.Response) {
     if (!req.params.name) {
@@ -12,6 +13,9 @@ export async function apiHandler(req: express.Request, res: express.Response) {
     const data = req.headers;
 
     switch (req.params.name) {
+        case 'game_updates':
+            game_updates(res, req, data);
+            return;
         case 'player_create':
             player_create(res, data);
             return;

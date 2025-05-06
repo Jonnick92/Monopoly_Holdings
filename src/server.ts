@@ -1,4 +1,4 @@
-import express from 'express';
+import express from "express";
 import { setupDatabase } from './database/init';
 import { apiHandler } from './routes/apiv1/index';
 import bodyParser from 'body-parser';
@@ -7,6 +7,7 @@ const router = express.Router();
 router.use(bodyParser.json());
 
 const app = express();
+
 const port = 3000;
 
 app.get('/', (req, res) => {
@@ -29,7 +30,7 @@ app.get('/games', (req, res) => {
 });
 
 app.get('/play/:id', (req, res) => {
-  // Spielen
+  // Spielen -> UI Files zurückgeben
   res.send('Spiele ' + req.params.id);
 });
 
