@@ -30,7 +30,7 @@ app.get('/play/:id', (req, res) => {
   // Spielen -> UI Files zurückgeben
   res.send('Spiele ' + req.params.id);
 });
-//
+
 app.get('/api/v1/', (req, res) => {
   apiHandler(req, res);
 });
