@@ -4,9 +4,13 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "ts-node src/server.ts",
-    "build": "tsc"
+    "build:server": "tsc",
+    "build:client": "cd client && ng build --configuration=production",
+    "build": "npm run build:server && npm run build:client",
+    "start": "npm run build && node dist/server.js",
+    "dev:server": "ts-node src/server.ts",
+    "dev:client": "cd client && ng serve",
+    "dev": "concurrently \"npm run dev:server\" \"npm run dev:client\""
   },
   "repository": {
     "type": "git",
@@ -20,14 +24,16 @@
   },
   "homepage": "https://github.com/Jonnick92/Monopoly_Holdings#readme",
   "dependencies": {
+    "concurrently": "^9.1.2",
     "express": "5.0.1",
+    "path": "^0.12.7",
     "sqlite": "^5.1.1",
     "sqlite3": "^5.1.7"
   },
   "devDependencies": {
     "@types/express": "^5.0.1",
-    "@types/node": "^22.13.14",
+    "@types/node": "^22.15.17",
     "ts-node": "^10.9.2",
-    "typescript": "^5.8.2"
+    "typescript": "^5.8.3"
   }
 }

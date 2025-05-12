@@ -1,4 +1,5 @@
 import express from "express";
+import path from "path";
 import { setupDatabase } from './database/init';
 import { apiHandler } from './routes/apiv1/index';
 import bodyParser from 'body-parser';
@@ -9,10 +10,6 @@ router.use(bodyParser.json());
 const app = express();
 
 const port = 3000;
-
-app.get('/', (req, res) => {
-  res.send('Hello, world!');
-});
 
 app.get('/player', (req, res) => {
   // Spieler aufsetzen, Name, Farbe, Figur etc.
@@ -38,8 +35,16 @@ app.get('/api/v1/', (req, res) => {
   apiHandler(req, res);
 });
 
-app.post('/api/v1/:name', (req, res, func) => {
+app.post('/api/v1/:name', (req, res,func) => {
   apiHandler(req, res);
+});
+
+// Statische Dateien aus dem public-Ordner bereitstellen
+const publicPath = path.join(process.cwd(), 'public/browser');
+app.use(express.static(publicPath));
+
+app.get('/', (req, res) => {
+  res.sendFile(path.join(publicPath, 'index.html'));
 });
 
 const startServer = async () => {
