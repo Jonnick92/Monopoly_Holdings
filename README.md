@@ -11,8 +11,8 @@
 
 ### Altes UI Framework
 
-[Phaser 3.51.0]("https://cdn.jsdelivr.net/npm/phaser@3.51.0/dist/phaser-arcade-physics.min.js")
-[Input Plugin]('https://raw.githubusercontent.com/rexrainbow/phaser3-rex-notes/master/dist/rexinputtextplugin.min.js')
+[Phaser 3.51.0](https://cdn.jsdelivr.net/npm/phaser@3.51.0/dist/phaser-arcade-physics.min.js)
+[Input Plugin](https://raw.githubusercontent.com/rexrainbow/phaser3-rex-notes/master/dist/rexinputtextplugin.min.js)
 
 ### Hardcoded Positionen
 
