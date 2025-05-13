@@ -38,7 +38,7 @@ this.board = this.add.image(1920 + center_offset,1080,'bg');
   - Bewegen
   - Feld Aktion
   - Spieler Bankrott
-  - Gefängniss
+  - Gefängnis
   - Event / Community Karten
 - Loading vom Game, Player etc
 - API Calls
