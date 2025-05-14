@@ -24,11 +24,13 @@ export async function game_updates(res: express.Response, req: express.Request, 
 
     clients.set(Number(game_id), new Map<String, express.Request>());
     clients.get(Number(game_id))?.set(name, req);
+    console.log('Client connected:', game_id, name);
 
     req.once('close', () => {
         for (const [gameId, clientMap] of clients.entries()) {
             if (clientMap.has(name)) {
                 clientMap.delete(name);
+                console.log('Client disconnected:', gameId, name);
                 if (clientMap.size === 0) {
                     clients.delete(gameId);
                 }
