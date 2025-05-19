@@ -11,8 +11,8 @@
 
 ### Altes UI Framework
 
-[Phaser 3.51.0]("https://cdn.jsdelivr.net/npm/phaser@3.51.0/dist/phaser-arcade-physics.min.js")
-[Input Plugin]('https://raw.githubusercontent.com/rexrainbow/phaser3-rex-notes/master/dist/rexinputtextplugin.min.js')
+[Phaser 3.51.0](https://cdn.jsdelivr.net/npm/phaser@3.51.0/dist/phaser-arcade-physics.min.js)
+[Input Plugin](https://raw.githubusercontent.com/rexrainbow/phaser3-rex-notes/master/dist/rexinputtextplugin.min.js)
 
 ### Hardcoded Positionen
 
@@ -38,7 +38,7 @@ this.board = this.add.image(1920 + center_offset,1080,'bg');
   - Bewegen
   - Feld Aktion
   - Spieler Bankrott
-  - Gefängniss
+  - Gefängnis
   - Event / Community Karten
 - Loading vom Game, Player etc
 - API Calls
