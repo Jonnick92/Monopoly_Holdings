@@ -2,6 +2,7 @@ import sqlite3 from 'sqlite3';
 import { open } from 'sqlite';
 export { GAME_FIELD, Provider, TrainStation, Property, CommunityField, EventField } from './houses';
 export { EVENT_CARDS, COMMUNITY_CARDS, Card } from './cards';
+import { get_players } from './players';
 
 async function initDatabase() {
     const db = await get_database();
@@ -65,6 +66,9 @@ async function initDatabase() {
 
     const holdings = await db.all(`SELECT * FROM holdings`);
     console.log('Holdings:', holdings);
+
+    const player_ingame = await get_players(1);
+    console.log('Players:', player_ingame);
 
     await db.close();
 }

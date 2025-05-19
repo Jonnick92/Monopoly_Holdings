@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?><sqlb_project><db path="" readonly="0" foreign_keys="" case_sensitive_like="" temp_store="" wal_autocheckpoint="" synchronous=""/><attached/><window><main_tabs open="structure browser pragmas query" current="3"/></window><tab_structure><column_width id="0" width="300"/><column_width id="1" width="0"/><column_width id="2" width="100"/><column_width id="3" width="2373"/><column_width id="4" width="0"/></tab_structure><tab_browse><table title="." custom_title="0" dock_id="2" table="0,0:"/><dock_state state="000000ff00000000fd00000001000000020000043c000002b6fc0100000002fb000000160064006f0063006b00420072006f007700730065003101000000000000043c0000000000000000fb000000160064006f0063006b00420072006f00770073006500320100000000ffffffff0000012000ffffff000002600000000000000004000000040000000800000008fc00000000"/><default_encoding codec=""/><browse_table_settings/></tab_browse><tab_sql><sql name="Erstellung Properties*">INSERT INTO player_properties(property_id, game_id, player_id, houses, mortgaged) Values(1, 1, 1, 0, False);
+INSERT INTO player_properties(property_id, game_id, player_id, houses, mortgaged) Values(2, 1, 1, 0, False);
+INSERT INTO player_properties(property_id, game_id, player_id, houses, mortgaged) Values(3, 1, 1, 0, False);
+INSERT INTO player_properties(property_id, game_id, player_id, houses, mortgaged) Values(4, 1, 1, 0, False);
+INSERT INTO player_properties(property_id, game_id, player_id, houses, mortgaged) Values(5, 1, 1, 0, False);
+INSERT INTO player_properties(property_id, game_id, player_id, houses, mortgaged) Values(6, 1, 1, 0, False);
+
+INSERT INTO player_properties(property_id, game_id, player_id, houses, mortgaged) Values(7, 1, 2, 0, False);
+INSERT INTO player_properties(property_id, game_id, player_id, houses, mortgaged) Values(8, 1, 2, 0, False);
+INSERT INTO player_properties(property_id, game_id, player_id, houses, mortgaged) Values(9, 1, 2, 0, False);
+INSERT INTO player_properties(property_id, game_id, player_id, houses, mortgaged) Values(10, 1, 2, 0, False);
+INSERT INTO player_properties(property_id, game_id, player_id, houses, mortgaged) Values(11, 1, 2, 0, False);
+INSERT INTO player_properties(property_id, game_id, player_id, houses, mortgaged) Values(12, 1, 2, 0, False);
+
+INSERT INTO player_properties(property_id, game_id, player_id, houses, mortgaged) Values(13, 1, 3, 0, False);
+
+
+
+</sql><sql name="SQL 2*">SELECT
+    p.*,
+    COALESCE(
+        (SELECT json_group_array(json_object(
+            'property_id', pp.property_id,
+            'houses', pp.houses,
+            'mortgaged', pp.mortgaged
+        ))
+         FROM player_properties pp
+         WHERE pp.game_id = p.game_id AND pp.player_id = p.player_id
+        ), '[]'
+    ) AS properties,
+    COALESCE(
+        (SELECT json_group_array(json_object(
+            'holding_id', h.holding_id,
+            'player_shares', h.player_shares
+        ))
+         FROM holdings h
+         WHERE h.game_id = p.game_id AND h.player_id = p.player_id
+        ), '[]'
+    ) AS holding_shares
+FROM players p
+WHERE p.game_id = 1
+ORDER BY p.player_id;</sql><sql name="Holding + Shares*">INSERT into players(game_id, player_id, name, color, figure, is_holding, money, position, in_jail, jail_free_cards)
+				Values(1, 2, &quot;Kekse&quot;, &quot;blue&quot;, &quot;&quot;, True, 1000, 0, False, 0);
+
+INSERT into players(game_id, player_id, name, color, figure, is_holding, money, position, in_jail, jail_free_cards)
+				Values(1, 3, &quot;Kekse 2&quot;, &quot;green&quot;, &quot;&quot;, True, 100, 0, False, 0);
+				
+Insert into holdings(game_id, holding_id, player_id, player_shares) Values(1, 2, 1, 1.0);
+Insert into holdings(game_id, holding_id, player_id, player_shares) Values(1, 3, 1, .7);
+Insert into holdings(game_id, holding_id, player_id, player_shares) Values(1, 3, 2, 0.3);</sql><current_tab id="1"/></tab_sql></sqlb_project>
