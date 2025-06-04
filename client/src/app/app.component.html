@@ -1,5 +1,13 @@
 <div class="background-container">
 	<router-outlet></router-outlet>
+	<div>
+    <label for="playerId">Player ID:</label>
+    <input type="number" id="playerId" [(ngModel)]="dummyPlayerId">
+  </div>
+  <div>
+    <label for="gameId">Game ID:</label>
+    <input type="number" id="gameId" [(ngModel)]="dummyGameId">
+  </div>
 	<button (click)="navigateToGameView()">
 		Zum Testspiel
 	</button>

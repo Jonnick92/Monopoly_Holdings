@@ -1,4 +1,4 @@
-import { Component, inject, Input } from '@angular/core';
+import { Component, inject, Input, OnInit } from '@angular/core';
 import { ActivatedRoute, Router, RouterOutlet } from '@angular/router';
 import { GameDataService } from '../game-data.service';
 
@@ -7,9 +7,10 @@ import { GameDataService } from '../game-data.service';
   selector: 'app-game-view',
   imports: [RouterOutlet],
   templateUrl: './game-view.component.html',
-  styleUrl: './game-view.component.css'
+  styleUrl: './game-view.component.css',
+  providers: [GameDataService]
 })
-export class GameViewComponent {
+export class GameViewComponent implements OnInit{
   router = inject(Router);
   private route = inject(ActivatedRoute)
   selectedDataField: number = 0;
@@ -24,7 +25,8 @@ export class GameViewComponent {
       this.playerId = +params['playerId'] || 0;
     });
     console.log(`Game ID: ${this.gameId}, Player ID: ${this.playerId}`);
-    this.gameService.setUserPlayerId(this.playerId);
+    this.gameService.setUserPlayerId(this.playerId); 
+    this.gameService.initializeGameData(); // Initialize game data with dummy data
   }
 
   onButtonNextClick() {

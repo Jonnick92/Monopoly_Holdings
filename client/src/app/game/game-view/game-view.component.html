@@ -3,7 +3,14 @@
   <div class="first-row">
     <img src="simple_board_dark.png" class="game-board" />
     <div>
-      <div class="player-info">Here comes the player name and his balance</div>
+      <div class="player-info">
+        @if (gameService.ownPlayer()) {
+          <div>{{ gameService.getPlayerById(playerId)?.name }}: {{ gameService.getPlayerById(playerId)?.balance }}</div>
+        } 
+        @else {
+          <div>Loading game data...</div>
+        }
+      </div>
       <div class="finance-info">
         <button class="nav-btn prev" (click)="onButtonPreviousClick()">
           <img src="arrow_back.png" />
