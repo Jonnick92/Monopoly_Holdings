@@ -1,11 +1,12 @@
 import { Component, inject, Input, OnInit } from '@angular/core';
 import { ActivatedRoute, Router, RouterOutlet } from '@angular/router';
 import { GameDataService } from '../game-data.service';
+import { GamePlayerListComponent } from "./game-player-list/game-player-list.component";
 
 @Component({
   standalone: true,
   selector: 'app-game-view',
-  imports: [RouterOutlet],
+  imports: [RouterOutlet, GamePlayerListComponent],
   templateUrl: './game-view.component.html',
   styleUrl: './game-view.component.css',
   providers: [GameDataService]

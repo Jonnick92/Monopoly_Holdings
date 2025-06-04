@@ -7,7 +7,7 @@ import { MONOPOLY_PROPERTIES } from "./monopoly-properties";
 })
 
 export class GameDataService {
-    private gameData = signal<GameData>({
+    private _gameData = signal<GameData>({
         gameId: 0,
         players: [],
         activePlayer: 0,
@@ -16,15 +16,18 @@ export class GameDataService {
         diceResults: [0, 0]
     });
 
+    // Add this getter to expose gameData
+    readonly gameData = this._gameData.asReadonly();
+
     //Dummy data for testing purposes (remplace later with api calls)
     initializeGameData() {
-        this.gameData.set({
+        this._gameData.set({
             gameId: 1,
             players: [
                 { id: 1, name: 'Testuser 1', color: 'red', balance: 200000, position: 10, properties: [MONOPOLY_PROPERTIES[2], MONOPOLY_PROPERTIES[10], MONOPOLY_PROPERTIES[7], MONOPOLY_PROPERTIES[6], MONOPOLY_PROPERTIES[3]], isActive: true },
                 { id: 2, name: 'Testuser 2', color: 'blue', balance: 1500, position: 25, properties: [MONOPOLY_PROPERTIES[14], MONOPOLY_PROPERTIES[20], MONOPOLY_PROPERTIES[8], MONOPOLY_PROPERTIES[9], MONOPOLY_PROPERTIES[1]], isActive: false },
-                { id: 2, name: 'Testuser 2', color: 'blue', balance: 1500, position: 25, properties:[], isActive: false },
-                { id: 2, name: 'Testuser 2', color: 'blue', balance: 1500, position: 25, properties: [], isActive: false }
+                { id: 2, name: 'Testuser 3', color: 'green', balance: 5000, position: 25, properties:[], isActive: false },
+                { id: 2, name: 'Testuser 4', color: 'yellow', balance: 4155, position: 25, properties: [], isActive: false }
             ],
             activePlayer: 1,
             userPlayerId: 1,
@@ -56,7 +59,7 @@ export class GameDataService {
     });
 
     setUserPlayerId(playerId: number) {
-        this.gameData.update(data => ({
+        this._gameData.update(data => ({
             ...data,
             userPlayerId: playerId
         }));

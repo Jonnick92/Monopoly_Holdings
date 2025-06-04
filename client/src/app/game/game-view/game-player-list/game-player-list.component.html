@@ -1,0 +1,11 @@
+<div class="player-list">
+  <h3>Other Players</h3>
+  @for (player of getOtherPlayers(); track player.id) {
+    <div class="player-item">
+      <span class="player-name" [style.color]="player.color">{{ player.name }}</span>
+      <span class="player-balance">${{ player.balance }}</span>
+    </div>
+  } @empty {
+    <div class="no-players">No other players in the game</div>
+  }
+</div>
