@@ -1,0 +1,32 @@
+import { Property } from "./game.model";
+
+export const MONOPOLY_PROPERTIES: Property[] = [
+    {id: 1, name: 'Badstraße', assetId: 1},
+    {id: 3, name: 'Turmstraße', assetId: 2},
+    {id: 5, name: 'Südbahnhof', assetId: 23},
+    {id: 6, name: 'Chauseestraße',assetId: 3},
+    {id: 8, name: 'Elisenstraße', assetId: 4},
+    {id: 9, name: 'Poststraße', assetId: 5},
+    {id: 11, name: 'Seestraße', assetId: 6},
+    {id: 12, name: 'Elektrizitätswerk', assetId:27},
+    {id: 13, name: 'Hafenstraße', assetId: 7},
+    {id: 14, name: 'Neue Straße', assetId: 8},
+    {id: 15, name: 'Westbahnhof', assetId: 24},
+    {id: 16, name: 'Münchener Straße', assetId: 9},
+    {id: 18, name: 'Wiener Straße', assetId: 10},
+    {id: 19, name: 'Berliner Straße', assetId: 11},
+    {id: 21, name: 'Theaterstraße', assetId: 12},
+    {id: 23, name: 'Museumstraße', assetId: 13},
+    {id: 24, name: 'Opernplatz', assetId: 14},
+    {id: 25, name: 'Nordbahnhof', assetId: 25},
+    {id: 26, name: 'Lessingstraße', assetId: 15},
+    {id: 27, name: 'Schillerstraße', assetId: 16},
+    {id: 28, name:  'Wasserwerk', assetId: 28},
+    {id: 29, name: 'Goethestraße', assetId: 17},
+    {id: 31, name: 'Rathausplatz', assetId: 18},
+    {id: 32, name: 'Hauptstraße', assetId: 19},
+    {id: 34, name: 'Bahnhofstraße', assetId: 20},
+    {id: 35, name: 'Hauptbahnhof', assetId: 26},
+    {id: 37, name: 'Parkstraße', assetId: 21},
+    {id: 39, name: 'Schlossallee', assetId: 22}
+]

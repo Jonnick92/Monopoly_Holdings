@@ -43,7 +43,7 @@ app.post('/api/v1/:name', (req, res,func) => {
 const publicPath = path.join(process.cwd(), 'public/browser');
 app.use(express.static(publicPath));
 
-app.get('/', (req, res) => {
+app.get('/{*splat}', (req, res) => {
   res.sendFile(path.join(publicPath, 'index.html'));
 });
 
