@@ -58,6 +58,10 @@ export class GameDataService {
         return this.gameData().diceResults[1];
     });
 
+    dice = computed(() => {
+        return this.gameData().diceResults;
+    });
+
     setUserPlayerId(playerId: number) {
         this._gameData.update(data => ({
             ...data,

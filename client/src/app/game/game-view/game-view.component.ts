@@ -31,8 +31,7 @@ export class GameViewComponent implements OnInit{
   }
 
   onButtonNextClick() {
-    this.selectedDataField++;
-    this.selectedDataField = this.selectedDataField % 3;
+    this.selectedDataField = ++this.selectedDataField % 3;
   }
 
   onButtonPreviousClick() {

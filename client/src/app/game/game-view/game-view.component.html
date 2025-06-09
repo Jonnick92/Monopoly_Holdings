@@ -16,18 +16,8 @@
           <img src="arrow_back.png" />
         </button>
         <div class="nav-dots">
-          @if (selectedDataField === 0) {
-          <span class="dot active"></span>
-          } @else {
-          <span class="dot"></span>
-          } @if (selectedDataField === 1) {
-          <span class="dot active"></span>
-          } @else {
-          <span class="dot"></span>
-          } @if (selectedDataField === 2) {
-          <span class="dot active"></span>
-          } @else {
-          <span class="dot"></span>
+          @for (dot of [0, 1, 2]; track dot) {
+            <span class="dot" [class.active]="selectedDataField === dot"></span>
           }
         </div>
         <button class="nav-btn next" (click)="onButtonNextClick()">
