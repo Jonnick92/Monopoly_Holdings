@@ -36,7 +36,7 @@ ng serve             # Development server at :4200
 - `npm run dev:client` - Frontend only  
 - `npm run build` - Production build
 - `npm start` - Start server with production build 
-- `npm install` - Install dependencys for the server and angular
+- `npm install` - Install dependencies for the server and angular
 
 ## Infos
 
