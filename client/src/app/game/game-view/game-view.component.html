@@ -1,0 +1,46 @@
+<div class="background-container">
+  <router-outlet></router-outlet>
+  <div class="first-row">
+    <img src="simple_board_dark.png" class="game-board" />
+    <div>
+      <div class="player-info">
+        @if (gameService.ownPlayer()) {
+          <div>{{ gameService.getPlayerById(playerId)?.name }}: {{ gameService.getPlayerById(playerId)?.balance }}</div>
+        } 
+        @else {
+          <div>Loading game data...</div>
+        }
+      </div>
+      <div class="finance-info">
+        <button class="nav-btn prev" (click)="onButtonPreviousClick()">
+          <img src="arrow_back.png" />
+        </button>
+        <div class="nav-dots">
+          @for (dot of [0, 1, 2]; track dot) {
+            <span class="dot" [class.active]="selectedDataField === dot"></span>
+          }
+        </div>
+        <button class="nav-btn next" (click)="onButtonNextClick()">
+          <img src="arrow_forward.png" />
+        </button>
+      </div>
+      <div>
+        <!-- Replace the anchor elements with the three component (player-overview, own-holdings, all-holdings)-->
+        @switch (selectedDataField) { 
+          @case (0) {
+            <app-game-player-list></app-game-player-list>
+          }
+          @case (1) {
+            <a class="player-info">1</a>
+          }
+          @case (2) {
+            <a class="player-info">2</a>
+          }
+        }
+      </div>
+    </div>
+  </div>
+  <div class="property-row">
+    <!-- Later: @for displaying the property cards the player owns (maybe in a new component) -->
+  </div>
+</div>

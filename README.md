@@ -2,10 +2,41 @@
 
 ## How to run the project
 
-1. Clone the repository
-2. Install the dependencies using `npm install` or `npm update`
-3. Build the Typescript files using `npm run build`
-4. Start the Server with `npm start`
+### Prerequisites
+- **Node.js** (version 18+) and **npm**
+- **Angular CLI**: `npm install -g @angular/cli`
+
+### Quick Start
+```bash
+# Install dependencies and run both backend and frontend simultaneously with production build
+npm install
+npm start
+```
+
+### Manual Setup
+
+#### Backend (Node.js/TypeScript)
+```bash
+npm install
+npm run dev:server    # Development server at :3000
+```
+
+#### Frontend (Angular 19)
+The Angular project is in the `client/` directory:
+```bash
+npm install
+ng serve             # Development server at :4200
+```
+
+
+
+### Available Scripts
+- `npm run dev` - Both backend and frontend
+- `npm run dev:server` - Backend only
+- `npm run dev:client` - Frontend only  
+- `npm run build` - Production build
+- `npm start` - Start server with production build 
+- `npm install` - Install dependencies for the server and angular
 
 ## Infos
 
