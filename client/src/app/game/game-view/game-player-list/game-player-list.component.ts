@@ -13,7 +13,7 @@ export class GamePlayerListComponent {
 
   // Get all players except the current user
   getOtherPlayers() {
-    const userPlayerId = this.gameService.ownPlayer();
+    const userPlayerId = this.gameService.ownPlayerId();
     return this.gameService.gameData().players.filter(player => player.id !== userPlayerId);
   }
 }

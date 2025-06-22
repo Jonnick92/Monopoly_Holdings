@@ -3,11 +3,12 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { GameDataService } from '../game-data.service';
 import { GamePlayerListComponent } from "./game-player-list/game-player-list.component";
 import { ApiService } from '../../api.service';
+import { GamePropertyListComponent } from "./game-property-list/game-property-list.component";
 
 @Component({
   standalone: true,
   selector: 'app-game-view',
-  imports: [GamePlayerListComponent],
+  imports: [GamePlayerListComponent, GamePropertyListComponent],
   templateUrl: './game-view.component.html',
   styleUrl: './game-view.component.css',
   providers: [GameDataService]

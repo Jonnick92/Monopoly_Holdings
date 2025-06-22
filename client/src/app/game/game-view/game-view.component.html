@@ -1,8 +1,8 @@
 <div class="first-row">
 	<img src="simple_board_dark.png" class="game-board"/>
-	<div>
+	<div class="right-column">
 		<div class="player-info">
-			@if (gameService.ownPlayer()) {
+			@if (gameService.ownPlayerId()) {
 				<div>{{ gameService.getPlayerById(playerId)?.name }}
 					: {{ gameService.getPlayerById(playerId)?.balance }}
 				</div>
@@ -31,7 +31,7 @@
 				<img src="arrow_forward.png"/>
 			</button>
 		</div>
-		<div>
+		<div class="content-section">
 			<!-- Replace the anchor elements with the three component (player-overview, own-holdings, all-holdings)-->
 			@switch (selectedDataField) {
 				@case (0) {
@@ -45,8 +45,8 @@
 				}
 			}
 		</div>
+		<div class="property-row">
+			<app-game-property-list></app-game-property-list>
+		</div>
 	</div>
-</div>
-<div class="property-row">
-	<!-- Later: @for displaying the property cards the player owns (maybe in a new component) -->
 </div>

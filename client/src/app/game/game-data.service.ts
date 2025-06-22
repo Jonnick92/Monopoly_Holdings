@@ -41,7 +41,7 @@ export class GameDataService {
         return this.gameData().players.find(player => player.id === activePlayerId)?.name || null;
     });
 
-    ownPlayer = computed(() => {
+    ownPlayerId = computed(() => {
         return this.gameData().userPlayerId;
     });
 
@@ -62,12 +62,17 @@ export class GameDataService {
         return this.gameData().diceResults;
     });
 
+    ownProperties = computed(() => {
+        return this.getPlayerById(this.ownPlayerId())?.properties
+    })
+
     setUserPlayerId(playerId: number) {
         this._gameData.update(data => ({
             ...data,
             userPlayerId: playerId
         }));
     }
+
     getPlayerById(playerId: number) {
         return this.gameData().players.find(player => player.id === playerId) || null;
     }

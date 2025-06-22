@@ -1,24 +1,47 @@
+:host {
+  display: block;
+  height: 100%;
+}
+
 .first-row {
   display: flex;
   align-items: flex-start;
   padding: 16px;
+  overflow: hidden;
+  height: 100vh;
+  box-sizing: border-box;
+  margin: 0;
 }
 
 .game-board {
-  width: 40%;
+  width: 49%;
   height: auto;
+  max-height: calc(100vh - 32px);
   margin-right: 24px;
+  flex-shrink: 0;
+  object-fit: contain;
+}
+
+.right-column {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  min-width: 0;
+  height: calc(100vh - 32px);
 }
 
 .player-info {
   font-weight: bold;
   color: #fff;
+  flex-shrink: 0;
 }
 
 .finance-info {
   display: flex;
   align-items: center;
   gap: 12px;
+  flex-shrink: 0;
 }
 
 .nav-btn {
@@ -83,4 +106,19 @@
 
 .dice-button:focus {
   outline: none;
+}
+
+.property-row {
+  flex: 1;
+  width: 100%;
+  max-width: 100%;
+  overflow: hidden;
+  min-width: 0;
+  min-height: 0;
+}
+
+.content-section {
+  max-width: 400px;
+  min-width: 0;
+  flex-shrink: 0;
 }

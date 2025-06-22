@@ -1,0 +1,16 @@
+.property-list {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr); /* Two equal columns */
+  grid-template-rows: repeat(auto-fit, minmax(200px, auto)); /* Auto rows with min height */
+  gap: 10px; /* Spacing between items */
+  overflow-x: auto;
+  overflow-y: auto; /* Allow vertical scrolling if needed */
+  padding: 10px;
+  max-height: 400px; /* Set a max height to enable scrolling */
+}
+
+.property-list img {
+  width: 100%;
+  height: auto;
+  object-fit: contain; /* Maintain aspect ratio */
+}
