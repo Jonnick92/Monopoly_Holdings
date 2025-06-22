@@ -1,16 +1,134 @@
 .property-list {
   display: grid;
-  grid-template-columns: repeat(2, 1fr); /* Two equal columns */
-  grid-template-rows: repeat(auto-fit, minmax(200px, auto)); /* Auto rows with min height */
-  gap: 10px; /* Spacing between items */
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(auto-fit, minmax(200px, auto));
+  gap: 10px; 
   overflow-x: auto;
-  overflow-y: auto; /* Allow vertical scrolling if needed */
+  overflow-y: auto;
   padding: 10px;
-  max-height: 400px; /* Set a max height to enable scrolling */
+  max-height: 608px;
 }
 
-.property-list img {
+.property-card {
   width: 100%;
   height: auto;
-  object-fit: contain; /* Maintain aspect ratio */
+  object-fit: contain;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  border-radius: 8px;
+}
+
+.property-card:hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background: black;
+  border-radius: 12px;
+  max-width: 90vw;
+  max-height: 90vh;
+  overflow-y: auto;
+  position: relative;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+}
+
+.close-button {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  color: #999;
+  z-index: 1001;
+}
+
+.close-button:hover {
+  color: #ccc;
+}
+
+.modal-header {
+  padding: 20px 20px 10px 20px;
+  border-bottom: 1px solid #ccc;
+}
+
+.modal-header h2 {
+  margin: 0;
+  color: #ccc;
+} 
+
+.modal-body {
+  padding: 20px;
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.large-property-image {
+  max-width: 400px;
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+}
+
+.property-info {
+  flex: 1;
+  min-width: 300px;
+}
+
+.property-info p {
+  margin: 10px 0;
+  color: #ccc;
+}
+
+.property-actions {
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.action-button {
+  padding: 10px 15px;
+  background-color: #007acc;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.action-button:hover {
+  background-color: #005fa3;
+}
+
+.action-button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .modal-body {
+    flex-direction: column;
+  }
+  
+  .property-info {
+    min-width: auto;
+  }
 }

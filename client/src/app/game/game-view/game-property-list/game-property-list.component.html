@@ -1,5 +1,37 @@
 <div class="property-list">
-    @for (property of properties; track property.id){
-        <img [src]="'/reel_estate_cards/Folie' + property.assetId + '.png'" alt="Property Card">
+    @for (property of properties; track property.id) {
+        <img 
+            [src]="'/reel_estate_cards/Folie' + property.assetId + '.png'" 
+            alt="Property Card"
+            (click)="onPropertyClick(property)"
+            class="property-card"
+        >
     }
 </div>
+
+@if (showOverlay && selectedProperty) {
+    <div class="overlay" (click)="onOverlayClick($event)">
+        <div class="modal-content">
+            <button class="close-button" (click)="closeOverlay()">&times;</button>
+            <div class="modal-header">
+                <h2>{{ selectedProperty.name || 'Property Details' }}</h2>
+            </div>
+            <div class="modal-body">
+                <img 
+                    [src]="'/reel_estate_cards/Folie' + selectedProperty.assetId + '.png'" 
+                    alt="Property Card Large View"
+                    class="large-property-image"
+                >
+                <div class="property-info">
+                    <p><strong>Property ID:</strong> {{ selectedProperty.id }}</p>
+                    <p><strong>Asset ID:</strong> {{ selectedProperty.assetId }}</p>
+                    <div class="property-actions">
+                        <button class="action-button">Sell Property</button>
+                        <button class="action-button">Mortgage</button>
+                        <button class="action-button">Build Houses</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
