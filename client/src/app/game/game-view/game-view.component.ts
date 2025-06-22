@@ -1,21 +1,23 @@
-import { Component, inject, Input, OnInit } from '@angular/core';
-import { ActivatedRoute, Router, RouterOutlet } from '@angular/router';
+import { Component, inject, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { GameDataService } from '../game-data.service';
 import { GamePlayerListComponent } from "./game-player-list/game-player-list.component";
+import { ApiService } from '../../api.service';
 
 @Component({
   standalone: true,
   selector: 'app-game-view',
-  imports: [RouterOutlet, GamePlayerListComponent],
+  imports: [GamePlayerListComponent],
   templateUrl: './game-view.component.html',
   styleUrl: './game-view.component.css',
   providers: [GameDataService]
 })
 export class GameViewComponent implements OnInit{
   router = inject(Router);
-  private route = inject(ActivatedRoute)
+  private route = inject(ActivatedRoute);
   selectedDataField: number = 0;
   gameService = inject(GameDataService);
+  apiService = inject(ApiService);
 
   gameId: number = 0;
   playerId: number = 0;
@@ -39,5 +41,9 @@ export class GameViewComponent implements OnInit{
     if (this.selectedDataField < 0) {
       this.selectedDataField = 2;
     }
+  }
+
+  onThrowDiceClick(){
+    this.apiService.throwDice(this.gameId, this.playerId);
   }
 }
