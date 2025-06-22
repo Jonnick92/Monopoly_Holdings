@@ -1,5 +1,5 @@
 import { computed, Injectable, OnInit, signal } from "@angular/core";
-import { GameData } from "./game.model";
+import { GameData, UserProperty } from "./game.model";
 import { MONOPOLY_PROPERTIES } from "./monopoly-properties";
 
 @Injectable({
@@ -19,15 +19,68 @@ export class GameDataService {
     // Add this getter to expose gameData
     readonly gameData = this._gameData.asReadonly();
 
-    //Dummy data for testing purposes (remplace later with api calls)
+    // Helper method to create UserProperty from Property
+    private createUserProperty(property: any): UserProperty {
+        return {
+            property: property,
+            houses: 0,
+            mortaged: false
+        };
+    }
+
+    // Dummy data for testing purposes (replace later with api calls)
     initializeGameData() {
         this._gameData.set({
             gameId: 1,
             players: [
-                { id: 1, name: 'Testuser 1', color: 'red', balance: 200000, position: 10, properties: [MONOPOLY_PROPERTIES[2], MONOPOLY_PROPERTIES[10], MONOPOLY_PROPERTIES[7], MONOPOLY_PROPERTIES[6], MONOPOLY_PROPERTIES[3]], isActive: true },
-                { id: 2, name: 'Testuser 2', color: 'blue', balance: 1500, position: 25, properties: [MONOPOLY_PROPERTIES[14], MONOPOLY_PROPERTIES[20], MONOPOLY_PROPERTIES[8], MONOPOLY_PROPERTIES[9], MONOPOLY_PROPERTIES[1]], isActive: false },
-                { id: 2, name: 'Testuser 3', color: 'green', balance: 5000, position: 25, properties:[], isActive: false },
-                { id: 2, name: 'Testuser 4', color: 'yellow', balance: 4155, position: 25, properties: [], isActive: false }
+                { 
+                    id: 1, 
+                    name: 'Testuser 1', 
+                    color: 'red', 
+                    balance: 200000, 
+                    position: 10, 
+                    properties: [
+                        this.createUserProperty(MONOPOLY_PROPERTIES[2]),
+                        this.createUserProperty(MONOPOLY_PROPERTIES[10]),
+                        this.createUserProperty(MONOPOLY_PROPERTIES[7]),
+                        this.createUserProperty(MONOPOLY_PROPERTIES[6]),
+                        this.createUserProperty(MONOPOLY_PROPERTIES[3])
+                    ], 
+                    isActive: true 
+                },
+                { 
+                    id: 2, 
+                    name: 'Testuser 2', 
+                    color: 'blue', 
+                    balance: 1500, 
+                    position: 25, 
+                    properties: [
+                        this.createUserProperty(MONOPOLY_PROPERTIES[14]),
+                        this.createUserProperty(MONOPOLY_PROPERTIES[20]),
+                        this.createUserProperty(MONOPOLY_PROPERTIES[8]),
+                        this.createUserProperty(MONOPOLY_PROPERTIES[9]),
+                        this.createUserProperty(MONOPOLY_PROPERTIES[1])
+                    ], 
+                    isActive: false 
+                },
+                { 
+                    id: 3, 
+                    name: 'Testuser 3', 
+                    color: 'green', 
+                    balance: 5000, 
+                    position: 25, 
+                    properties: [], 
+                    isActive: false 
+                },
+                { 
+                    id: 4, 
+                    name: 'Testuser 4', 
+                    color: 'yellow', 
+                    balance: 4155, 
+                    position: 25, 
+                    properties: [], 
+                    isActive: false 
+                }
             ],
             activePlayer: 1,
             userPlayerId: 1,

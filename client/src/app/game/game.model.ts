@@ -1,7 +1,16 @@
-export interface Property{
+export interface Property {
     id: number;
     name: string;
     assetId: number;
+    color?: string;
+    amountColorProperties?: number;
+    developable: boolean;
+}
+
+export interface UserProperty {
+    property : Property,
+    houses : number,
+    mortaged : boolean
 }
 
 export interface Player {
@@ -10,7 +19,7 @@ export interface Player {
     color: string;
     balance: number;
     position: number;
-    properties: Property[];
+    properties: UserProperty[];
     isActive: boolean;
 }
 

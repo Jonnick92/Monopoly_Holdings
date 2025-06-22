@@ -1,7 +1,7 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { GameDataService } from '../../game-data.service';
-import { Property } from '../../game.model';
+import { UserProperty } from '../../game.model';
 
 @Component({
   selector: 'app-game-property-list',
@@ -12,21 +12,21 @@ import { Property } from '../../game.model';
 })
 export class GamePropertyListComponent implements OnInit {
   gameService = inject(GameDataService);
-  properties: Property[] = [];
-  selectedProperty: Property | null = null;
+  properties: UserProperty[] = [];
+  selectedProperty: UserProperty | null = null;
   showOverlay = false;
 
   ngOnInit(): void {
     const ownProperties = this.gameService.ownProperties();
     if (ownProperties) {
-      this.properties = [...ownProperties].sort((a, b) => a.id - b.id);
+      this.properties = [...ownProperties].sort((a, b) => a.property.id - b.property.id);
     } else {
       this.properties = [];
     }
   }
 
-  onPropertyClick(property: Property): void {
-    this.selectedProperty = property;
+  onPropertyClick(userProperty: UserProperty): void {
+    this.selectedProperty = userProperty;
     this.showOverlay = true;
   }
 
@@ -36,9 +36,20 @@ export class GamePropertyListComponent implements OnInit {
   }
 
   onOverlayClick(event: Event): void {
-    // Close overlay when clicking on the background
     if (event.target === event.currentTarget) {
       this.closeOverlay();
     }
+  }
+
+  onTradePropertyClick() {
+    //add Code to route to trade manager later
+  }
+
+  onMortgageClick() {
+
+  }
+
+  onDischargeClick() {
+    
   }
 }
