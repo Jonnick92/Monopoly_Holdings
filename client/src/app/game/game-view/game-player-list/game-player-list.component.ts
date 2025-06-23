@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { GameDataService } from '../../game-data.service';
 import { CommonModule } from '@angular/common';
 
@@ -8,7 +8,7 @@ import { CommonModule } from '@angular/common';
   templateUrl: './game-player-list.component.html',
   styleUrl: './game-player-list.component.css'
 })
-export class GamePlayerListComponent {
+export class GamePlayerListComponent{
   gameService = inject(GameDataService);
 
   // Get all players except the current user

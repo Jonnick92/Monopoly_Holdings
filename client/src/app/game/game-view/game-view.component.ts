@@ -24,14 +24,14 @@ export class GameViewComponent implements OnInit{
   playerId: number = 0;
 
   ngOnInit() {
-    this.route.params.subscribe(params => {
+    this.route.queryParams.subscribe(params => {
       this.gameId = +params['gameId'] || 0;
       this.playerId = +params['playerId'] || 0;
     });
     console.log(`Game ID: ${this.gameId}, Player ID: ${this.playerId}`);
-    this.gameService.setUserPlayerId(this.playerId); 
     this.gameService.initializeGameData(); // Initialize game data with dummy data
-  }
+    this.gameService.setUserPlayerId(this.playerId); 
+ }
 
   onButtonNextClick() {
     this.selectedDataField = ++this.selectedDataField % 3;

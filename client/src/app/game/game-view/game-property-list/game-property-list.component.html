@@ -23,9 +23,9 @@
                     class="large-property-image"
                 >
                 <div class="property-info">
-                    @if (selectedProperty.houses >= 5) {
+                    @if (selectedProperty.property.developable && selectedProperty.houses >= 5) {
                         <p><strong>Hotel:</strong> {{ selectedProperty.houses - 4}}</p>
-                    }@else {
+                    }@else if (selectedProperty.property.developable) {
                         <p><strong>Houses:</strong> {{ selectedProperty.houses }}</p>
                     }
                     <p><strong>Mortgaged:</strong> {{ selectedProperty.mortaged ? 'Yes' : 'No' }}</p>

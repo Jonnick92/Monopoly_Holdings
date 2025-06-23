@@ -120,10 +120,13 @@ export class GameDataService {
     })
 
     setUserPlayerId(playerId: number) {
-        this._gameData.update(data => ({
-            ...data,
-            userPlayerId: playerId
-        }));
+        this._gameData.update(data => {
+            const updated = {
+                ...data,
+                userPlayerId: playerId
+            };
+            return updated;
+        });
     }
 
     getPlayerById(playerId: number) {

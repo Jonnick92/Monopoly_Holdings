@@ -18,7 +18,7 @@ export class OverviewComponent {
 
   navigateToGameView() {
     this.router.navigate(['/game-view'], {
-      queryParams: { gameid: this.dummyGameId, playerId: this.dummyPlayerId }
+      queryParams: { gameId: this.dummyGameId, playerId: this.dummyPlayerId }
     });
   }
 }
