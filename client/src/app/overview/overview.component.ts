@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-overview',
@@ -11,10 +11,21 @@ import { Router } from '@angular/router';
 })
 export class OverviewComponent {
   router = inject(Router);
+  route = inject(ActivatedRoute)
 
   //Just some dummy code for testing purposes
   dummyPlayerId = 1;
   dummyGameId = 1;
+
+  ngOnInit() {
+    this.route.queryParams.subscribe(params => {
+        if (params['error']) {
+            // Show error message to user
+            console.error(params['message']);
+            // Or display in UI
+        }
+    });
+}
 
   navigateToGameView() {
     this.router.navigate(['/game-view'], {

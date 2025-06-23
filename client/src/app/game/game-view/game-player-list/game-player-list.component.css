@@ -20,6 +20,7 @@
   padding: 12px 0;
   border-bottom: 1px solid rgba(255, 255, 255, 0.2);
   transition: background-color 0.2s ease;
+  cursor: pointer;
 }
 
 .player-item:hover {
@@ -33,6 +34,28 @@
   border-bottom: none;
 }
 
+.player-info {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  cursor: pointer;
+}
+
+.view-details-btn {
+  background: #007acc;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 12px;
+  transition: background 0.2s ease;
+}
+
+.view-details-btn:hover {
+  background: #005fa3;
+}
+
 .player-name {
   font-weight: bold;
   font-size: 16px;
@@ -40,7 +63,7 @@
 
 .player-balance {
   font-size: 14px;
-  color: #90EE91;
+  color: #90ee91;
   font-weight: bold;
 }
 

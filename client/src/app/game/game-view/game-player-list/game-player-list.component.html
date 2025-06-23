@@ -1,7 +1,7 @@
 <div class="player-list">
   <h3>Other Players</h3>
   @for (player of getOtherPlayers(); track player.id) {
-    <div class="player-item">
+    <div class="player-item" (click)="onPlayerClick(player)">
       <span class="player-name" [style.color]="player.color">{{ player.name }}</span>
       <span class="player-balance">${{ player.balance }}</span>
     </div>

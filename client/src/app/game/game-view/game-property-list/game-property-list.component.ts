@@ -2,6 +2,7 @@ import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { GameDataService } from '../../game-data.service';
 import { UserProperty } from '../../game.model';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-game-property-list',
@@ -12,6 +13,7 @@ import { UserProperty } from '../../game.model';
 })
 export class GamePropertyListComponent implements OnInit {
   gameService = inject(GameDataService);
+  router = inject(Router);
   properties: UserProperty[] = [];
   selectedProperty: UserProperty | null = null;
   showOverlay = false;
@@ -42,7 +44,9 @@ export class GamePropertyListComponent implements OnInit {
   }
 
   onTradePropertyClick() {
-    //add Code to route to trade manager later
+    this.router.navigate(['/game-view/trade-manager'], { 
+        queryParamsHandling: 'preserve' 
+    });
   }
 
   onMortgageClick() {
