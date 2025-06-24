@@ -10,8 +10,7 @@ import { GamePropertyListComponent } from "./game-property-list/game-property-li
   selector: 'app-game-view',
   imports: [GamePlayerListComponent, GamePropertyListComponent],
   templateUrl: './game-view.component.html',
-  styleUrl: './game-view.component.css',
-  providers: [GameDataService]
+  styleUrl: './game-view.component.css'
 })
 export class GameViewComponent implements OnInit{
   router = inject(Router);

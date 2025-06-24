@@ -44,7 +44,7 @@ export class GamePropertyListComponent implements OnInit {
   }
 
   onTradePropertyClick() {
-    this.router.navigate(['/game-view/trade-manager'], { 
+    this.router.navigate(['/game/trade'], { 
         queryParamsHandling: 'preserve' 
     });
   }

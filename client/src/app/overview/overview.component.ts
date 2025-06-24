@@ -25,10 +25,10 @@ export class OverviewComponent {
             // Or display in UI
         }
     });
-}
+  }
 
   navigateToGameView() {
-    this.router.navigate(['/game-view'], {
+    this.router.navigate(['/game/view'], {
       queryParams: { gameId: this.dummyGameId, playerId: this.dummyPlayerId }
     });
   }

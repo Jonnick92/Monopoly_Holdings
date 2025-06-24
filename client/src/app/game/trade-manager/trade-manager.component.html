@@ -1,1 +1,13 @@
-<p>trade-manager works!</p>
+<div class="trade-manager">
+  <h2>Select Trade Partner</h2>
+  <div class="player-buttons">
+    @for (player of otherPlayers; track player.id) {
+      <button class="player-button" (click)="selectTradePartner(player.id)">
+        <img src="user_icon.png" alt="User Icon" class="user-icon">
+        <span class="player-name">{{ player.name }}</span>
+      </button>
+    } @empty {
+      <div class="no-players">No other players available for trading</div>
+    }
+  </div>
+</div>
