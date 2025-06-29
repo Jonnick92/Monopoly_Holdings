@@ -129,6 +129,10 @@ export class GameDataService {
         });
     }
 
+    isInitialized(): boolean {
+        return this.gameData().gameId !== 0;
+    }
+
     getPlayerById(playerId: number) {
         return this.gameData().players.find(player => player.id === playerId) || null;
     }

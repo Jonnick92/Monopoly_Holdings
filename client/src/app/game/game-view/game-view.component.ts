@@ -28,8 +28,6 @@ export class GameViewComponent implements OnInit{
       this.playerId = +params['playerId'] || 0;
     });
     console.log(`Game ID: ${this.gameId}, Player ID: ${this.playerId}`);
-    this.gameService.initializeGameData(); // Initialize game data with dummy data
-    this.gameService.setUserPlayerId(this.playerId); 
  }
 
   onButtonNextClick() {
