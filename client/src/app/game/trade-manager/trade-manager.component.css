@@ -2,26 +2,30 @@
   padding: 20px;
   color: #ffffff;
   min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
 }
 
 .trade-manager h2 {
   color: #ffffff;
   margin-bottom: 20px;
+  text-align: center;
 }
 
 .player-buttons {
   display: flex;
   flex-wrap: wrap;
   gap: 15px;
-  margin-top: 20px;
+  justify-content: center;
 }
 
 .player-button {
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 15px;
-  background-color: #2d2d2d;
+  padding: 10px;
+  background-color: transparent;
   border: 2px solid #404040;
   border-radius: 8px;
   cursor: pointer;
@@ -37,11 +41,22 @@
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
 }
 
+.player-button.selected {
+  background-color: #5f5f5f;
+  border-color: #5f5f5f;
+  box-shadow: 0 0 15px rgba(95, 95, 95, 0.5);
+}
+
+.player-button.selected:hover {
+  background-color: #5f5f5f;
+  border-color: #5f5f5f;
+}
+
 .user-icon {
   width: 48px;
   height: 48px;
   margin-bottom: 8px;
-  filter: brightness(1); /* Keeps the white icon as-is */
+  filter: brightness(1);
 }
 
 .player-name {
@@ -49,6 +64,13 @@
   font-weight: bold;
   text-align: center;
   color: #ffffff;
+  margin-bottom: 4px;
+}
+
+.player-balance {
+  font-size: 12px;
+  color: #90ee91;
+  font-weight: bold;
 }
 
 .no-players {
@@ -56,4 +78,239 @@
   font-style: italic;
   text-align: center;
   padding: 20px;
+}
+
+.properties-section {
+  margin: 10px 0;
+  padding: 10px;
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.properties-section h3 {
+  color: #ffffff;
+  margin-bottom: 15px;
+  font-size: 18px;
+  text-align: center;
+}
+
+.properties-content {
+  display: flex;
+  gap: 20px;
+  align-items: flex-start;
+}
+
+.property-list-horizontal {
+  flex: 1;
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 10px;
+  justify-content: flex-start;
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding: 10px;
+  min-height: 120px;
+  align-items: center;
+  
+  /* Custom scrollbar styling */
+  scrollbar-width: thin;
+  scrollbar-color: #999 rgba(0, 0, 0, 0.3);
+}
+
+/* Webkit browsers (Chrome, Safari, Edge) scrollbar styling */
+.property-list-horizontal::-webkit-scrollbar {
+  width: 0;
+  height: 8px;
+}
+
+.property-list-horizontal::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 4px;
+}
+
+.property-list-horizontal::-webkit-scrollbar-thumb {
+  background: #999;
+  border-radius: 4px;
+  transition: background 0.2s ease;
+}
+
+.property-list-horizontal::-webkit-scrollbar-thumb:hover {
+  background: #bbb;
+}
+
+.property-card {
+  width: 150px;
+  height: auto;
+  border-radius: 6px;
+  cursor: pointer;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    border-color 0.2s ease;
+  border: 2px solid transparent;
+  user-select: none; /* Prevent text selection on click */
+}
+
+.property-card:hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 12px rgba(255, 255, 255, 0.2);
+  border-color: #ffffff;
+}
+
+.property-card.selected {
+  border-color: #90ee91;
+  box-shadow: 0 0 15px rgba(144, 238, 145, 0.6);
+  transform: scale(1.05);
+}
+
+.property-card.selected:hover {
+  border-color: #90ee91;
+  box-shadow: 0 0 20px rgba(144, 238, 145, 0.8);
+}
+
+.no-properties {
+  color: #cccccc;
+  font-style: italic;
+  text-align: center;
+  padding: 20px;
+  width: 100%;
+}
+
+/* Money Input Styles */
+.money-section {
+  flex-shrink: 0;
+  width: 280px;
+  padding: 20px;
+  background: rgba(0, 0, 0, 0.4);
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.money-section label {
+  display: block;
+  color: #ffffff;
+  font-weight: bold;
+  margin-bottom: 10px;
+  font-size: 16px;
+}
+
+.money-input-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(0, 0, 0, 0.5);
+  border: 2px solid #404040;
+  border-radius: 8px;
+  padding: 10px 15px;
+  transition: border-color 0.3s ease;
+}
+
+.money-input-group:focus-within {
+  border-color: #007acc;
+  box-shadow: 0 0 10px rgba(0, 122, 204, 0.3);
+}
+
+.currency-symbol {
+  color: #90ee91;
+  font-weight: bold;
+  font-size: 18px;
+}
+
+.money-input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  color: #ffffff;
+  font-size: 16px;
+  font-weight: bold;
+  outline: none;
+  min-width: 100px;
+}
+
+.money-input::placeholder {
+  color: #888888;
+}
+
+.money-input::-webkit-outer-spin-button,
+.money-input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.money-input[type=number] {
+  -moz-appearance: textfield;
+  appearance: textfield;
+}
+
+.max-amount {
+  color: #cccccc;
+  font-size: 14px;
+  white-space: nowrap;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .properties-content {
+    flex-direction: column;
+    gap: 15px;
+  }
+  
+  .money-section {
+    width: 100%;
+  }
+  
+  .property-list-horizontal {
+    justify-content: center;
+  }
+  
+  .request-trade-button {
+    position: static !important;
+    margin-top: 20px;
+    margin-left: auto;
+    margin-right: 0;
+    display: block;
+  }
+}
+
+/* Request Trade Button */
+.request-trade-button {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  background: linear-gradient(135deg, #4CAF50, #45a049);
+  color: white;
+  border: none;
+  border-radius: 12px;
+  padding: 15px 25px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  box-shadow: 0 4px 15px rgba(76, 175, 80, 0.3);
+  transition: all 0.3s ease;
+  z-index: 1000;
+  min-width: 140px;
+}
+
+.request-trade-button:hover:not(:disabled) {
+  background: linear-gradient(135deg, #45a049, #3d8b40);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(76, 175, 80, 0.4);
+}
+
+.request-trade-button:active:not(:disabled) {
+  transform: translateY(0);
+  box-shadow: 0 3px 10px rgba(76, 175, 80, 0.3);
+}
+
+.request-trade-button:disabled {
+  background: #666666;
+  cursor: not-allowed;
+  box-shadow: 0 2px 8px rgba(102, 102, 102, 0.2);
+  opacity: 0.6;
+}
+
+.request-trade-button:disabled:hover {
+  transform: none;
+  box-shadow: 0 2px 8px rgba(102, 102, 102, 0.2);
 }
