@@ -5,3 +5,5 @@ package-lock.json
 database.sqlite
 client/node_modules/*
 client/.angular/*
+# IntelliJ
+.idea/*
