@@ -72,6 +72,7 @@ export const COMMUNITY_CARDS: Card[] = [
     new Card(14, CardType.money_bank, -100),
     new Card(15, CardType.money_bank, 50),
     new Card(16, CardType.money_players, 10),
+    new Card(33, CardType.money_bank, 500),
 ];
 
 export const EVENT_CARDS: Card[] = [
