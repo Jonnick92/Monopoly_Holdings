@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { ApiService } from '../api.service';
 
 @Component({
   selector: 'app-overview',
@@ -11,7 +12,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 })
 export class OverviewComponent {
   router = inject(Router);
-  route = inject(ActivatedRoute)
+  route = inject(ActivatedRoute);
+  apiService = inject(ApiService);
 
   //Just some dummy code for testing purposes
   dummyPlayerId = 1;
@@ -25,6 +27,7 @@ export class OverviewComponent {
             // Or display in UI
         }
     });
+    this.apiService.games_get();
   }
 
   navigateToGameView() {

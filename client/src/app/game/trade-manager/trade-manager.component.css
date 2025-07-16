@@ -1,6 +1,6 @@
 .trade-manager {
   padding: 20px;
-  color: #ffffff;
+  color: #fff;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
@@ -8,7 +8,7 @@
 }
 
 .trade-manager h2 {
-  color: #ffffff;
+  color: #fff;
   margin-bottom: 20px;
   text-align: center;
 }
@@ -25,30 +25,30 @@
   flex-direction: column;
   align-items: center;
   padding: 10px;
-  background-color: transparent;
+  background: transparent;
   border: 2px solid #404040;
   border-radius: 8px;
   cursor: pointer;
   transition: all 0.3s ease;
   min-width: 120px;
-  color: #ffffff;
+  color: #fff;
 }
 
 .player-button:hover {
-  background-color: #3a3a3a;
+  background: #3a3a3a;
   border-color: #606060;
   transform: translateY(-2px);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.3);
 }
 
 .player-button.selected {
-  background-color: #5f5f5f;
+  background: #5f5f5f;
   border-color: #5f5f5f;
-  box-shadow: 0 0 15px rgba(95, 95, 95, 0.5);
+  box-shadow: 0 0 15px rgba(95,95,95,0.5);
 }
 
 .player-button.selected:hover {
-  background-color: #5f5f5f;
+  background: #5f5f5f;
   border-color: #5f5f5f;
 }
 
@@ -63,7 +63,7 @@
   font-size: 14px;
   font-weight: bold;
   text-align: center;
-  color: #ffffff;
+  color: #fff;
   margin-bottom: 4px;
 }
 
@@ -74,7 +74,7 @@
 }
 
 .no-players {
-  color: #cccccc;
+  color: #ccc;
   font-style: italic;
   text-align: center;
   padding: 20px;
@@ -83,13 +83,13 @@
 .properties-section {
   margin: 10px 0;
   padding: 10px;
-  background: rgba(0, 0, 0, 0.3);
+  background: rgba(0,0,0,0.3);
   border-radius: 10px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255,255,255,0.1);
 }
 
 .properties-section h3 {
-  color: #ffffff;
+  color: #fff;
   margin-bottom: 15px;
   font-size: 18px;
   text-align: center;
@@ -112,20 +112,17 @@
   padding: 10px;
   min-height: 120px;
   align-items: center;
-  
-  /* Custom scrollbar styling */
   scrollbar-width: thin;
-  scrollbar-color: #999 rgba(0, 0, 0, 0.3);
+  scrollbar-color: #999 rgba(0,0,0,0.3);
 }
 
-/* Webkit browsers (Chrome, Safari, Edge) scrollbar styling */
 .property-list-horizontal::-webkit-scrollbar {
   width: 0;
   height: 8px;
 }
 
 .property-list-horizontal::-webkit-scrollbar-track {
-  background: rgba(0, 0, 0, 0.3);
+  background: rgba(0,0,0,0.3);
   border-radius: 4px;
 }
 
@@ -144,52 +141,48 @@
   height: auto;
   border-radius: 6px;
   cursor: pointer;
-  transition:
-    transform 0.2s ease,
-    box-shadow 0.2s ease,
-    border-color 0.2s ease;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
   border: 2px solid transparent;
-  user-select: none; /* Prevent text selection on click */
+  user-select: none;
 }
 
 .property-card:hover {
   transform: scale(1.05);
-  box-shadow: 0 4px 12px rgba(255, 255, 255, 0.2);
-  border-color: #ffffff;
+  box-shadow: 0 4px 12px rgba(255,255,255,0.2);
+  border-color: #fff;
 }
 
 .property-card.selected {
   border-color: #90ee91;
-  box-shadow: 0 0 15px rgba(144, 238, 145, 0.6);
+  box-shadow: 0 0 15px rgba(144,238,145,0.6);
   transform: scale(1.05);
 }
 
 .property-card.selected:hover {
   border-color: #90ee91;
-  box-shadow: 0 0 20px rgba(144, 238, 145, 0.8);
+  box-shadow: 0 0 20px rgba(144,238,145,0.8);
 }
 
 .no-properties {
-  color: #cccccc;
+  color: #ccc;
   font-style: italic;
   text-align: center;
   padding: 20px;
   width: 100%;
 }
 
-/* Money Input Styles */
 .money-section {
   flex-shrink: 0;
   width: 280px;
   padding: 20px;
-  background: rgba(0, 0, 0, 0.4);
+  background: rgba(0,0,0,0.4);
   border-radius: 8px;
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(255,255,255,0.2);
 }
 
 .money-section label {
   display: block;
-  color: #ffffff;
+  color: #fff;
   font-weight: bold;
   margin-bottom: 10px;
   font-size: 16px;
@@ -199,7 +192,7 @@
   display: flex;
   align-items: center;
   gap: 8px;
-  background: rgba(0, 0, 0, 0.5);
+  background: rgba(0,0,0,0.5);
   border: 2px solid #404040;
   border-radius: 8px;
   padding: 10px 15px;
@@ -208,7 +201,7 @@
 
 .money-input-group:focus-within {
   border-color: #007acc;
-  box-shadow: 0 0 10px rgba(0, 122, 204, 0.3);
+  box-shadow: 0 0 10px rgba(0,122,204,0.3);
 }
 
 .currency-symbol {
@@ -221,7 +214,7 @@
   flex: 1;
   background: transparent;
   border: none;
-  color: #ffffff;
+  color: #fff;
   font-size: 16px;
   font-weight: bold;
   outline: none;
@@ -229,7 +222,7 @@
 }
 
 .money-input::placeholder {
-  color: #888888;
+  color: #888;
 }
 
 .money-input::-webkit-outer-spin-button,
@@ -244,12 +237,11 @@
 }
 
 .max-amount {
-  color: #cccccc;
+  color: #ccc;
   font-size: 14px;
   white-space: nowrap;
 }
 
-/* Responsive Design */
 @media (max-width: 768px) {
   .properties-content {
     flex-direction: column;
@@ -266,14 +258,11 @@
   
   .request-trade-button {
     position: static !important;
-    margin-top: 20px;
-    margin-left: auto;
-    margin-right: 0;
+    margin: 20px auto 0 0;
     display: block;
   }
 }
 
-/* Request Trade Button */
 .request-trade-button {
   position: fixed;
   bottom: 30px;
@@ -286,7 +275,7 @@
   font-size: 16px;
   font-weight: bold;
   cursor: pointer;
-  box-shadow: 0 4px 15px rgba(76, 175, 80, 0.3);
+  box-shadow: 0 4px 15px rgba(76,175,80,0.3);
   transition: all 0.3s ease;
   z-index: 1000;
   min-width: 140px;
@@ -295,22 +284,22 @@
 .request-trade-button:hover:not(:disabled) {
   background: linear-gradient(135deg, #45a049, #3d8b40);
   transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(76, 175, 80, 0.4);
+  box-shadow: 0 6px 20px rgba(76,175,80,0.4);
 }
 
 .request-trade-button:active:not(:disabled) {
   transform: translateY(0);
-  box-shadow: 0 3px 10px rgba(76, 175, 80, 0.3);
+  box-shadow: 0 3px 10px rgba(76,175,80,0.3);
 }
 
 .request-trade-button:disabled {
-  background: #666666;
+  background: #666;
   cursor: not-allowed;
-  box-shadow: 0 2px 8px rgba(102, 102, 102, 0.2);
+  box-shadow: 0 2px 8px rgba(102,102,102,0.2);
   opacity: 0.6;
 }
 
 .request-trade-button:disabled:hover {
   transform: none;
-  box-shadow: 0 2px 8px rgba(102, 102, 102, 0.2);
+  box-shadow: 0 2px 8px rgba(102,102,102,0.2);
 }
