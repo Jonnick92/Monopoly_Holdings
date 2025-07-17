@@ -1,6 +1,5 @@
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { error } from 'console';
 import { color_map } from './colors';
 
 @Injectable({
