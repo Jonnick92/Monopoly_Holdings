@@ -2,10 +2,6 @@ import { computed, Injectable, OnInit, signal } from "@angular/core";
 import { GameData, UserProperty } from "./game.model";
 import { MONOPOLY_PROPERTIES } from "./monopoly-properties";
 
-@Injectable({
-    providedIn: 'root'
-})
-
 export class GameDataService {
     private _gameData = signal<GameData>({
         gameId: 0,
@@ -16,7 +12,6 @@ export class GameDataService {
         diceResults: [0, 0]
     });
 
-    // Add this getter to expose gameData
     readonly gameData = this._gameData.asReadonly();
 
     // Helper method to create UserProperty from Property

@@ -1,76 +1,30 @@
 <div class="trade-manager">
   <div class="properties-section">
     <h3>Your Properties</h3>
-    <div class="properties-content">
-      <div class="property-list-horizontal">
-        @for (userProperty of playerProperties; track userProperty.property.id) {
-          <img 
-            [src]="'/reel_estate_cards/Folie' + userProperty.property.assetId + '.png'" 
-            alt="Property Card"
-            class="property-card"
-            [class.selected]="isPlayerPropertySelected(userProperty.property.id)"
-            (click)="togglePlayerPropertySelection(userProperty.property.id)"
-          >
-        } @empty {
-          <div class="no-properties">No properties owned</div>
-        }
-      </div>
-      
-      <div class="money-section">
-        <label for="playerMoney">Your Money Offer:</label>
-        <div class="money-input-group">
-          <span class="currency-symbol">$</span>
-          <input 
-            type="number" 
-            id="playerMoney"
-            [(ngModel)]="playerMoneyOffer"
-            [max]="maxPlayerMoney"
-            min="0"
-            (input)="onPlayerMoneyChange()"
-            class="money-input"
-            placeholder="0"
-          >
-          <span class="max-amount">/ ${{ maxPlayerMoney }}</span>
-        </div>
+      <div class="properties-content">
+        <app-trade-manager-properties 
+          [playerId]="playerId"
+          [tradePartner]="false">
+        </app-trade-manager-properties>
+        <app-trade-manager-money
+          [playerId]="playerId"
+          [tradePartner]="false">
+        </app-trade-manager-money>
       </div>
     </div>
-  </div>
 
-  @if (tradePartnerId > 0) {
+  @if (tradePartnerId() > 0) {
     <div class="properties-section">
       <h3>{{ selectedTradePartner?.name }}'s Properties</h3>
       <div class="properties-content">
-        <div class="property-list-horizontal">
-          @for (userProperty of tradePartnerProperties; track userProperty.property.id) {
-            <img 
-              [src]="'/reel_estate_cards/Folie' + userProperty.property.assetId + '.png'" 
-              alt="Property Card"
-              class="property-card"
-              [class.selected]="isTradePartnerPropertySelected(userProperty.property.id)"
-              (click)="toggleTradePartnerPropertySelection(userProperty.property.id)"
-            >
-          } @empty {
-            <div class="no-properties">No properties owned</div>
-          }
-        </div>
-        
-        <div class="money-section">
-          <label for="tradePartnerMoney">{{ selectedTradePartner?.name }}'s Money Offer:</label>
-          <div class="money-input-group">
-            <span class="currency-symbol">$</span>
-            <input 
-              type="number" 
-              id="tradePartnerMoney"
-              [(ngModel)]="tradePartnerMoneyOffer"
-              [max]="maxTradePartnerMoney"
-              min="0"
-              (input)="onTradePartnerMoneyChange()"
-              class="money-input"
-              placeholder="0"
-            >
-            <span class="max-amount">/ ${{ maxTradePartnerMoney }}</span>
-          </div>
-        </div>
+        <app-trade-manager-properties 
+          [playerId]="tradePartnerId"
+          [tradePartner]="true">
+        </app-trade-manager-properties>      
+        <app-trade-manager-money
+          [playerId]="tradePartnerId"
+          [tradePartner]="true">
+        </app-trade-manager-money>
       </div>
     </div>
   }
@@ -81,7 +35,7 @@
   <div class="player-buttons">
     @for (player of otherPlayers; track player.id) {
       <button class="player-button" 
-              [class.selected]="tradePartnerId === player.id"
+              [class.selected]="tradePartnerId() === player.id"
               (click)="selectTradePartner(player.id)">
         <img src="user_icon.png" alt="User Icon" class="user-icon">
         <span class="player-name">{{ player.name }}</span>
@@ -93,8 +47,8 @@
 
   <button 
     class="request-trade-button"
-    [disabled]="!canRequestTrade()"
-    (click)="requestTrade()">
+    [disabled]="!tradeService.canRequestTrade()"
+    (click)="tradeService.sendTradeRequest()">
     Request Trade
   </button>
 </div>

@@ -1,0 +1,17 @@
+<div class="money-section">
+    <label for="tradePartnerMoney">{{ playerName() }}'s Money Offer:</label>
+    <div class="money-input-group">
+        <span class="currency-symbol">$</span>
+        <input 
+            type="number"
+            [ngModel]="displayValue()"
+            (ngModelChange)="onModelChange($event)"
+            (input)="onInputChange($event)"
+            [max]="playerAvailableMoney()"
+            min="0"
+            class="money-input"
+            placeholder="0"
+            >
+        <span class="max-amount">/ ${{ playerAvailableMoney() }}</span>
+    </div>
+</div>

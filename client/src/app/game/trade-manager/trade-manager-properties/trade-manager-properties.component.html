@@ -1,0 +1,13 @@
+<div class="property-list-horizontal">
+    @for (userProperty of playerProperties(); track userProperty.property.id) {
+      <img 
+        [src]="'/reel_estate_cards/Folie' + userProperty.property.assetId + '.png'" 
+        alt="Property Card"
+        class="property-card"
+        [class.selected]="isPlayerPropertySelected(userProperty.property.id)"
+        (click)="togglePlayerPropertySelection(userProperty.property.id)"
+        >
+    } @empty {
+        <div class="no-properties">No properties owned</div>
+    }
+</div>

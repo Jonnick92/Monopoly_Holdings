@@ -1,0 +1,69 @@
+.property-list-horizontal {
+  flex: 1;
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 10px;
+  justify-content: flex-start;
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding: 10px;
+  min-height: 120px;
+  align-items: center;
+  scrollbar-width: thin;
+  scrollbar-color: #999 rgba(0,0,0,0.3);
+}
+
+.property-list-horizontal::-webkit-scrollbar {
+  width: 0;
+  height: 8px;
+}
+
+.property-list-horizontal::-webkit-scrollbar-track {
+  background: rgba(0,0,0,0.3);
+  border-radius: 4px;
+}
+
+.property-list-horizontal::-webkit-scrollbar-thumb {
+  background: #999;
+  border-radius: 4px;
+  transition: background 0.2s ease;
+}
+
+.property-list-horizontal::-webkit-scrollbar-thumb:hover {
+  background: #bbb;
+}
+
+.property-card {
+  width: 150px;
+  height: auto;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+  border: 2px solid transparent;
+  user-select: none;
+}
+
+.property-card:hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 12px rgba(255,255,255,0.2);
+  border-color: #fff;
+}
+
+.property-card.selected {
+  border-color: #90ee91;
+  box-shadow: 0 0 15px rgba(144,238,145,0.6);
+  transform: scale(1.05);
+}
+
+.property-card.selected:hover {
+  border-color: #90ee91;
+  box-shadow: 0 0 20px rgba(144,238,145,0.8);
+}
+
+.no-properties {
+  color: #ccc;
+  font-style: italic;
+  text-align: center;
+  padding: 20px;
+  width: 100%;
+}
