@@ -131,4 +131,41 @@ export class GameDataService {
     getPlayerById(playerId: number) {
         return this.gameData().players.find(player => player.id === playerId) || null;
     }
+
+    mortageProperty(propertyId: number) {
+        const userProperty = this.ownProperties()?.find(userProperty => userProperty.property.id === propertyId);
+        //TODO: Add house check before mortaging
+        if(userProperty != undefined && userProperty.mortaged === false) {
+            //TODO: Replace with actual API-Call
+            this._gameData.update(data => ({
+                ...data,
+                players: data.players.map(player => 
+                    player.id === this.ownPlayerId() ? { ...player, properties: player.properties.map(prop => 
+                        prop.property.id === propertyId ? { ...prop, mortaged: true } : prop
+                    )}
+                    : player
+                )
+            })); 
+        }
+    }
+
+    dischargeProperty(propertyId: number){
+        const userProperty = this.ownProperties()?.find(userProperty => userProperty.property.id === propertyId);
+        //TODO: Add Cost and Mortage Value to the MONPOLY_PROERIES
+        if(userProperty != undefined && userProperty.mortaged === true) {
+            //TODO: Replace with actual API-Call
+            this._gameData.update(data => ({
+                ...data,
+                players: data.players.map(player => 
+                    player.id === this.ownPlayerId() ? { ...player, properties: player.properties.map(prop => 
+                        prop.property.id === propertyId ? { ...prop, mortaged: true } : prop
+                    )}
+                    : player
+                )
+            })); 
+        }
+        else{
+            window.alert("You don't habe enough money to disharge this property");
+        }
+    }
 }

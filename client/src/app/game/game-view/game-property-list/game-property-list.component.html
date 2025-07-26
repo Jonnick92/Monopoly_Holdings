@@ -1,5 +1,5 @@
 <div class="property-list">
-    @for (userProperty of properties; track userProperty.property.id) {
+    @for (userProperty of properties(); track userProperty.property.id) {
         <img 
             [src]="'/reel_estate_cards/Folie' + userProperty.property.assetId + '.png'" 
             alt="Property Card"
@@ -9,40 +9,9 @@
     }
 </div>
 
-@if (showOverlay && selectedProperty) {
-    <div class="overlay" (click)="onOverlayClick($event)">
-        <div class="modal-content">
-            <button class="close-button" (click)="closeOverlay()">&times;</button>
-            <div class="modal-header">
-                <h2>{{ selectedProperty.property.name || 'Property Details' }}</h2>
-            </div>
-            <div class="modal-body">
-                <img 
-                    [src]="'/reel_estate_cards/Folie' + selectedProperty.property.assetId + '.png'" 
-                    alt="Property Card Large View"
-                    class="large-property-image"
-                >
-                <div class="property-info">
-                    @if (selectedProperty.property.developable && selectedProperty.houses >= 5) {
-                        <p><strong>Hotel:</strong> {{ selectedProperty.houses - 4}}</p>
-                    }@else if (selectedProperty.property.developable) {
-                        <p><strong>Houses:</strong> {{ selectedProperty.houses }}</p>
-                    }
-                    <p><strong>Mortgaged:</strong> {{ selectedProperty.mortaged ? 'Yes' : 'No' }}</p>
-                    
-                    <div class="property-actions">
-                        <button class="action-button" (click)="onTradePropertyClick()">Trade Property</button>
-                        @if (selectedProperty.mortaged) {
-                            <button class="action-button" (click)="onDischargeClick()">Discharge</button>
-                        }@else {
-                            <button class="action-button" (click)="onMortgageClick()">Mortgage</button>
-                        }
-                        @if (selectedProperty.property.developable) {
-                            <button class="action-button" [disabled]="selectedProperty.houses >= 4">Build Houses</button>
-                        }
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+@if (showOverlay && selectedProperty()) {
+    <app-game-property-popup 
+        [selectedProperty]="selectedProperty()!"
+        (showOverlay)="onOverlayClose($event)">
+    </app-game-property-popup>
 }

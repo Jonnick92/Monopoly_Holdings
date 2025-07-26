@@ -1,0 +1,35 @@
+<div class="overlay" (click)="onOverlayClick($event)">
+        <div class="modal-content">
+            <button class="close-button" (click)="closeOverlay()">&times;</button>
+            <div class="modal-header">
+                    <h2>{{ property().name || 'Property Details' }}</h2>
+            </div>
+            <div class="modal-body">
+                <img 
+                    [src]="'/reel_estate_cards/Folie' + (property().assetId || '') + '.png'" 
+                    alt="Property Card Large View"
+                    class="large-property-image"
+                >
+                <div class="property-info">
+                    @if (property().developable && houses() >= 5) {
+                        <p><strong>Hotel:</strong> {{ houses() - 4}}</p>
+                    }@else if (property().developable) {
+                        <p><strong>Houses:</strong> {{ houses() }}</p>
+                    }
+                    <p><strong>Mortgaged:</strong> {{ mortaged() ? 'Yes' : 'No' }}</p>
+                    
+                    <div class="property-actions">
+                        <button class="action-button" (click)="onTradePropertyClick()">Trade Property</button>
+                        @if (mortaged()) {
+                            <button class="action-button" (click)="onDischargeClick()">Discharge</button>
+                        }@else {
+                            <button class="action-button" (click)="onMortgageClick()">Mortgage</button>
+                            }
+                        @if (property().developable) {
+                            <button class="action-button" [disabled]="houses() >= 4">Build Houses</button>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
