@@ -151,8 +151,7 @@ export class GameDataService {
 
     dischargeProperty(propertyId: number){
         const userProperty = this.ownProperties()?.find(userProperty => userProperty.property.id === propertyId);
-        //TODO: Add Cost and Mortage Value to the MONPOLY_PROERIES
-        if(userProperty != undefined && userProperty.mortaged === true) {
+        if(userProperty != undefined && userProperty.mortaged === true && userProperty.property.mortageValue < (this.getPlayerById(this.ownPlayerId())?.balance || 0)) {
             //TODO: Replace with actual API-Call
             this._gameData.update(data => ({
                 ...data,

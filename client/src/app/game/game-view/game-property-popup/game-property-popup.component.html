@@ -21,7 +21,7 @@
                     <div class="property-actions">
                         <button class="action-button" (click)="onTradePropertyClick()">Trade Property</button>
                         @if (mortaged()) {
-                            <button class="action-button" (click)="onDischargeClick()">Discharge</button>
+                            <button class="action-button" (click)="onDischargeClick()" [disabled]="!dischargeable()">Discharge</button>
                         }@else {
                             <button class="action-button" (click)="onMortgageClick()">Mortgage</button>
                             }

@@ -3,6 +3,7 @@ export interface Property {
     name: string;
     assetId: number;
     color?: string;
+    mortageValue: number;
     amountColorProperties?: number;
     developable: boolean;
 }
