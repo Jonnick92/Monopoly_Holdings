@@ -44,11 +44,15 @@
       <div class="no-players">No other players available for trading</div>
     }
   </div>
-
+  <button
+    class="cancel-request-button"
+    (click)="onCancelRequestClick()">
+    Cancel Request
+  </button>
   <button 
     class="request-trade-button"
     [disabled]="!tradeService.canRequestTrade()"
-    (click)="tradeService.sendTradeRequest()">
+    (click)="onRequestTradeClick()">
     Request Trade
   </button>
 </div>

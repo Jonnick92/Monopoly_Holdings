@@ -1,6 +1,6 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { GameDataService } from '../game-data.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { UserProperty } from '../game.model';
@@ -18,6 +18,7 @@ import { TradeManagerMoneyComponent } from "./trade-manager-money/trade-manager-
 export class TradeManagerComponent implements OnInit {
   gameService = inject(GameDataService);
   route = inject(ActivatedRoute);
+  router = inject(Router);
   tradeService = inject(TradeService);
 
   gameId: number = 0;
@@ -66,5 +67,14 @@ export class TradeManagerComponent implements OnInit {
     else{
       this.tradePartnerId.set(playerId);
     }
+  }
+  
+  onCancelRequestClick(){
+    this.router.navigate(['/game/view'], {queryParamsHandling: "preserve"});
+  }
+
+  onRequestTradeClick(){
+    this.tradeService.sendTradeRequest();
+    this.router.navigate(['/game/view'], {queryParamsHandling: "preserve"});
   }
 }
