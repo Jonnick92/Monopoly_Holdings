@@ -44,4 +44,8 @@ export class GameViewComponent implements OnInit{
   onThrowDiceClick(){
     this.apiService.throwDice(this.gameId, this.playerId);
   }
+
+  onNewHoldingClick(){
+    this.router.navigate(['/game/holding'], {queryParamsHandling: "preserve"});
+  }
 }

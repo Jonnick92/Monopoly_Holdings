@@ -24,11 +24,6 @@ export class GamePlayerListComponent {
   onPlayerClick(player: Player) {
     console.log('Player clicked:', player);
     const currentGameId = this.route.snapshot.queryParams['gameId'];
-    this.router.navigate(['/game/player'], {
-      queryParams: {
-        gameId: currentGameId,
-        playerId: player.id
-      }
-    });
+    this.router.navigate(['/game/player'], {queryParamsHandling: "preserve"});
   }
 }

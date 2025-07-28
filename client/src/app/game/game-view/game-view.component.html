@@ -11,10 +11,17 @@
 			}
 		</div>
 		<div class="dice-display">
-			@if (gameService.isUserTurn()) {
-				<button (click)="onThrowDiceClick()" class="dice-button">
-					<img src="dice.png" alt="Dice button" class="dice" />
-				</button>			}
+			<button
+				class="new-holding-button"
+				(click)="onNewHoldingClick()">
+				Fund new Holding
+			</button>
+			<button 
+				class="dice-button"
+				(click)="onThrowDiceClick()"
+				[disabled]="gameService.isUserTurn()">
+				<img src="dice.png" alt="Dice button" class="dice" />
+			</button>
 			<img [src]="'dice' + gameService.diceOne() + '.png'" alt="Dice 1" class="dice"/>
 			<img [src]="'dice' + gameService.diceTwo() + '.png'" alt="Dice 2" class="dice"/>
 		</div>
@@ -32,7 +39,7 @@
 			</button>
 		</div>
 		<div class="content-section">
-			<!-- Replace the anchor elements with the three component (player-overview, own-holdings, all-holdings)-->
+			<!-- TODO: Replace the anchor elements with the three component (player-overview, own-holdings, all-holdings)-->
 			@switch (selectedDataField) {
 				@case (0) {
 					<app-game-player-list></app-game-player-list>

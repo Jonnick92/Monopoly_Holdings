@@ -81,6 +81,26 @@
   background: #007acc;
 }
 
+.new-holding-button {
+  background: linear-gradient(135deg, #4CAF50, #45a049);
+  color: white;
+  border: none;
+  border-radius: 12px;
+  padding: 15px 25px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  box-shadow: 0 4px 15px rgba(76,175,80,0.3);
+  transition: all 0.3s ease;
+  z-index: 1000;
+}
+
+.new-holding-button:hover {
+  background: linear-gradient(135deg, #45a049, #3d8b40);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(76,175,80,0.4);
+}
+
 .dice-display {
   position: absolute;
   top: 20px;
@@ -106,6 +126,13 @@
 
 .dice-button:focus {
   outline: none;
+  background: none;
+}
+
+.dice-button:disabled {
+  opacity: 0.4;
+  filter: alpha(opacity=0.4);
+  cursor: not-allowed;
 }
 
 .property-row {
