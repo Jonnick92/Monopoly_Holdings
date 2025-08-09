@@ -1,1 +1,70 @@
-<p>holding-creator works!</p>
+<div class="holding-creator">
+  <h2>Create New Holding</h2>
+  <!--TODO: Request Name-->
+  
+  <div class="players-section">
+    @for (player of players(); track player.id) {
+      <div class="player-row">
+        <div class="player-info">
+          <h3 [style.color]="player.color">{{ player.name }}</h3>
+        </div>
+        
+        <div class="player-properties">
+          <div class="property-list">
+            @for (userProperty of getPlayerProperties(player.id); track userProperty.property.id) {
+              <img [src]="'/reel_estate_cards/Folie' + userProperty.property.assetId + '.png'" 
+                   alt="{{ userProperty.property.name }}"
+                   class="property-card"
+                   [class.selected]="isPropertySelected(player.id, userProperty.property.id)"
+                   (click)="togglePropertySelection(player.id, userProperty.property.id)">
+            } @empty {
+              <div class="no-properties">No properties owned</div>
+            }
+          </div>
+        </div>
+        
+        <div class="player-inputs">
+          <div class="input-group">
+            <!-- TODO: Properiate checks if player has the money -->
+            <label for="money-{{ player.id }}">Money Contribution</label>
+            <input type="number" 
+                   id="money-{{ player.id }}"
+                   [value]="getPlayerMoneyInput(player.id)"
+                   (input)="onMoneyInputChange(player.id, $event)"
+                   min="0"
+                   [max]="player.balance"
+                   class="money-input">
+          </div>
+          
+          <div class="input-group">
+            <!-- TODO: Implement functional value restrictins -->
+            <label for="shares-{{ player.id }}">Shares (%)</label>
+            <input type="number" 
+                   id="shares-{{ player.id }}"
+                   [value]="getPlayerShareInput(player.id)"
+                   [min]="0"
+                   [max]="100"
+                   (input)="onShareInputChange(player.id, $event)"
+                   min="0"
+                   max="100"
+                   class="shares-input">
+          </div>
+        </div>
+      </div>
+    }
+  </div>
+  
+  <div class="action-buttons">
+    <button
+      class="btn cancel-funding-button"
+      (click)="onCancelFundingClick()">
+      Cancel Funding
+    </button>
+    <button 
+      class="btn request-funding-button"
+      [disabled]="!canRequestHolding()"
+      (click)="onFundHoldingClick()">
+      Request Funding
+    </button>
+  </div>
+</div>

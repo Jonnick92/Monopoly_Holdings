@@ -25,9 +25,6 @@ export class TradeManagerComponent implements OnInit {
   playerId = this.tradeService.playerId;
   tradePartnerId = this.tradeService.tradePartnerId;
 
-  selectedPlayerProperties: Set<number> = new Set();
-  selectedTradePartnerProperties: Set<number> = new Set();
-
   ngOnInit() {
     this.route.queryParams.subscribe(params => {
       this.gameId = +params['gameId'] || 0;
@@ -50,14 +47,6 @@ export class TradeManagerComponent implements OnInit {
 
   get selectedTradePartner() {
     return this.gameService.getPlayerById(this.tradePartnerId());
-  }
-
-  get maxPlayerMoney() {
-    return this.currentPlayer?.balance || 0;
-  }
-
-  get maxTradePartnerMoney() {
-    return this.selectedTradePartner?.balance || 0;
   }
 
   selectTradePartner(playerId: number) {
